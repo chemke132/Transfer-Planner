@@ -1,0 +1,1227 @@
+{
+  "courses": [
+    {
+      "id": "dvc_comsc010nc",
+      "school_id": "dvc",
+      "code": "COMSC 010NC",
+      "name": "IBM SkillsBuild Micro-Credential: Data Analytics I - Noncredit",
+      "units": null,
+      "description": "--> This noncredit course offers a broad and practical introduction to the data analytics process, and core fundamental concepts including data classification, data storages, basic statistical methods, and obtaining/prepping/cleaning data. Taught in module lessons with real world examples illustrated using MS EXCEL. Includes a brief introduction of R, Python and SQL tools, and one mini-capstone project using Jupyter Notebook. -->"
+    },
+    {
+      "id": "dvc_comsc020nc",
+      "school_id": "dvc",
+      "code": "COMSC 020NC",
+      "name": "IBM SkillsBuild Micro-Credential: Data Analytics II - Noncredit",
+      "units": null,
+      "description": "--> This noncredit course offers a broad and practical introduction to the data analytics process, and core fundamental concepts including data analysis, data visualization and presentation. Taught in module lessons with real-world examples illustrated using MS EXCEL. Students will apply the statistical procedures on data analysis and present data visualizations in two mini-capstone and one final capstone project using Jupyter Notebook. -->"
+    },
+    {
+      "id": "dvc_comsc101",
+      "school_id": "dvc",
+      "code": "COMSC 101",
+      "name": "Computer Literacy",
+      "units": 4,
+      "description": "--> This introductory course in computer literacy covers the basics of computer hardware, software, and networking. Topics include local and cloud-based file management, productivity software for word processing, spreadsheets, databases, presentations, and home networks. An introduction to computer programming is also presented. -->"
+    },
+    {
+      "id": "dvc_comsc110",
+      "school_id": "dvc",
+      "code": "COMSC 110",
+      "name": "Introduction to Programming",
+      "units": 4,
+      "description": "--> This course introduces students to programming concepts emphasizing modular design and development of programs, coding style, documentation, debugging, and testing. All control structures and data types of a commonly-used language are covered. -->"
+    },
+    {
+      "id": "dvc_comsc120",
+      "school_id": "dvc",
+      "code": "COMSC 120",
+      "name": "SQL Programming",
+      "units": 4,
+      "description": "--> This course presents the creation and maintenance of databases and tables as well as the storage, retrieval and manipulation of data. Topics include both Oracle and Microsoft SQLServer. Structured Query Language (SQL) script that is common to both and product-specific variations are also covered. -->"
+    },
+    {
+      "id": "dvc_comsc140",
+      "school_id": "dvc",
+      "code": "COMSC 140",
+      "name": "Python Programming",
+      "units": 3,
+      "description": "--> This course presents an introduction to the Python language. Topics covered include: primitive and collection data types, operators and statements, loops and branching, functions and variable scoping, modules and packages, object-oriented programming, file handling and exceptions, and an introduction to Graphical User Interface (GUI) programming. -->"
+    },
+    {
+      "id": "dvc_comsc150",
+      "school_id": "dvc",
+      "code": "COMSC 150",
+      "name": "Topics in Computer Science",
+      "units": 0,
+      "description": "--> A supplemental course in computer science to provide a study of current concepts and problems. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_comsc156",
+      "school_id": "dvc",
+      "code": "COMSC 156",
+      "name": "Introduction to Data Science",
+      "units": 4,
+      "description": "--> This course offers a broad and practical introduction to the data science process, lifecycle, roles, and core fundamental concepts including methods in data acquisition, cleaning, and visualization. Lessons and examples include Python packages such as NumPy, Pandas, Matplotlib, and Scikit-Learn. An introduction to statistics and Jupyter Notebooks will be covered. -->"
+    },
+    {
+      "id": "dvc_comsc165",
+      "school_id": "dvc",
+      "code": "COMSC 165",
+      "name": "Advanced Programming with C and C++",
+      "units": 4,
+      "description": "--> The course emphasizes programming techniques using C and C++ languages. The syntax of C is reviewed. Also covered are advanced topics such as string processing, pointers, links lists, queues, stacks, and dynamic memory allocation. -->"
+    },
+    {
+      "id": "dvc_comsc171",
+      "school_id": "dvc",
+      "code": "COMSC 171",
+      "name": "Introduction to UNIX and Linux",
+      "units": 2,
+      "description": "--> This course introduces UNIX and Linux operating systems. Topics include scripting and the shell, access control, controlling processes, booting and shutting down, permissions, file systems, utility programs, editors, usage of network services, storage, AWK scripting, and X Window graphics. -->"
+    },
+    {
+      "id": "dvc_comsc175",
+      "school_id": "dvc",
+      "code": "COMSC 175",
+      "name": "Introduction to Cloud Computing",
+      "units": 4,
+      "description": "--> This course provides an introduction to essential cloud computing concepts on the Amazon Web Services (AWS) platform, including core services, architecture, computing, pricing and support. Students will get hands-on, practical experience in configuring cloud computing instances, managing storage and ensuring security, and will gain skills in the design of cloud-based solutions. -->"
+    },
+    {
+      "id": "dvc_comsc178",
+      "school_id": "dvc",
+      "code": "COMSC 178",
+      "name": "Cloud Machine Learning",
+      "units": 4,
+      "description": "--> This intermediate-level course explores the application of the fundamental principles of data science to data collection, statistical inference, predictive modeling, and making decisions with data. Techniques for data transformation, regression, classification, clustering, and visualization will be explored in the context of developing proficiency in data analysis. Students will build and deploy a custom machine learning model on the Amazon AWS cloud platform. -->"
+    },
+    {
+      "id": "dvc_comsc200",
+      "school_id": "dvc",
+      "code": "COMSC 200",
+      "name": "Object Oriented Programming C++",
+      "units": 4,
+      "description": "--> This course presents the concepts and syntax of the C++ Language. Topics include inheritance, overloaded operators, overloaded default operators, virtual functions, memory management, and templates. -->"
+    },
+    {
+      "id": "dvc_comsc210",
+      "school_id": "dvc",
+      "code": "COMSC 210",
+      "name": "Program Design and Data Structures",
+      "units": 4,
+      "description": "--> This course presents techniques relevant to program design and selection of data structures for larger programs. Topics include programming and design techniques, effective use of recursion, algorithmic efficiency and O-notation, linked lists, binary trees, B-trees, graphs, sorting and searching techniques. Extensive programming of a variety of data structures is practiced. -->"
+    },
+    {
+      "id": "dvc_comsc230",
+      "school_id": "dvc",
+      "code": "COMSC 230",
+      "name": "Discrete Mathematical Structures for Computer Science",
+      "units": 3,
+      "description": "--> This course introduces students to discrete mathematical structures and their applications in computer science. The course content includes functions, relations and sets, and propositional and predicate logic. Methods of proof, induction, fundamentals of counting, graphs, trees, and discrete probability are also covered. -->"
+    },
+    {
+      "id": "dvc_comsc240",
+      "school_id": "dvc",
+      "code": "COMSC 240",
+      "name": "Advanced Python Programming",
+      "units": 3,
+      "description": "--> This advanced Python programming course is a continuation of COMSC-140, Python Programming, and is designed to prepare students for jobs as Python programmers. Regular expressions and classes are covered extensively along with elements of network programming such as File Transfer Protocol (FTP), web client, and web server. The course also covers graphics, database access, and Python extensions. -->"
+    },
+    {
+      "id": "dvc_comsc255",
+      "school_id": "dvc",
+      "code": "COMSC 255",
+      "name": "Programming With Java",
+      "units": 4,
+      "description": "--> This course emphasizes programming techniques using the Java programming language. The syntax and deployment of Java applications are reviewed. Advanced topics such as objects, classes, methods, Object Oriented Programming (OOP) principles, Graphical User Interface (GUI), Input/Output (I/O), data structures, applets, networking, and threads are covered. -->"
+    },
+    {
+      "id": "dvc_comsc256",
+      "school_id": "dvc",
+      "code": "COMSC 256",
+      "name": "Advanced Java Programming",
+      "units": 4,
+      "description": "--> This course covers advanced topics in Java programming including multithreading, exception handling, serialization, reflection, model view controller architecture, java beans, servlets and database connectivity. -->"
+    },
+    {
+      "id": "dvc_comsc257",
+      "school_id": "dvc",
+      "code": "COMSC 257",
+      "name": "Mobile Programming for Android Using Java",
+      "units": 4,
+      "description": "--> The course introduces mobile programming concepts for the Android operating system using Java programming language. The mobile programming topics covered include activities, services, broadcast receivers, content providers, telephony, text messaging, location services, fragments, user interface, file, SQLite database, and Restful web services. -->"
+    },
+    {
+      "id": "dvc_comsc260",
+      "school_id": "dvc",
+      "code": "COMSC 260",
+      "name": "Assembly Language Programming/Computer Organization",
+      "units": 4,
+      "description": "--> This course covers the basics of machine architecture, machine language, assembly language, operating system interface, and interfacing with high-level languages. Topics include data representation, instruction representation and execution, addressing, indexing, macros, subroutine linkages, storage and time efficiency issues, interrupt descriptor tables, virtual memory, cache memory, and dynamic address translation. -->"
+    },
+    {
+      "id": "dvc_comsc295",
+      "school_id": "dvc",
+      "code": "COMSC 295",
+      "name": "Work Experience Education in COMSC",
+      "units": 1,
+      "description": "--> COMSC-295 is supervised employment that extends classroom learning to the job site and relates to the student’s chosen field of study or area of career interest. Under the supervision of a college instructor, students will engage in on-the-job and other learning experiences that contribute to their employability skills and occupational or educational goals. -->"
+    },
+    {
+      "id": "dvc_comsc296",
+      "school_id": "dvc",
+      "code": "COMSC 296",
+      "name": "Internship in Work Experience Education in COMSC",
+      "units": 1,
+      "description": "--> COMSC-296 is a supervised internship in a skilled or professional level assignment in the student&#x27;s major field of study or area of career interest. Under the supervision of a college instructor, students will engage in on-the-job and other learning experiences that contribute to their employability skills and occupational or educational goals. Internships may be paid, non-paid, or some partial compensation provided. -->"
+    },
+    {
+      "id": "dvc_math001nc",
+      "school_id": "dvc",
+      "code": "MATH 001NC",
+      "name": "Topics in Mathematics - Noncredit",
+      "units": null,
+      "description": "--> This noncredit course in mathematics provides the opportunity to present a variety of topics to meet the needs of basic skills students. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_math002",
+      "school_id": "dvc",
+      "code": "MATH 002",
+      "name": "Support for MATH-192 Analytic Geometry and Calculus I",
+      "units": 2,
+      "description": "--> This course provides students with academic support to be successful in MATH-192 Analytic Geometry and Calculus I. Additional practice with math concepts directly relevant to MATH-192 are integrated into instruction, as well as study skills strategies, mindset, and other academic supports. -->"
+    },
+    {
+      "id": "dvc_math002nc",
+      "school_id": "dvc",
+      "code": "MATH 002NC",
+      "name": "Fundamental Math Skills for the Statistics Pathway - Noncredit",
+      "units": null,
+      "description": "--> This noncredit course focuses on the specific math and study skills necessary for success in transfer-level statistics courses. Through practice and group work, students are prepared to enroll in statistics with confidence. -->"
+    },
+    {
+      "id": "dvc_math003",
+      "school_id": "dvc",
+      "code": "MATH 003",
+      "name": "Support for MATH-193 Analytic Geometry and Calculus II",
+      "units": 2,
+      "description": "--> This course provides students with academic support to be successful in MATH-193 Analytic Geometry and Calculus II. Additional practice with math concepts directly relevant to MATH-193 are integrated into instruction, as well as study skills strategies and other academic supports. -->"
+    },
+    {
+      "id": "dvc_math003nc",
+      "school_id": "dvc",
+      "code": "MATH 003NC",
+      "name": "Fundamental Math Skills for Business and STEM Pathways - Noncredit",
+      "units": null,
+      "description": "--> This noncredit course focuses on the specific math and study skills necessary for success in transfer-level math courses in the Business or STEM pathways. Through practice and group work, students are prepared to enroll in transfer-level math with confidence. -->"
+    },
+    {
+      "id": "dvc_math004nc",
+      "school_id": "dvc",
+      "code": "MATH 004NC",
+      "name": "Algebra and Trigonometry Skills for Math Success - Noncredit",
+      "units": null,
+      "description": "--> This noncredit, self-paced, course focuses on skills from elementary algebra, intermediate algebra, and trigonometry. Students can choose specific content from these topics in order to reach their math goals. -->"
+    },
+    {
+      "id": "dvc_math081",
+      "school_id": "dvc",
+      "code": "MATH 081",
+      "name": "Support for Success in MATH-181 Finite Math",
+      "units": 1,
+      "description": "--> This course provides students with academic support to be successful in MATH-181 Finite Mathematics. Additional practice with math concepts directly relevant to MATH-181 are integrated into instruction, including assistance with study skills strategies as needed. -->"
+    },
+    {
+      "id": "dvc_math082",
+      "school_id": "dvc",
+      "code": "MATH 082",
+      "name": "Support for Calculus for Management, Life Science, and Social Science I",
+      "units": 2,
+      "description": "--> This course provides students with academic support to be successful in MATH-182 Calculus for Management, Life Science, and Social Science I. Additional practice with math concepts directly related to MATH-182 are integrated into instruction, as well as study skills strategies, mindset, and other academic supports. -->"
+    },
+    {
+      "id": "dvc_math091",
+      "school_id": "dvc",
+      "code": "MATH 091",
+      "name": "Support for Success in MATH-191 Pre-Calculus",
+      "units": 1,
+      "description": "--> This course provides students with academic support to be successful in MATH-191 Pre-Calculus. Additional practice with math concepts directly relevant to MATH-191 are integrated into instruction, including assistance with study skills strategies as needed. -->"
+    },
+    {
+      "id": "dvc_math092",
+      "school_id": "dvc",
+      "code": "MATH 092",
+      "name": "Math for Trade Pre-Apprentices",
+      "units": 4,
+      "description": "--> This course provides practice in the mathematics needed to pass apprenticeship exams for various trades, as well as the mathematics required by apprentices on the job site. This course offers mathematics instruction contextualized for the building trades. -->"
+    },
+    {
+      "id": "dvc_math114",
+      "school_id": "dvc",
+      "code": "MATH 114",
+      "name": "Geometry",
+      "units": 3,
+      "description": "--> Students will investigate the properties of lines, polygons, and circles using deductive reasoning. Geometric theorems, formulas for perimeter, area, and volume for a variety of plane and solid geometric objects are presented. -->"
+    },
+    {
+      "id": "dvc_math120",
+      "school_id": "dvc",
+      "code": "MATH 120",
+      "name": "Intermediate Algebra",
+      "units": 5,
+      "description": "--> This course will expand upon the material covered in Elementary Algebra. Topics will include special products and factors, fractional equations, systems of linear equations, inequalities, conics, complex numbers, the binomial theorem, logarithms, and functions. -->"
+    },
+    {
+      "id": "dvc_math121",
+      "school_id": "dvc",
+      "code": "MATH 121",
+      "name": "Plane Trigonometry",
+      "units": 3,
+      "description": "--> This course focuses on the theory and applications of trigonometry, including right triangle trigonometry, general angle trigonometry, and trigonometry on the unit circle, as well as trigonometric functions of real numbers. Applications include solutions of right and oblique triangles in problems in surveying, physics, engineering, and navigation. -->"
+    },
+    {
+      "id": "dvc_math121l",
+      "school_id": "dvc",
+      "code": "MATH 121L",
+      "name": "Plane Trigonometry with Support",
+      "units": 5,
+      "description": "--> This course focuses on the theory and applications of trigonometry, including right triangle trigonometry, general angle trigonometry, and trigonometry on the unit circle, as well as trigonometric functions of real numbers. Applications include solutions of right and oblique triangles in problems in surveying, physics, engineering and navigation. This course provides students with academic support to be successful by providing additional practice with math concepts directly relevant to MATH-121 which are integrated into instruction, as well as study skills strategies, mindset, and other academic supports. -->"
+    },
+    {
+      "id": "dvc_math124",
+      "school_id": "dvc",
+      "code": "MATH 124",
+      "name": "Mathematics for Liberal Arts",
+      "units": 3,
+      "description": "--> This course presents applications of techniques and concepts of intermediate algebra and critical thinking to the solving of contemporary problems in mathematics. Emphasis is placed on statistics, finance, and voting/apportionment. Other topics may include sets, graph theory, exponential functions, logarithmic scales, probability, geometry, or cultural aspects of mathematics. Historical context of some of the great ideas of mathematics will also be explored. -->"
+    },
+    {
+      "id": "dvc_math125",
+      "school_id": "dvc",
+      "code": "MATH 125",
+      "name": "Mathematical Concepts for Elementary School Teachers",
+      "units": 3,
+      "description": "--> This course focuses on the development of quantitative reasoning skills through in-depth, integrated explorations of topics in mathematics, including real number systems and subsystems. Emphasis is on comprehension and analysis of mathematical concepts and applications of logical reasoning. -->"
+    },
+    {
+      "id": "dvc_math135",
+      "school_id": "dvc",
+      "code": "MATH 135",
+      "name": "College Algebra",
+      "units": 4,
+      "description": "--> This course presents a study of functions and their graphs, including polynomial, rational, radical, exponential, absolute value, logarithmic and inverse functions. Other topics include systems of equations, theory of polynomial equations, analytic geometry, and inequalities. -->"
+    },
+    {
+      "id": "dvc_math135l",
+      "school_id": "dvc",
+      "code": "MATH 135L",
+      "name": "College Algebra with Support",
+      "units": 6,
+      "description": "This course presents a study of functions and their graphs, including polynomial, rational, radical, exponential, absolute value, logarithmic and inverse functions. Other topics include systems of equations, theory of polynomial equations, analytic geometry, and inequalities. This course provides students with academic support to be successful in College Algebra. Additional practice with math concepts directly relevant to MATH-135 are integrated into instruction, as well as study skills strategies, mindset, and other academic supports."
+    },
+    {
+      "id": "dvc_math140",
+      "school_id": "dvc",
+      "code": "MATH 140",
+      "name": "Tutor Training",
+      "units": 1,
+      "description": "--> This course presents the basic principles and methods of tutoring, including the tutoring sequence, leading and probing questions, communication skills, and learning theory. Topics include the application of tutoring techniques to specific areas of mathematics including algebra, trigonometry, and pre-calculus. Students will receive instruction to help tutees with special needs. -->"
+    },
+    {
+      "id": "dvc_math150",
+      "school_id": "dvc",
+      "code": "MATH 150",
+      "name": "Topics in Mathematics",
+      "units": 0,
+      "description": "--> A supplemental course in mathematics to provide a study of current concepts and problems. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_math181",
+      "school_id": "dvc",
+      "code": "MATH 181",
+      "name": "Finite Mathematics",
+      "units": 3,
+      "description": "--> This course applies intermediate algebra and critical thinking to the solution of contemporary problems in business and the life sciences. Topics include linear models, systems of linear equations and inequalities, linear programming (with geometric method and the simplex method), matrix equations, sets and probabilities, and finance. -->"
+    },
+    {
+      "id": "dvc_math181l",
+      "school_id": "dvc",
+      "code": "MATH 181L",
+      "name": "Finite Mathematics with Support",
+      "units": 4,
+      "description": "This course applies intermediate algebra and critical thinking to the solution of contemporary problems in business and the life sciences. Topics include linear models, systems of linear equations and inequalities, linear programming (with geometric method and the simplex method), matrix equations, sets and probabilities, and finance. This course provides students with academic support to be successful in Finite Mathematics. Additional practice with math concepts directly relevant to MATH-181 are integrated into instruction, as well as study skills strategies, mindset, and other academic supports."
+    },
+    {
+      "id": "dvc_math182",
+      "school_id": "dvc",
+      "code": "MATH 182",
+      "name": "Calculus for Management, Life Science, and Social Science I",
+      "units": 4,
+      "description": "--> This is the first in a two-term calculus sequence for management, life science, and social science majors. Topics include the derivative and its applications (including curve sketching, optimization, and rates of change), an introduction to the integral (including Riemann sums and the Fundamental Theorem of Calculus) and its applications. -->"
+    },
+    {
+      "id": "dvc_math183",
+      "school_id": "dvc",
+      "code": "MATH 183",
+      "name": "Calculus for Management, Life Science, and Social Science II",
+      "units": 4,
+      "description": "--> This is the second course in a two-term sequence in calculus for management, life science, and social science majors, and is a continuation of MATH-182. Topics include techniques of integration, applications of the integral, multi-variable functions, differential equations, and Taylor polynomials. -->"
+    },
+    {
+      "id": "dvc_math191",
+      "school_id": "dvc",
+      "code": "MATH 191",
+      "name": "Pre-Calculus",
+      "units": 5,
+      "description": "--> This course is an in-depth treatment of functions and their graphs, including polynomial, rational, logarithmic, exponential and trigonometric functions. Nonlinear systems, vectors, and complex numbers are also covered. Use of a graphing calculator or a computer algebra system is required. -->"
+    },
+    {
+      "id": "dvc_math191l",
+      "school_id": "dvc",
+      "code": "MATH 191L",
+      "name": "Pre-Calculus with Support",
+      "units": 6,
+      "description": "This course is an in-depth treatment of functions and their graphs, including polynomial, rational, logarithmic, exponential and trigonometric functions. Nonlinear systems, vectors, and complex numbers are also covered. Use of a graphing calculator or a computer algebra system is required. This course also provides students with academic support to be successful in Pre-Calculus. Additional practice with math concepts directly relevant to MATH-191 are integrated into instruction, including assistance with study skills strategies as needed."
+    },
+    {
+      "id": "dvc_math192",
+      "school_id": "dvc",
+      "code": "MATH 192",
+      "name": "Analytic Geometry and Calculus I",
+      "units": 5,
+      "description": "--> This course presents the elements of analytic geometry, differentiation and integration of algebraic and transcendental functions with applications. Use of a graphing calculator or a computer algebra system is required. -->"
+    },
+    {
+      "id": "dvc_math193",
+      "school_id": "dvc",
+      "code": "MATH 193",
+      "name": "Analytic Geometry and Calculus II",
+      "units": 5,
+      "description": "--> This course is a continuation of MATH-192. Techniques and applications of integration in geometry, science and engineering will be explored. Work with algebraic and transcendental functions will be continued. Other topics will include numerical methods in evaluation of the integral, infinite series, solving differential equations, applications of differential equations, polar coordinates, parametric equations, and conic sections. -->"
+    },
+    {
+      "id": "dvc_math194",
+      "school_id": "dvc",
+      "code": "MATH 194",
+      "name": "Linear Algebra",
+      "units": 3,
+      "description": "--> This course is an introduction to linear algebra, covering vector spaces, matrices, determinants, bases, and linear transformations. Techniques for solving systems of equations using matrices, and applications of linear transformations are covered. -->"
+    },
+    {
+      "id": "dvc_math195",
+      "school_id": "dvc",
+      "code": "MATH 195",
+      "name": "Discrete Mathematics",
+      "units": 4,
+      "description": "--> This course provides an introduction to propositional logic, induction, set theory, relations and functions, counting and combinatorics, introduction to trees, graph theory, algorithms, and algebraic structures. The emphasis is on topics of interest to computer science students. -->"
+    },
+    {
+      "id": "dvc_math289",
+      "school_id": "dvc",
+      "code": "MATH 289",
+      "name": "Introduction to Upper Division Mathematics",
+      "units": 4,
+      "description": "--> This course is designed for students who intend to transfer to a four-year college or university and study upper-division mathematics. Topics include number theory, set theory, and methods of proof including induction, direct and indirect proof as well as other topics from upper-division mathematics including abstract algebra. -->"
+    },
+    {
+      "id": "dvc_math292",
+      "school_id": "dvc",
+      "code": "MATH 292",
+      "name": "Analytic Geometry and Calculus III",
+      "units": 5,
+      "description": "--> This course is a continuation of MATH-193. Topics include limits, parametric equations, vector-valued functions, analytic geometry of three dimensions, partial derivatives, multiple integrals, and Green&#x27;s, Stokes&#x27;, and the Divergence theorems. -->"
+    },
+    {
+      "id": "dvc_math294",
+      "school_id": "dvc",
+      "code": "MATH 294",
+      "name": "Differential Equations",
+      "units": 5,
+      "description": "--> This course presents an introduction to the theory and applications of ordinary differential equations and an introduction to partial differential equations. -->"
+    },
+    {
+      "id": "dvc_math298",
+      "school_id": "dvc",
+      "code": "MATH 298",
+      "name": "Independent Study",
+      "units": 0,
+      "description": "--> This course is designed for advanced students who wish to conduct additional research, a special project, or learning activities in a specific discipline/subject area and is not intended to replace an existing course. The student and instructor develop a written contract that includes objectives to be achieved, activities and procedures to accomplish the study project, and the means by which the supervising instructor may assess accomplishment. -->"
+    },
+    {
+      "id": "dvc_math299",
+      "school_id": "dvc",
+      "code": "MATH 299",
+      "name": "Student Instructional Assistant",
+      "units": 0,
+      "description": "--> Students work as instructional assistants, lab assistants and research assistants in this department. The instructional assistants function as group discussion leaders, meet and assist students with problems and projects, or help instructors by setting up laboratory or demonstration apparatus. Students may not assist in course sections in which they are currently enrolled. -->"
+    },
+    {
+      "id": "dvc_phys110",
+      "school_id": "dvc",
+      "code": "PHYS 110",
+      "name": "Elementary Physics",
+      "units": 3,
+      "description": "--> This course provides an overview of physics. Forces, motion, heat, electricity and magnetism, optics, and modern physics will be discussed. This course emphasizes topics in classical physics. -->"
+    },
+    {
+      "id": "dvc_phys111",
+      "school_id": "dvc",
+      "code": "PHYS 111",
+      "name": "Physics Laboratory",
+      "units": 1,
+      "description": "--> This laboratory course will include measurement and analysis of mechanical, thermal, electrical, and optical phenomena. -->"
+    },
+    {
+      "id": "dvc_phys112",
+      "school_id": "dvc",
+      "code": "PHYS 112",
+      "name": "Elementary Physics with Laboratory",
+      "units": 4,
+      "description": "--> This course provides an overview of physics. Forces, motion, heat, electricity and magnetism, optics, and modern physics are discussed. This course emphasizes topics in classical physics and includes measurement and analysis of mechanical, thermal, electrical, and optical phenomena. -->"
+    },
+    {
+      "id": "dvc_phys120",
+      "school_id": "dvc",
+      "code": "PHYS 120",
+      "name": "General College Physics I",
+      "units": 4,
+      "description": "--> This course is the first semester of a two-semester sequence (PHYS-120 and PHYS-121) designed for majors other than engineering and physical sciences, such as life science and allied health majors, among others. It includes an algebra-based lecture and laboratory study of mechanics, heat, and sound. -->"
+    },
+    {
+      "id": "dvc_phys121",
+      "school_id": "dvc",
+      "code": "PHYS 121",
+      "name": "General College Physics II",
+      "units": 4,
+      "description": "--> This course is the second semester of a two-semester sequence (PHYS-120 and PHYS-121) designed for majors other than engineering and physical sciences such as life science and allied health majors among others. It includes an algebra-based lecture and laboratory study of electricity, magnetism, light, and modern physics. -->"
+    },
+    {
+      "id": "dvc_phys124",
+      "school_id": "dvc",
+      "code": "PHYS 124",
+      "name": "Calculus Supplement for Physics 120",
+      "units": 0,
+      "description": "--> In this course, students will apply calculus techniques to the physics topics learned in PHYS-120 General College Physics I. -->"
+    },
+    {
+      "id": "dvc_phys125",
+      "school_id": "dvc",
+      "code": "PHYS 125",
+      "name": "Calculus Supplement for Physics 121",
+      "units": 0,
+      "description": "--> In this course, students will apply calculus techniques to the physics topics learned in PHYS-121 General College Physics II. -->"
+    },
+    {
+      "id": "dvc_phys129",
+      "school_id": "dvc",
+      "code": "PHYS 129",
+      "name": "Introductory Physics for Engineers",
+      "units": 4,
+      "description": "--> This course is designed for engineering, physics, and chemistry majors. The student will be introduced to basic vocabulary and techniques of studying physics. It presents a study of vectors, motion, forces, momentum, energy, and rotating systems. One or more additional topics such as geometric optics, electricity, the atomic nature of matter, or the study of fluids will be presented. -->"
+    },
+    {
+      "id": "dvc_phys130",
+      "school_id": "dvc",
+      "code": "PHYS 130",
+      "name": "Physics for Engineers and Scientists A: Mechanics and Wave Motion",
+      "units": 4,
+      "description": "--> This course is designed for engineering and physical science majors such as physics, chemistry, and geology. Lecture and laboratory study of classical mechanics: vectors, particle kinematics, Newton&#x27;s laws, equilibrium of rigid bodies, work and energy, gravitation, fluids, momentum, rotational kinematics and dynamics, and oscillations and waves in elastic media are presented. -->"
+    },
+    {
+      "id": "dvc_phys150",
+      "school_id": "dvc",
+      "code": "PHYS 150",
+      "name": "Topics in Physics",
+      "units": 0,
+      "description": "--> A supplemental course in Physics to provide a study of current concepts and problems in physics. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_phys230",
+      "school_id": "dvc",
+      "code": "PHYS 230",
+      "name": "Physics for Engineers and Scientists B: Heat and Electro-Magnetism",
+      "units": 4,
+      "description": "--> This course is a continuation of PHYS-130 and presents the study of thermodynamics, electricity, and magnetism. Topics include temperature, heat, the first and second laws of thermodynamics, kinetic theory of gases, electric field and electric potential of charges, capacitance, magnetic field of moving charges, current, voltage, resistance, induced electric and magnetic fields, Maxwell&#x27;s equations, and plane electromagnetic waves. -->"
+    },
+    {
+      "id": "dvc_phys231",
+      "school_id": "dvc",
+      "code": "PHYS 231",
+      "name": "Physics for Engineers and Scientists C: Optics and Modern Physics",
+      "units": 4,
+      "description": "--> This course is a continuation of PHYS-130 and PHYS-230 and presents the study of optics and modern physics. Topics include geometric and wave optics, special relativity, quantum physics, atomic and molecular physics, condensed matter physics, and nuclear physics. -->"
+    },
+    {
+      "id": "dvc_phys299",
+      "school_id": "dvc",
+      "code": "PHYS 299",
+      "name": "Student Instructional Assistant",
+      "units": 0,
+      "description": "--> Students work as instructional assistants, lab assistants and research assistants in this department. The instructional assistants function as group discussion leaders, meet and assist students with problems and projects, or help instructors by setting up laboratory or demonstration apparatus. Students may not assist in course sections in which they are currently enrolled. -->"
+    },
+    {
+      "id": "dvc_engl095",
+      "school_id": "dvc",
+      "code": "ENGL 095",
+      "name": "Studies in Reading and Writing",
+      "units": 0,
+      "description": "--> A supplemental course in reading and writing to provide a study of current concepts and problems in reading, writing, and related substantive areas. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_engl122al",
+      "school_id": "dvc",
+      "code": "ENGL 122AL",
+      "name": "Academic Reading and Writing for Multilingual Students",
+      "units": 5,
+      "description": "--> In this course, students receive instruction in academic reading and writing, including writing processes, effective use of language, analytical thinking, and the foundations of academic research. Rhetorical strategies, strengthening linguistic monitors, and grammar concepts specific to the needs of multilingual students who do not speak English as their primary language are emphasized. -->"
+    },
+    {
+      "id": "dvc_engl123",
+      "school_id": "dvc",
+      "code": "ENGL 123",
+      "name": "Critical Thinking: Writing about Literature",
+      "units": 3,
+      "description": "--> This course in advanced composition focuses on the analysis of literary texts, the development of logical reasoning, and the improvement of argumentative writing skills. It is designed to develop critical thinking, reading, and writing skills beyond the level expected in ENGL-C1000 through the study of various critical approaches and diverse literary genres. -->"
+    },
+    {
+      "id": "dvc_engl123a",
+      "school_id": "dvc",
+      "code": "ENGL 123A",
+      "name": "Critical Thinking: Writing about Literature for Multilingual Students",
+      "units": 4,
+      "description": "--> This course is designed for multilingual students who do not speak English as their primary language. ENGL-123A is a continuation of first-year writing, focusing on the analysis of literary texts, the development of logical reasoning, and the improvement of argumentative writing skills. It is designed to develop critical thinking, reading, and writing skills beyond the level expected in first-year writing through the study of various critical approaches and diverse literary genres. This course emphasizes cultural discussion as well as skill-building in academic communication, rhetoric, linguistic complexity, and the grammar concepts specific to the needs of multilingual students. During the course, students will be assigned college-level essays of at least 750 words in length, with 6,000-8,000 final draft words assigned. -->"
+    },
+    {
+      "id": "dvc_engl124",
+      "school_id": "dvc",
+      "code": "ENGL 124",
+      "name": "The Nature of Language: An Introduction to Linguistics",
+      "units": 3,
+      "description": "--> This course examines formal, psychological, and socio/cultural properties of language. This examination will focus on the analysis, description, and functions of language in relation to culture, society, and personality. -->"
+    },
+    {
+      "id": "dvc_engl126a",
+      "school_id": "dvc",
+      "code": "ENGL 126A",
+      "name": "Critical Thinking and Writing for Multilingual Students",
+      "units": 4,
+      "description": "--> In this course, students receive instruction in critical thinking for purposes of constructing, evaluating, and composing arguments in a variety of rhetorical forms, using primarily non-fiction texts, refining writing skills and research strategies developed in ENGL C1000 Academic Reading and Writing (C-ID ENGL 100) or similar first-year college writing course. This course is designed for multilingual students who do not speak English as their primary language. Cultural discussion as well as skill-building in academic communication, norms, linguistic complexity, and the grammar concepts specific to the needs of multilingual students will be emphasized. -->"
+    },
+    {
+      "id": "dvc_engl140a",
+      "school_id": "dvc",
+      "code": "ENGL 140A",
+      "name": "Tutor Training: Working with Composition and Reading",
+      "units": 1,
+      "description": "--> This course introduces students to the principles of effective tutoring with a focus on composition and reading. The class will explore the role of the tutor, common reading and writing challenges, and equitable and current tutoring practices with an emphasis on fostering independent learning. Campus resources and tutoring across modalities will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl140b",
+      "school_id": "dvc",
+      "code": "ENGL 140B",
+      "name": "Tutor Training: Grammar for Native English Speakers",
+      "units": 1,
+      "description": "--> This course introduces students to the principles of effective tutoring with a focus on grammar concepts for native English speakers. The class will explore the role of the tutor, native speakers’ grammar needs for successful completion of composition and reading assignments, and equitable and current tutoring practices with an emphasis on fostering independent learning. Campus resources and tutoring across modalities will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl140c",
+      "school_id": "dvc",
+      "code": "ENGL 140C",
+      "name": "Tutor Training: Working With Non-Native English Speakers",
+      "units": 1,
+      "description": "--> This course introduces students to the principles of effective tutoring with a focus on grammar concepts for non-native English speakers. The class will explore the role of the tutor, non-native speakers’ grammar needs for successful completion of composition and reading assignments, and equitable and current tutoring practices with an emphasis on fostering independent learning. Campus resources and tutoring across modalities will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl140d",
+      "school_id": "dvc",
+      "code": "ENGL 140D",
+      "name": "Tutor Training: Working With Literature and Creative Writing",
+      "units": 1,
+      "description": "--> This course introduces students to the principles of effective tutoring with a focus on literature and creative writing. The class will explore the role of the tutor, students’ needs for successful completion of literature and creative-writing assignments, and equitable and current tutoring practices with an emphasis on fostering independent learning. Tutoring across modalities will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl150",
+      "school_id": "dvc",
+      "code": "ENGL 150",
+      "name": "Introduction to Literature",
+      "units": 3,
+      "description": "--> This course offers a survey of the literary genres by introducing students to the academic study of literature through representative works reflecting a variety of cultures and experiences. Critical approaches to analyze how historical, social, economic, psychological, philosophical, and aesthetic lenses shape the genres are emphasized. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl151",
+      "school_id": "dvc",
+      "code": "ENGL 151",
+      "name": "The Short Story",
+      "units": 3,
+      "description": "--> This course introduces the study of the short story through representative works reflecting a variety of cultures and experiences. The course covers the distinguishing elements of the short story, the art and practice of literary analysis, and the historical, philosophical, social, political, and/or aesthetic contexts relevant to selected texts. -->"
+    },
+    {
+      "id": "dvc_engl152",
+      "school_id": "dvc",
+      "code": "ENGL 152",
+      "name": "Film and Literature",
+      "units": 3,
+      "description": "--> The course examines film in relationship to literature. Students will focus on how films tell stories that engage viewers in unique ways. The course will touch on the development of film genres and will consider literature-to-film adaptations. Also, students will consider elements common to film and literature, such as character presentation, narrative tension and structure, diction, and point of view. Many films from the DVC collection, including some showing the lives and stories of members of American subcultures and cultures around the world, along with new releases from major film distributors, will be viewed, discussed, and written about. -->"
+    },
+    {
+      "id": "dvc_engl153",
+      "school_id": "dvc",
+      "code": "ENGL 153",
+      "name": "Contemporary Poetry",
+      "units": 3,
+      "description": "--> This course explores diverse voices in contemporary poetry. Through analysis, discussion, writing, and other projects, the course encourages students to identify and interpret poetic elements (conduct close readings) and then connect their interpretations to the poems’ historical, social, cultural, political contexts, and/or aesthetic movements. -->"
+    },
+    {
+      "id": "dvc_engl154",
+      "school_id": "dvc",
+      "code": "ENGL 154",
+      "name": "Shakespeare and His World",
+      "units": 3,
+      "description": "--> This course surveys a representative selection of Shakespeare’s plays and poetry to analyze his language, ideas, craft, and worldview in light of the historical and cultural forces of the early modern world, while evaluating their continued relevance to our own time. Students will practice the skills needed for analyzing and writing critically about literature, but also study Shakespeare’s works as dramatic art, and explore the ways they have been adapted and reimagined into various media -->"
+    },
+    {
+      "id": "dvc_engl155",
+      "school_id": "dvc",
+      "code": "ENGL 155",
+      "name": "Topics in English",
+      "units": 0,
+      "description": "--> A supplemental course in English to provide a study of current concepts and problems in English and related substantive areas. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_engl163",
+      "school_id": "dvc",
+      "code": "ENGL 163",
+      "name": "Asian American Literature",
+      "units": 3,
+      "description": "--> This course presents a variety of literary works that illuminate Asian American experiences, cultural identities, and languages. Readings are chosen for their literary, historical, cultural, philosophical, and psychological importance within the context of Asian American communities. The course focuses on the relation between texts and broader historical, political, aesthetic, and cultural themes and conditions. This course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl164",
+      "school_id": "dvc",
+      "code": "ENGL 164",
+      "name": "Native American Literatures",
+      "units": 3,
+      "description": "--> This course presents the literary traditions and cultures of various Native American/indigenous nations through the study of oral and written literary works (such as songs, myths, folktales, oratories, autobiographies, films, plays, poetry, and prose). Through reading, analysis, discussion, and written responses, the course will reflect Native American literatures within their respective historical, social, cultural, and aesthetic contexts. Issues central to Native peoples, such as cultural identity, language, and self-determination, are also presented. -->"
+    },
+    {
+      "id": "dvc_engl166",
+      "school_id": "dvc",
+      "code": "ENGL 166",
+      "name": "African American Literature",
+      "units": 3,
+      "description": "--> This course presents a variety of literary works that illuminate African American experiences, history, and culture. Readings are chosen for their literary, historical, cultural, philosophical, and psychological importance within the context of African American communities. The course focuses on the relation between texts and broader historical, political, aesthetic, and cultural themes and conditions. This course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl167",
+      "school_id": "dvc",
+      "code": "ENGL 167",
+      "name": "Latin American Literature",
+      "units": 3,
+      "description": "--> This course presents a variety of literary works that illuminate Latin American experiences, cultural identities, and history. Readings are chosen for their literary, historical, cultural, philosophical, and psychological importance within the context of Latin American history. The course focuses on the relation between texts and broader historical, political, aesthetic, and cultural themes and conditions of Latin America. This course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl168",
+      "school_id": "dvc",
+      "code": "ENGL 168",
+      "name": "Multiethnic Literatures of the United States",
+      "units": 3,
+      "description": "--> This course examines literary works of authors from underrepresented groups including African American, Asian American, Latinx American, and Native American. Selected contributions will be studied from novels, plays, short stories, nonfiction, and poetry to explore the influences that shape the literatures of the United States. Through reading, analysis, and discussion, the course will connect these literatures to historical, social, cultural, economic, and aesthetic contexts and examine issues central to underrepresented peoples, such as cultural identity, language, and self-determination. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl170",
+      "school_id": "dvc",
+      "code": "ENGL 170",
+      "name": "World Mythology",
+      "units": 3,
+      "description": "--> This course presents a variety of world myths that are meant to illuminate the human experience. The course examines the literary elements of mythology, including creation stories, archetypes, the hero’s journey, and more. Texts may represent myths from the Middle East, Asia, Europe, Africa, indigenous peoples of the Americas, among others, and expose students to relevant historical, philosophical, social, political, and aesthetic contexts. The course also exposes students to distinguishing elements of selected mythic forms, and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl173",
+      "school_id": "dvc",
+      "code": "ENGL 173",
+      "name": "Queer Literature Across Cultures",
+      "units": 3,
+      "description": "--> This course is a survey of queer literature in a variety of literary genres. The wide-range of Lesbian, Gay, Bisexual, Transgender, Queer (LGBTQ) experience is examined from various cultural points of reference and literary devices that characterize this genre. Students will read selections from a variety of cultures. Additionally, students will analyze the ways historical, social, economic, and psychological forces shape LGBTQ cultures and the literatures they produce. The course also exposes students to distinguishing elements of literary forms and to analyzing literature of any genre. -->"
+    },
+    {
+      "id": "dvc_engl175",
+      "school_id": "dvc",
+      "code": "ENGL 175",
+      "name": "Science Fiction and Fantasy Literature",
+      "units": 3,
+      "description": "--> This course offers a survey of speculative fiction as a literary form. Covering a range of literary genres and a variety of texts from diverse cultures, the course considers major authors, developments in the genre over time, and important themes. This course uses critical approaches to analyze the ways historical, social, economic, psychological, philosophical, and aesthetic forces shape science fiction and fantasy. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl176",
+      "school_id": "dvc",
+      "code": "ENGL 176",
+      "name": "The Graphic Novel as Literature",
+      "units": 3,
+      "description": "--> This course is a survey of the graphic literature as literary and artistic form. The course will examine the genre’s variety of forms and explore the genre from various cultural points of reference. The course will also review the literary and artistic techniques used in composing graphic literature, the origins of the form, and its significance in contemporary literature and culture. Additionally, this course will use formal analysis and critical approaches to analyze the ways historical, social, economic, psychological, and aesthetic forces shape graphic literature. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl177",
+      "school_id": "dvc",
+      "code": "ENGL 177",
+      "name": "Children&#x27;s Literature",
+      "units": 3,
+      "description": "--> This course is a survey of children’s literature of different literary genres. It places children&#x27;s literature in an historical context, tracing its development from earliest oral origins to the present. The course examines children’s literature from various time periods and geographical and cultural points of reference. Additionally, this course will analyze the ways historical, social, psychological, philosophical, and aesthetic forces shape children’s literature. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl178",
+      "school_id": "dvc",
+      "code": "ENGL 178",
+      "name": "Young Adult Literature",
+      "units": 3,
+      "description": "--> This course is a survey of young adult literature of different literary genres and from different cultures. The course examines young adult literature from various time periods and geographical and cultural points of reference. Additionally, this course analyzes the ways historical, social, psychological, philosophical, and aesthetic forces shape young adult literature. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl180",
+      "school_id": "dvc",
+      "code": "ENGL 180",
+      "name": "Drama and Performance as Literature",
+      "units": 3,
+      "description": "--> This course presents reading, critical study, and discussion of dramatic literature as a literary form by authors from diverse time periods and cultures. Dramatic structure, elements of performance (dramatic expression, stage direction, rhythm, etc.), and literary devices that characterize this literary genre are emphasized. Students will analyze the ways dramatic literature reflects and captures historical, social, cultural, and economic forces, and can serve as a unique literary artifact. -->"
+    },
+    {
+      "id": "dvc_engl190",
+      "school_id": "dvc",
+      "code": "ENGL 190",
+      "name": "Multicultural Literature by American Women",
+      "units": 3,
+      "description": "--> This course presents literature by and about women from at least three of the following cultural, ethnic, or racial groups: African American, Native American, European American, Asian American, and Latinx American. The course will analyze women&#x27;s prescribed role in society, their literary voices in resistance to those roles, as well as the language, ideology, content, and form of the literature. Through reading, analysis, and discussion, the course will connect these literatures to historical, social, cultural, and aesthetic contexts and examine issues central to women’s lives. The distinguishing elements of different literary genres and methods used to analyze literature of any genre will also be covered. -->"
+    },
+    {
+      "id": "dvc_engl222",
+      "school_id": "dvc",
+      "code": "ENGL 222",
+      "name": "Multi-Genre Creative Writing",
+      "units": 3,
+      "description": "--> In this course, students will compose different pieces representing a variety of literary genres. Students will read in different genres in order to learn various writing techniques, styles, and conventions. The readings represent the diverse perspectives of African American, Native American, European American, Asian American, and Latinx American writers. Students then employ the identified literary techniques and craft elements to plan and compose their own creative works. Students will workshop their pieces in class, focusing on the revision and editing processes. -->"
+    },
+    {
+      "id": "dvc_engl223",
+      "school_id": "dvc",
+      "code": "ENGL 223",
+      "name": "Fiction Writing",
+      "units": 3,
+      "description": "--> In this course, students analyze classic and contemporary short fiction writing to identify the characteristics and strategies of successful works of fiction. The readings represent the diverse perspectives of African American, Native American, European American, Asian American, Latinx American, and/or world writers. Students employ the craft elements to plan and compose fiction pieces. Students workshop their pieces in class, focusing on revision and editing processes. -->"
+    },
+    {
+      "id": "dvc_engl224",
+      "school_id": "dvc",
+      "code": "ENGL 224",
+      "name": "Poetry Writing",
+      "units": 3,
+      "description": "--> In this course, students analyze classic and contemporary poetry to identify the aspects and strategies of successful poems. The readings represent the diverse perspectives of African American, Native American, European American, Asian American, Latinx American, and/or world writers. Students employ the craft elements to plan and compose poems with an emphasis on the strategies necessary to develop poems. Students workshop their pieces in class, focusing on the revision and editing processes. -->"
+    },
+    {
+      "id": "dvc_engl225",
+      "school_id": "dvc",
+      "code": "ENGL 225",
+      "name": "Creative Nonfiction Writing",
+      "units": 3,
+      "description": "--> In this course, students analyze classic and contemporary narrative nonfiction writing, to identify the aspects and strategies of successful creative nonfiction works. The readings represent the diverse perspectives of African American, Native American, European American, Asian American, and Latinx American writers. Students then employ the craft elements to plan and compose creative nonfiction essays with an emphasis on the strategies necessary to develop an authentic narrative voice. Students will workshop their pieces in class, focusing on the revision and editing processes. -->"
+    },
+    {
+      "id": "dvc_engl252",
+      "school_id": "dvc",
+      "code": "ENGL 252",
+      "name": "Survey of Early English Literature",
+      "units": 3,
+      "description": "--> This course presents Early English Literature from the time period of roughly 750-1790, a thousand years of poetry and prose that reflects the diverse history of the English-speaking peoples who populated the British Isles (England, Ireland, Scotland, and Wales). The course examines the evolution of style and language in selected texts and the influence of cultural heritage on ideas, institutions, literature, and other art forms. The course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl253",
+      "school_id": "dvc",
+      "code": "ENGL 253",
+      "name": "Survey of Late English Literature",
+      "units": 3,
+      "description": "--> This course provides a survey of late English literature (nineteenth and twentieth centuries) through representative works such as poems, fiction, drama and non-fiction from major movements of this period. The course focuses on the development of literary forms and the relation between texts and broader historical, political, aesthetic and cultural themes and conditions. The course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl262",
+      "school_id": "dvc",
+      "code": "ENGL 262",
+      "name": "Survey of Early American Literature",
+      "units": 3,
+      "description": "--> This course provides a survey of early American literature from before first contact through the Civil War, a body of work comprising diverse cultures, traditions, and genres. The course focuses on the development of literary forms and the relation between texts and broader historical, political, aesthetic and cultural themes and conditions. The course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl263",
+      "school_id": "dvc",
+      "code": "ENGL 263",
+      "name": "Survey of Late American Literature",
+      "units": 3,
+      "description": "--> This course provides a survey of late American literature from the Civil War through the present day, a body of work comprising diverse traditions, genres, and cultures. The course focuses on the development of late American literary forms and the relation between texts and broader historical, political, aesthetic and cultural themes and conditions. The course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl272",
+      "school_id": "dvc",
+      "code": "ENGL 272",
+      "name": "Survey of Early World Literature",
+      "units": 3,
+      "description": "--> This course surveys early world literature from antiquity through the mid-seventeenth century. The course studies the development of major early literary genres and forms in relation to broader historical, political, aesthetic, and cultural conditions, analyzing and comparing examples from different cultures side by side. The course teaches students to distinguish and interpret elements of literary forms, and to write critically about literature from diverse periods and cultures. -->"
+    },
+    {
+      "id": "dvc_engl273",
+      "school_id": "dvc",
+      "code": "ENGL 273",
+      "name": "Survey of Late World Literature",
+      "units": 3,
+      "description": "--> This course provides a survey of late world literature from the seventeenth century to modern times from cultures around the world, including significant literary movements of this timeframe: romanticism, realism, modernism, post-colonial, and contemporary literature. The course focuses on the development of late world literary forms and the relation between texts and broader historical, political, aesthetic and cultural themes and conditions. The course also exposes students to distinguishing elements of selected literary forms and to the art and practice of analyzing and writing about literature. -->"
+    },
+    {
+      "id": "dvc_engl298",
+      "school_id": "dvc",
+      "code": "ENGL 298",
+      "name": "Independent Study",
+      "units": 0,
+      "description": "--> This course is designed for advanced students who wish to conduct additional research, a special project, or learning activities in a specific discipline/subject area and is not intended to replace an existing course. The student and instructor develop a written contract that includes objectives to be achieved, activities and procedures to accomplish the study project, and the means by which the supervising instructor may assess accomplishment. -->"
+    },
+    {
+      "id": "dvc_englc1000",
+      "school_id": "dvc",
+      "code": "ENGL C1000",
+      "name": "Academic Reading and Writing",
+      "units": 3,
+      "description": "--> In this course, students receive instruction in academic reading and writing, including writing processes, effective use of language, analytical thinking, and the foundations of academic research. Formerly ENGL-122 (25-26) -->"
+    },
+    {
+      "id": "dvc_englc1000e",
+      "school_id": "dvc",
+      "code": "ENGL C1000E",
+      "name": "Academic Reading and Writing",
+      "units": 5,
+      "description": "--> In this course, students receive instruction in academic reading and writing, including writing processes, effective use of language, analytical thinking, and the foundations of academic research. This course includes embedded support. Formerly ENGL-122L (25-26) -->"
+    },
+    {
+      "id": "dvc_englc1001",
+      "school_id": "dvc",
+      "code": "ENGL C1001",
+      "name": "Critical Thinking and Writing",
+      "units": 3,
+      "description": "--> In this course, students receive instruction in critical thinking for purposes of constructing, evaluating, and composing arguments in a variety of rhetorical forms, using primarily non-fiction texts, refining writing skills and research strategies developed in ENGL C1000 Academic Reading and Writing (C-ID ENGL 100) or similar first-year college writing course. Formerly ENGL-126 (25-26) -->"
+    },
+    {
+      "id": "dvc_chem107",
+      "school_id": "dvc",
+      "code": "CHEM 107",
+      "name": "Integrated Inorganic, Organic, and Biological Chemistry",
+      "units": 5,
+      "description": "--> This course is an intensive survey of the fundamentals of chemistry, which explores and applies the topics of inorganic and organic chemistry to biochemistry. This course satisfies the requirements of nursing and other health-career programs that require one term of chemistry. -->"
+    },
+    {
+      "id": "dvc_chem108",
+      "school_id": "dvc",
+      "code": "CHEM 108",
+      "name": "Introductory Chemistry",
+      "units": 4,
+      "description": "--> This course is an introduction to the experimental science of chemistry. Using mathematical word problems and chemical terms, the student will have an overview of inorganic chemistry. This course is appropriate for those that have no high school chemistry experience. This course serves as preparation for General Chemistry (CHEM-120/121) or the first course of a two-semester sequence (with CHEM-109) that satisfies the requirements of allied health programs such as nursing and dental hygiene that require one year of chemistry. -->"
+    },
+    {
+      "id": "dvc_chem109",
+      "school_id": "dvc",
+      "code": "CHEM 109",
+      "name": "Introduction to Organic and Biochemistry",
+      "units": 4,
+      "description": "--> This course provides a focused introduction to the chemistry of living things. Organic chemistry is the study of carbon compounds that is linked to biochemistry, the chemical basis of life, through the relationship of molecular structure and function. -->"
+    },
+    {
+      "id": "dvc_chem120",
+      "school_id": "dvc",
+      "code": "CHEM 120",
+      "name": "General College Chemistry I",
+      "units": 5,
+      "description": "--> This course is the first semester of a two-semester sequence (CHEM-120 and CHEM-121) that covers the fundamentals of chemistry including atomic theory, chemical reactions, bonding, structure, stoichiometry, gases, solutions, thermochemistry, and chemical kinetics. Basic laboratory techniques are introduced including the preparation of standard solutions, titration, and the generation of calibration curves used in qualitative and quantitative analysis. Students will perform experiments safely, keep a laboratory notebook, and complete laboratory reports. -->"
+    },
+    {
+      "id": "dvc_chem121",
+      "school_id": "dvc",
+      "code": "CHEM 121",
+      "name": "General College Chemistry II",
+      "units": 5,
+      "description": "--> This course is the second semester of a two-semester sequence (CHEM-120 and CHEM-121) that covers gaseous and acid-base equilibria, buffers, titration curves, solubility products, thermodynamics, electrochemistry, coordination complexes, nuclear chemistry, as well as qualitative and quantitative experiments. Laboratory work in this course will build upon techniques used in CHEM-120 and includes some independent experimental design. -->"
+    },
+    {
+      "id": "dvc_chem150",
+      "school_id": "dvc",
+      "code": "CHEM 150",
+      "name": "Topics in Chemistry",
+      "units": 0,
+      "description": "--> A supplemental course in Chemistry to provide a study of current concepts and problems in Chemistry. Specific topics will be announced in the schedule of classes. -->"
+    },
+    {
+      "id": "dvc_chem226",
+      "school_id": "dvc",
+      "code": "CHEM 226",
+      "name": "Organic Chemistry I",
+      "units": 5,
+      "description": "--> This course is the first semester of a two-semester sequence (CHEM-226 and CHEM-227) that covers structure and bonding, stereochemistry, conformational analysis, reaction mechanisms, and the nomenclature, physical properties, and reactions of various classes of organic compounds (alkanes, alkenes, alkynes, alkyl halides, alcohols, and ethers). Basic organic laboratory techniques are introduced and used in syntheses or other projects. Chemical safety, information retrieval and good lab practices are emphasized. A variety of laboratory instrumentation skills are developed including data collection and analysis using gas chromatography (GC), and IR and UV-Visible spectrometry. -->"
+    },
+    {
+      "id": "dvc_chem227",
+      "school_id": "dvc",
+      "code": "CHEM 227",
+      "name": "Organic Chemistry II",
+      "units": 5,
+      "description": "--> This course is a continuation of CHEM-226. Topics include spectroscopy, additional reaction mechanisms, the nomenclature, physical properties, and reactions of other basic classes of compounds (aromatics, organometallics, aldehydes, ketones, carboxylic acids and their derivatives, and amines). The nature and reactions of multifunctional compounds and the structure and reactions of biochemical molecules (carbohydrates, lipids, amino acids, proteins and nucleic acids) are also discussed. Laboratory work includes hands-on spectroscopic techniques (i.e. NMR, IR), organic instrumental analysis, more advanced projects involving synthesis, and a literature research project using university-level chemical literature resources. -->"
+    },
+    {
+      "id": "dvc_chem298",
+      "school_id": "dvc",
+      "code": "CHEM 298",
+      "name": "Independent Study",
+      "units": 0,
+      "description": "--> This course is designed for advanced students who wish to conduct additional research, a special project, or learning activities in a specific discipline/subject area and is not intended to replace an existing course. The student and instructor develop a written contract that includes objectives to be achieved, activities and procedures to accomplish the study project, and the means by which the supervising instructor may assess accomplishment. -->"
+    },
+    {
+      "id": "dvc_chem299",
+      "school_id": "dvc",
+      "code": "CHEM 299",
+      "name": "Student Instructional Assistant",
+      "units": 0,
+      "description": "--> Students work as instructional assistants, lab assistants and research assistants in this department. The instructional assistants function as group discussion leaders, meet and assist students with problems and projects, or help instructors by setting up laboratory or demonstration apparatus. Students may not assist in course sections in which they are currently enrolled. -->"
+    }
+  ],
+  "prerequisites": [
+    {
+      "course_id": "dvc_comsc120",
+      "prerequisite_id": "dvc_comsc110"
+    },
+    {
+      "course_id": "dvc_comsc165",
+      "prerequisite_id": "dvc_comsc110"
+    },
+    {
+      "course_id": "dvc_comsc200",
+      "prerequisite_id": "dvc_comsc165"
+    },
+    {
+      "course_id": "dvc_comsc210",
+      "prerequisite_id": "dvc_comsc165"
+    },
+    {
+      "course_id": "dvc_comsc230",
+      "prerequisite_id": "dvc_comsc140"
+    },
+    {
+      "course_id": "dvc_comsc230",
+      "prerequisite_id": "dvc_comsc165"
+    },
+    {
+      "course_id": "dvc_comsc240",
+      "prerequisite_id": "dvc_comsc140"
+    },
+    {
+      "course_id": "dvc_comsc260",
+      "prerequisite_id": "dvc_comsc165"
+    },
+    {
+      "course_id": "dvc_math183",
+      "prerequisite_id": "dvc_math182"
+    },
+    {
+      "course_id": "dvc_math193",
+      "prerequisite_id": "dvc_math192"
+    },
+    {
+      "course_id": "dvc_math194",
+      "prerequisite_id": "dvc_math193"
+    },
+    {
+      "course_id": "dvc_math195",
+      "prerequisite_id": "dvc_math193"
+    },
+    {
+      "course_id": "dvc_math289",
+      "prerequisite_id": "dvc_math193"
+    },
+    {
+      "course_id": "dvc_math292",
+      "prerequisite_id": "dvc_math193"
+    },
+    {
+      "course_id": "dvc_math294",
+      "prerequisite_id": "dvc_math292"
+    },
+    {
+      "course_id": "dvc_phys111",
+      "prerequisite_id": "dvc_phys110"
+    },
+    {
+      "course_id": "dvc_phys120",
+      "prerequisite_id": "dvc_math121"
+    },
+    {
+      "course_id": "dvc_phys121",
+      "prerequisite_id": "dvc_phys120"
+    },
+    {
+      "course_id": "dvc_phys124",
+      "prerequisite_id": "dvc_math182"
+    },
+    {
+      "course_id": "dvc_phys124",
+      "prerequisite_id": "dvc_math192"
+    },
+    {
+      "course_id": "dvc_phys124",
+      "prerequisite_id": "dvc_phys120"
+    },
+    {
+      "course_id": "dvc_phys125",
+      "prerequisite_id": "dvc_math183"
+    },
+    {
+      "course_id": "dvc_phys125",
+      "prerequisite_id": "dvc_math193"
+    },
+    {
+      "course_id": "dvc_phys125",
+      "prerequisite_id": "dvc_phys121"
+    },
+    {
+      "course_id": "dvc_phys129",
+      "prerequisite_id": "dvc_math192"
+    },
+    {
+      "course_id": "dvc_phys130",
+      "prerequisite_id": "dvc_phys110"
+    },
+    {
+      "course_id": "dvc_phys130",
+      "prerequisite_id": "dvc_phys112"
+    },
+    {
+      "course_id": "dvc_phys130",
+      "prerequisite_id": "dvc_phys120"
+    },
+    {
+      "course_id": "dvc_phys130",
+      "prerequisite_id": "dvc_phys129"
+    },
+    {
+      "course_id": "dvc_phys230",
+      "prerequisite_id": "dvc_math292"
+    },
+    {
+      "course_id": "dvc_phys230",
+      "prerequisite_id": "dvc_phys130"
+    },
+    {
+      "course_id": "dvc_phys231",
+      "prerequisite_id": "dvc_math294"
+    },
+    {
+      "course_id": "dvc_phys231",
+      "prerequisite_id": "dvc_phys230"
+    },
+    {
+      "course_id": "dvc_engl123",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl123a",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl126a",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl222",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl223",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl224",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl225",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl252",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl253",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl262",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl263",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl272",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_engl273",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_englc1001",
+      "prerequisite_id": "dvc_englc1000"
+    },
+    {
+      "course_id": "dvc_chem109",
+      "prerequisite_id": "dvc_chem107"
+    },
+    {
+      "course_id": "dvc_chem109",
+      "prerequisite_id": "dvc_chem108"
+    },
+    {
+      "course_id": "dvc_chem109",
+      "prerequisite_id": "dvc_chem120"
+    },
+    {
+      "course_id": "dvc_chem120",
+      "prerequisite_id": "dvc_chem108"
+    },
+    {
+      "course_id": "dvc_chem121",
+      "prerequisite_id": "dvc_chem120"
+    },
+    {
+      "course_id": "dvc_chem226",
+      "prerequisite_id": "dvc_chem121"
+    },
+    {
+      "course_id": "dvc_chem227",
+      "prerequisite_id": "dvc_chem121"
+    },
+    {
+      "course_id": "dvc_chem227",
+      "prerequisite_id": "dvc_chem226"
+    }
+  ],
+  "unresolved_prereqs": [
+    {
+      "course": "COMSC 120",
+      "prereq_slug": "engin135",
+      "reason": "slug not in scraped set — department not included?"
+    },
+    {
+      "course": "COMSC 165",
+      "prereq_slug": "engin135",
+      "reason": "slug not in scraped set — department not included?"
+    },
+    {
+      "course": "PHYS 130",
+      "prereq_slug": "phys111",
+      "reason": "slug not in scraped set — department not included?"
+    }
+  ]
+}

@@ -1,0 +1,499 @@
+{
+  "articulations": [
+    {
+      "id": "dvc_ucb_cs:compsci_61a",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "COMPSCI 61A",
+      "receiving_name": "The Structure and Interpretation of Computer Programs",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [
+                  {
+                    "position": 0,
+                    "content": "Must complete an additional university course after transfer to satisfy this requirement"
+                  }
+                ],
+                "courseIdentifierParentId": 375854,
+                "courseTitle": "Python Programming",
+                "courseNumber": "140",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F2020",
+                "end": "",
+                "minUnits": 3.0,
+                "maxUnits": 3.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 279,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          },
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 375855,
+                "courseTitle": "Advanced Python Programming",
+                "courseNumber": "240",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F2020",
+                "end": "",
+                "minUnits": 3.0,
+                "maxUnits": 3.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 279,
+                "position": 0,
+                "type": "Course"
+              },
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [
+                  {
+                    "position": 0,
+                    "content": "Must complete an additional university course after transfer to satisfy this requirement"
+                  }
+                ],
+                "courseIdentifierParentId": 305099,
+                "courseTitle": "Analytic Geometry and Calculus I",
+                "courseNumber": "192",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 299,
+                "position": 1,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 1,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [
+          {
+            "id": "26896333-513a-4efa-9bac-08ddfca1a18b",
+            "sendingArticulationId": "547734c9-b370-41bd-8662-08ddfd0a381f",
+            "groupConjunction": "Or",
+            "sendingCourseGroupBeginPosition": 0,
+            "sendingCourseGroupEndPosition": 1
+          }
+        ],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_61b",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "COMPSCI 61B",
+      "receiving_name": "Data Structures",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 291003,
+                "courseTitle": "Program Design and Data Structures",
+                "courseNumber": "210",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F1995",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_61c",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "COMPSCI 61C",
+      "receiving_name": "Machine Structures",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 289228,
+                "courseTitle": "Assembly Language Programming/Computer Organization",
+                "courseNumber": "260",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F1995",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_70",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "COMPSCI 70",
+      "receiving_name": "Discrete Mathematics and Probability Theory",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": "This course must be taken at the university after transfer",
+        "deniedCourses": [],
+        "items": [],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": false
+    },
+    {
+      "id": "dvc_ucb_cs:math_54",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "MATH 54",
+      "receiving_name": "Linear Algebra and Differential Equations",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 148093,
+                "courseTitle": "Differential Equations",
+                "courseNumber": "294",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 1,
+                "type": "Course"
+              },
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 160374,
+                "courseTitle": "Linear Algebra",
+                "courseNumber": "194",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 3.0,
+                "maxUnits": 3.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucb_cs:math_51",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "MATH 51",
+      "receiving_name": "Calculus I",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 305099,
+                "courseTitle": "Analytic Geometry and Calculus I",
+                "courseNumber": "192",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucb_cs:math_52",
+      "path_id": "dvc_ucb_cs",
+      "receiving_code": "MATH 52",
+      "receiving_name": "Calculus II",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 288130,
+                "courseTitle": "Analytic Geometry and Calculus II",
+                "courseNumber": "193",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    }
+  ],
+  "options": [
+    {
+      "id": "dvc_ucb_cs:compsci_61a:0",
+      "articulation_id": "dvc_ucb_cs:compsci_61a",
+      "option_index": 0,
+      "label": "COMSC 140",
+      "course_ids": []
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_61a:1",
+      "articulation_id": "dvc_ucb_cs:compsci_61a",
+      "option_index": 1,
+      "label": "COMSC 240 + MATH 192",
+      "course_ids": [
+        "dvc_math192"
+      ]
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_61b:0",
+      "articulation_id": "dvc_ucb_cs:compsci_61b",
+      "option_index": 0,
+      "label": "COMSC 210",
+      "course_ids": [
+        "dvc_comsc210"
+      ]
+    },
+    {
+      "id": "dvc_ucb_cs:compsci_61c:0",
+      "articulation_id": "dvc_ucb_cs:compsci_61c",
+      "option_index": 0,
+      "label": "COMSC 260",
+      "course_ids": [
+        "dvc_comsc260"
+      ]
+    },
+    {
+      "id": "dvc_ucb_cs:math_54:0",
+      "articulation_id": "dvc_ucb_cs:math_54",
+      "option_index": 0,
+      "label": "MATH 294 + MATH 194",
+      "course_ids": [
+        "dvc_math194"
+      ]
+    },
+    {
+      "id": "dvc_ucb_cs:math_51:0",
+      "articulation_id": "dvc_ucb_cs:math_51",
+      "option_index": 0,
+      "label": "MATH 192",
+      "course_ids": [
+        "dvc_math192"
+      ]
+    },
+    {
+      "id": "dvc_ucb_cs:math_52:0",
+      "articulation_id": "dvc_ucb_cs:math_52",
+      "option_index": 0,
+      "label": "MATH 193",
+      "course_ids": [
+        "dvc_math193"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "path_id": "dvc_ucb_cs",
+      "course_id": "dvc_comsc210",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucb_cs",
+      "course_id": "dvc_comsc260",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucb_cs",
+      "course_id": "dvc_math192",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucb_cs",
+      "course_id": "dvc_math193",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucb_cs",
+      "course_id": "dvc_math194",
+      "is_required": true
+    }
+  ],
+  "missing_courses": [
+    {
+      "code": "COMSC 140",
+      "name": "Python Programming",
+      "assist_id": 375854,
+      "school_id": "dvc",
+      "units": 3.0
+    },
+    {
+      "code": "COMSC 240",
+      "name": "Advanced Python Programming",
+      "assist_id": 375855,
+      "school_id": "dvc",
+      "units": 3.0
+    },
+    {
+      "code": "MATH 294",
+      "name": "Differential Equations",
+      "assist_id": 148093,
+      "school_id": "dvc",
+      "units": 5.0
+    }
+  ],
+  "unmapped_articulations": []
+}

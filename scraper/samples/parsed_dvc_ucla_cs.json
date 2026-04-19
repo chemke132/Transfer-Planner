@@ -1,0 +1,813 @@
+{
+  "articulations": [
+    {
+      "id": "dvc_ucla_cs:math_31a",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 31A",
+      "receiving_name": "Differential and Integral Calculus",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 305099,
+                "courseTitle": "Analytic Geometry and Calculus I",
+                "courseNumber": "192",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "F2027",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_31b",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 31B",
+      "receiving_name": "Integration and Infinite Series",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 288130,
+                "courseTitle": "Analytic Geometry and Calculus II",
+                "courseNumber": "193",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "F2027",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_32a",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 32A",
+      "receiving_name": "Calculus of Several Variables",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 253544,
+                "courseTitle": "Analytic Geometry and Calculus III",
+                "courseNumber": "292",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_32b",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 32B",
+      "receiving_name": "Calculus of Several Variables",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 253544,
+                "courseTitle": "Analytic Geometry and Calculus III",
+                "courseNumber": "292",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_33a",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 33A",
+      "receiving_name": "Linear Algebra and Applications",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 160374,
+                "courseTitle": "Linear Algebra",
+                "courseNumber": "194",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 3.0,
+                "maxUnits": 3.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_33b",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 33B",
+      "receiving_name": "Differential Equations",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 148093,
+                "courseTitle": "Differential Equations",
+                "courseNumber": "294",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": null,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:math_61",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "MATH 61",
+      "receiving_name": "Introduction to Discrete Structures",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 145525,
+                "courseTitle": "Discrete Mathematics",
+                "courseNumber": "195",
+                "prefix": "MATH",
+                "prefixParentId": 10026,
+                "prefixDescription": "Mathematics",
+                "departmentParentId": 15389,
+                "department": "Mathematics and Statistics",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 209,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:engcomp_3",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "ENGCOMP 3",
+      "receiving_name": "English Composition, Rhetoric, and Language",
+      "receiving_units": 5.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 370314,
+                "courseTitle": "Academic Reading and Writing for Multilingual Students",
+                "courseNumber": "122AL",
+                "prefix": "ENGL",
+                "prefixParentId": 2737,
+                "prefixDescription": "English",
+                "departmentParentId": 5025,
+                "department": "English",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 299,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 2,
+            "type": "CourseGroup"
+          },
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 370311,
+                "courseTitle": "Academic Reading and Writing ",
+                "courseNumber": "C1000E",
+                "prefix": "ENGL",
+                "prefixParentId": 2737,
+                "prefixDescription": "English",
+                "departmentParentId": 5025,
+                "department": "English",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 5.0,
+                "maxUnits": 5.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 299,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 1,
+            "type": "CourseGroup"
+          },
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 197037,
+                "courseTitle": "Academic Reading and Writing",
+                "courseNumber": "C1000",
+                "prefix": "ENGL",
+                "prefixParentId": 2737,
+                "prefixDescription": "English",
+                "departmentParentId": 5025,
+                "department": "English",
+                "begin": "F2025",
+                "end": "",
+                "minUnits": 3.0,
+                "maxUnits": 3.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 299,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [
+          {
+            "id": "3b30de12-48ed-43a8-e76f-08ddcb9717a5",
+            "sendingArticulationId": "b4f9972f-e57f-4364-ef1e-08ddcb97173a",
+            "groupConjunction": "Or",
+            "sendingCourseGroupBeginPosition": 0,
+            "sendingCourseGroupEndPosition": 1
+          },
+          {
+            "id": "378d59d5-1ce3-4240-e76d-08ddcb9717a5",
+            "sendingArticulationId": "b4f9972f-e57f-4364-ef1e-08ddcb97173a",
+            "groupConjunction": "Or",
+            "sendingCourseGroupBeginPosition": 1,
+            "sendingCourseGroupEndPosition": 2
+          }
+        ],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_31",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "COM SCI 31",
+      "receiving_name": "Introduction to Computer Science I",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 302475,
+                "courseTitle": "Object Oriented Programming C++",
+                "courseNumber": "200",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F2012",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 247,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 1,
+            "type": "CourseGroup"
+          },
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 253489,
+                "courseTitle": "Advanced Programming with C and C++",
+                "courseNumber": "165",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F2012",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 247,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [
+          {
+            "id": "81fcbc12-cf73-4389-e75d-08ddcb9717a5",
+            "sendingArticulationId": "609cb7b4-20cc-4c78-eee5-08ddcb97173a",
+            "groupConjunction": "Or",
+            "sendingCourseGroupBeginPosition": 0,
+            "sendingCourseGroupEndPosition": 1
+          }
+        ],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_32",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "COM SCI 32",
+      "receiving_name": "Introduction to Computer Science II",
+      "receiving_units": 4.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 291003,
+                "courseTitle": "Program Design and Data Structures",
+                "courseNumber": "210",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F1995",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 179,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_33",
+      "path_id": "dvc_ucla_cs",
+      "receiving_code": "COM SCI 33",
+      "receiving_name": "Introduction to Computer Organization",
+      "receiving_units": 5.0,
+      "sending_logic": {
+        "noArticulationReason": null,
+        "deniedCourses": [],
+        "items": [
+          {
+            "courseConjunction": "And",
+            "items": [
+              {
+                "visibleCrossListedCourses": [],
+                "requisites": [],
+                "attributes": [],
+                "courseIdentifierParentId": 289228,
+                "courseTitle": "Assembly Language Programming/Computer Organization",
+                "courseNumber": "260",
+                "prefix": "COMSC",
+                "prefixParentId": 548,
+                "prefixDescription": "Computer Science",
+                "departmentParentId": 3217,
+                "department": "Computer Science",
+                "begin": "F1995",
+                "end": "",
+                "minUnits": 4.0,
+                "maxUnits": 4.0,
+                "pathways": [],
+                "publishedCourseIdentifierYearTermId": 179,
+                "position": 0,
+                "type": "Course"
+              }
+            ],
+            "attributes": [],
+            "position": 0,
+            "type": "CourseGroup"
+          }
+        ],
+        "courseGroupConjunctions": [],
+        "type": "SendingArticulation",
+        "attributes": []
+      },
+      "has_articulation": true
+    }
+  ],
+  "options": [
+    {
+      "id": "dvc_ucla_cs:math_31a:0",
+      "articulation_id": "dvc_ucla_cs:math_31a",
+      "option_index": 0,
+      "label": "MATH 192",
+      "course_ids": [
+        "dvc_math192"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:math_31b:0",
+      "articulation_id": "dvc_ucla_cs:math_31b",
+      "option_index": 0,
+      "label": "MATH 193",
+      "course_ids": [
+        "dvc_math193"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:math_32a:0",
+      "articulation_id": "dvc_ucla_cs:math_32a",
+      "option_index": 0,
+      "label": "MATH 292",
+      "course_ids": [
+        "dvc_math292"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:math_32b:0",
+      "articulation_id": "dvc_ucla_cs:math_32b",
+      "option_index": 0,
+      "label": "MATH 292",
+      "course_ids": [
+        "dvc_math292"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:math_33a:0",
+      "articulation_id": "dvc_ucla_cs:math_33a",
+      "option_index": 0,
+      "label": "MATH 194",
+      "course_ids": [
+        "dvc_math194"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:math_33b:0",
+      "articulation_id": "dvc_ucla_cs:math_33b",
+      "option_index": 0,
+      "label": "MATH 294",
+      "course_ids": []
+    },
+    {
+      "id": "dvc_ucla_cs:math_61:0",
+      "articulation_id": "dvc_ucla_cs:math_61",
+      "option_index": 0,
+      "label": "MATH 195",
+      "course_ids": [
+        "dvc_math195"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:engcomp_3:0",
+      "articulation_id": "dvc_ucla_cs:engcomp_3",
+      "option_index": 0,
+      "label": "ENGL 122AL",
+      "course_ids": []
+    },
+    {
+      "id": "dvc_ucla_cs:engcomp_3:1",
+      "articulation_id": "dvc_ucla_cs:engcomp_3",
+      "option_index": 1,
+      "label": "ENGL C1000E",
+      "course_ids": []
+    },
+    {
+      "id": "dvc_ucla_cs:engcomp_3:2",
+      "articulation_id": "dvc_ucla_cs:engcomp_3",
+      "option_index": 2,
+      "label": "ENGL C1000",
+      "course_ids": []
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_31:0",
+      "articulation_id": "dvc_ucla_cs:com_sci_31",
+      "option_index": 0,
+      "label": "COMSC 200",
+      "course_ids": [
+        "dvc_comsc200"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_31:1",
+      "articulation_id": "dvc_ucla_cs:com_sci_31",
+      "option_index": 1,
+      "label": "COMSC 165",
+      "course_ids": [
+        "dvc_comsc165"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_32:0",
+      "articulation_id": "dvc_ucla_cs:com_sci_32",
+      "option_index": 0,
+      "label": "COMSC 210",
+      "course_ids": [
+        "dvc_comsc210"
+      ]
+    },
+    {
+      "id": "dvc_ucla_cs:com_sci_33:0",
+      "articulation_id": "dvc_ucla_cs:com_sci_33",
+      "option_index": 0,
+      "label": "COMSC 260",
+      "course_ids": [
+        "dvc_comsc260"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_comsc200",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_comsc210",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_comsc260",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_math192",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_math193",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_math194",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_math195",
+      "is_required": true
+    },
+    {
+      "path_id": "dvc_ucla_cs",
+      "course_id": "dvc_math292",
+      "is_required": true
+    }
+  ],
+  "missing_courses": [
+    {
+      "code": "MATH 294",
+      "name": "Differential Equations",
+      "assist_id": 148093,
+      "school_id": "dvc",
+      "units": 5.0
+    },
+    {
+      "code": "ENGL 122AL",
+      "name": "Academic Reading and Writing for Multilingual Students",
+      "assist_id": 370314,
+      "school_id": "dvc",
+      "units": 5.0
+    },
+    {
+      "code": "ENGL C1000E",
+      "name": "Academic Reading and Writing ",
+      "assist_id": 370311,
+      "school_id": "dvc",
+      "units": 5.0
+    },
+    {
+      "code": "ENGL C1000",
+      "name": "Academic Reading and Writing",
+      "assist_id": 197037,
+      "school_id": "dvc",
+      "units": 3.0
+    }
+  ],
+  "unmapped_articulations": []
+}

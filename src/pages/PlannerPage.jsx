@@ -1,0 +1,653 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { DndContext, DragOverlay, PointerSensor, useDraggable, useDroppable, useSensor, useSensors, pointerWithin } from '@dnd-kit/core'
+import SemesterColumn from '../components/Planner/SemesterColumn.jsx'
+import AutoPlanButton from '../components/Planner/AutoPlanButton.jsx'
+import { autoPlanSemesters } from '../lib/topologicalSort.js'
+import { defaultTerms, extendTerms } from '../lib/terms.js'
+import { useCalGetcSelections } from '../hooks/useCalGetcSelections.js'
+import { useSetup } from '../hooks/useSetup.js'
+import { useAppData } from '../hooks/useAppData.jsx'
+import { useOrChoices } from '../hooks/useOrChoices.js'
+
+const SUMMER_AUTO_CAP = 6
+const SUMMER_AUTO_MAX_COURSES = 1
+
+const STORAGE_KEY = 'tp:planner_state'
+const STORAGE_VERSION = 1
+
+function loadPersistedState() {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed?.version !== STORAGE_VERSION) return null
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+function buildInitialPool(majorCourses, calGetcCourses, selectedCalGetcIds) {
+  const calGetc = calGetcCourses.filter((c) => selectedCalGetcIds.has(c.id))
+  return [...majorCourses, ...calGetc]
+}
+
+function makeEmptySemesters(terms) {
+  return terms.map((t) => ({ id: t.id, name: t.name, season: t.season, year: t.year, courses: [] }))
+}
+
+export default function PlannerPage() {
+  const { setup } = useSetup()
+  const { selected: selectedCalGetc } = useCalGetcSelections()
+  const { choices: orChoices } = useOrChoices()
+  const {
+    findTransferPath,
+    getMajorCourses,
+    getDirectRequiredIds,
+    getCalGetcCourses,
+    filterPrerequisites,
+    PREREQUISITES,
+  } = useAppData()
+
+  // Derived per-setup context.
+  const path = useMemo(
+    () => findTransferPath({ cc_id: setup.cc_id, target_major_id: setup.target_major_id }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setup.cc_id, setup.target_major_id],
+  )
+  const majorCourses = useMemo(
+    () => getMajorCourses(path, orChoices),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [path, orChoices],
+  )
+  const directRequiredIds = useMemo(
+    () => getDirectRequiredIds(path, orChoices),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [path, orChoices],
+  )
+  const majorIds = useMemo(() => new Set(majorCourses.map((c) => c.id)), [majorCourses])
+  const calGetcCourses = useMemo(
+    () => getCalGetcCourses(setup.cc_id),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setup.cc_id],
+  )
+  const calGetcIds = useMemo(() => new Set(calGetcCourses.map((c) => c.id)), [calGetcCourses])
+
+  const [unitCap, setUnitCap] = useState(() => {
+    const persisted = loadPersistedState()
+    return typeof persisted?.unitCap === 'number' ? persisted.unitCap : 15
+  })
+  const [terms] = useState(() => defaultTerms())
+  const [semesters, setSemesters] = useState(() => {
+    const persisted = loadPersistedState()
+    if (Array.isArray(persisted?.semesters) && persisted.semesters.length > 0) {
+      return persisted.semesters
+    }
+    return makeEmptySemesters(terms)
+  })
+  const [pinnedIds, setPinnedIds] = useState(() => {
+    const persisted = loadPersistedState()
+    return new Set(Array.isArray(persisted?.pinnedIds) ? persisted.pinnedIds : [])
+  })
+  const [pool, setPool] = useState(() => {
+    const initial = buildInitialPool(majorCourses, calGetcCourses, selectedCalGetc)
+    const persisted = loadPersistedState()
+    if (Array.isArray(persisted?.semesters)) {
+      const placed = new Set(
+        persisted.semesters.flatMap((s) => (s.courses || []).map((c) => c.id)),
+      )
+      return initial.filter((c) => !placed.has(c.id))
+    }
+    return initial
+  })
+  const [activeCourse, setActiveCourse] = useState(null)
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }))
+
+  // When the transfer path OR the OR-branch choices change, reconcile state:
+  // - drop placed/pinned courses that are no longer required
+  // - add newly-required courses to the pool (keep existing placements intact)
+  useEffect(() => {
+    setSemesters((prev) =>
+      prev.map((s) => ({
+        ...s,
+        courses: s.courses.filter((c) => majorIds.has(c.id) || calGetcIds.has(c.id)),
+      })),
+    )
+    setPool((prev) => {
+      const placedIds = new Set(
+        semesters.flatMap((s) => (s.courses || []).map((c) => c.id)),
+      )
+      const desiredIds = new Set([
+        ...majorCourses.map((c) => c.id),
+        ...calGetcCourses.filter((c) => selectedCalGetc.has(c.id)).map((c) => c.id),
+      ])
+      const keep = prev.filter((c) => desiredIds.has(c.id))
+      const keepIds = new Set(keep.map((c) => c.id))
+      const toAdd = [
+        ...majorCourses,
+        ...calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
+      ].filter((c) => !keepIds.has(c.id) && !placedIds.has(c.id))
+      return [...keep, ...toAdd]
+    })
+    setPinnedIds((prev) => {
+      const next = new Set()
+      for (const id of prev) if (majorIds.has(id) || calGetcIds.has(id)) next.add(id)
+      return next
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setup.cc_id, setup.target_major_id, orChoices])
+
+  // Sync pool when Cal-GETC selection changes.
+  useEffect(() => {
+    const placedIds = new Set(semesters.flatMap((s) => s.courses.map((c) => c.id)))
+    setPool((prev) => {
+      const keep = prev.filter((c) => {
+        const isCalGetc = calGetcIds.has(c.id)
+        return isCalGetc ? selectedCalGetc.has(c.id) : true
+      })
+      const keepIds = new Set(keep.map((c) => c.id))
+      const toAdd = calGetcCourses.filter(
+        (c) =>
+          selectedCalGetc.has(c.id) && !keepIds.has(c.id) && !placedIds.has(c.id),
+      )
+      return [...keep, ...toAdd]
+    })
+    setSemesters((prev) =>
+      prev.map((s) => ({
+        ...s,
+        courses: s.courses.filter(
+          (c) => !calGetcIds.has(c.id) || selectedCalGetc.has(c.id),
+        ),
+      })),
+    )
+    setPinnedIds((prev) => {
+      const next = new Set()
+      for (const id of prev) {
+        if (!calGetcIds.has(id) || selectedCalGetc.has(id)) next.add(id)
+      }
+      return next
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCalGetc])
+
+  // Persist planner state on any change.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const payload = {
+        version: STORAGE_VERSION,
+        unitCap,
+        semesters,
+        pinnedIds: [...pinnedIds],
+      }
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    } catch {
+      // ignore quota / serialization errors
+    }
+  }, [unitCap, semesters, pinnedIds])
+
+  const allPlaced = useMemo(
+    () => semesters.flatMap((s) => s.courses.map((c) => ({ ...c, semesterId: s.id }))),
+    [semesters],
+  )
+
+  function handleAutoPlan() {
+    const selectedCalGetcCourses = calGetcCourses.filter((c) => selectedCalGetc.has(c.id))
+    const planPool = [...majorCourses, ...selectedCalGetcCourses]
+    if (!planPool.length) return
+
+    // Pinned courses stay where they are; everything else gets (re)placed.
+    const pinnedBySem = new Map()
+    for (const s of semesters) {
+      pinnedBySem.set(
+        s.id,
+        s.courses.filter((c) => pinnedIds.has(c.id)),
+      )
+    }
+    const coursesToPlan = planPool.filter((c) => !pinnedIds.has(c.id))
+
+    // Runway = user's current semesters + buffer for overflow.
+    const last = semesters[semesters.length - 1]
+    const currentRunway = semesters.map((s) => ({
+      id: s.id, name: s.name, season: s.season, year: s.year,
+    }))
+    const runway = [...currentRunway, ...extendTerms({ season: last.season, year: last.year }, 6)]
+
+    const slots = runway.map((t) => ({
+      id: t.id,
+      unitCap: t.season === 'SU' ? SUMMER_AUTO_CAP : unitCap,
+      maxCourses: t.season === 'SU' ? SUMMER_AUTO_MAX_COURSES : Infinity,
+      pinnedCourses: pinnedBySem.get(t.id) || [],
+    }))
+
+    const relevantPrereqs = filterPrerequisites(planPool.map((c) => c.id))
+    const plan = autoPlanSemesters(coursesToPlan, relevantPrereqs, slots)
+    const planById = new Map(plan.map((p) => [p.id, p]))
+
+    const next = runway.map((t) => {
+      const entry = planById.get(t.id)
+      const pinned = entry?.pinnedCourses ?? pinnedBySem.get(t.id) ?? []
+      const planned = entry?.courses ?? []
+      return {
+        id: t.id, name: t.name, season: t.season, year: t.year,
+        courses: [...pinned, ...planned],
+      }
+    })
+
+    // Trim trailing empties only in the buffer region (beyond user's current count).
+    const minCount = semesters.length
+    while (next.length > minCount && next[next.length - 1].courses.length === 0) {
+      next.pop()
+    }
+
+    const placedIdsAfter = new Set(next.flatMap((s) => s.courses.map((c) => c.id)))
+    setSemesters(next)
+    setPool((prev) => prev.filter((c) => !placedIdsAfter.has(c.id)))
+  }
+
+  function findCourse(id) {
+    const fromPool = pool.find((c) => c.id === id)
+    if (fromPool) return fromPool
+    for (const s of semesters) {
+      const m = s.courses.find((c) => c.id === id)
+      if (m) return m
+    }
+    return null
+  }
+
+  function handleDragStart(event) {
+    setActiveCourse(findCourse(event.active.id))
+  }
+
+  function handleDragEnd(event) {
+    setActiveCourse(null)
+    const { active, over } = event
+    if (!over) return
+    const courseId = active.id
+    const targetId = over.id
+    const validTargets = new Set([...semesters.map((s) => s.id), 'pool'])
+    if (!validTargets.has(targetId)) return
+
+    const fromPool = pool.find((c) => c.id === courseId)
+    if (fromPool) {
+      if (targetId === 'pool') return
+      setPool(pool.filter((c) => c.id !== courseId))
+      setSemesters((prev) =>
+        prev.map((s) => (s.id === targetId ? { ...s, courses: [...s.courses, fromPool] } : s)),
+      )
+      setPinnedIds((prev) => new Set(prev).add(courseId))
+      return
+    }
+
+    let moving = null
+    const without = semesters.map((s) => {
+      const match = s.courses.find((c) => c.id === courseId)
+      if (match) moving = match
+      return { ...s, courses: s.courses.filter((c) => c.id !== courseId) }
+    })
+    if (!moving) return
+
+    if (targetId === 'pool') {
+      setSemesters(without)
+      setPool((prev) => [...prev, moving])
+      setPinnedIds((prev) => {
+        const next = new Set(prev)
+        next.delete(courseId)
+        return next
+      })
+      return
+    }
+
+    setSemesters(
+      without.map((s) => (s.id === targetId ? { ...s, courses: [...s.courses, moving] } : s)),
+    )
+    setPinnedIds((prev) => new Set(prev).add(courseId))
+  }
+
+  function handleRemoveFromSemester(courseId) {
+    let moving = null
+    const without = semesters.map((s) => {
+      const match = s.courses.find((c) => c.id === courseId)
+      if (match) moving = match
+      return { ...s, courses: s.courses.filter((c) => c.id !== courseId) }
+    })
+    if (!moving) return
+    setSemesters(without)
+    setPool((prev) => (prev.some((c) => c.id === courseId) ? prev : [...prev, moving]))
+    setPinnedIds((prev) => {
+      const next = new Set(prev)
+      next.delete(courseId)
+      return next
+    })
+  }
+
+  function handleAddSemester() {
+    setSemesters((prev) => {
+      const last = prev[prev.length - 1]
+      const [next] = extendTerms({ season: last.season, year: last.year }, 1)
+      return [
+        ...prev,
+        { id: next.id, name: next.name, season: next.season, year: next.year, courses: [] },
+      ]
+    })
+  }
+
+  function handleRemoveLastSemester() {
+    setSemesters((prev) => {
+      if (prev.length <= 1) return prev
+      const last = prev[prev.length - 1]
+      if (last.courses.length > 0) return prev
+      return prev.slice(0, -1)
+    })
+  }
+
+  function handleReset() {
+    if (typeof window !== 'undefined') {
+      const ok = window.confirm(
+        'Reset planner? All placed courses, pinned courses, and unit cap will be cleared.',
+      )
+      if (!ok) return
+      window.localStorage.removeItem(STORAGE_KEY)
+    }
+    const freshTerms = defaultTerms()
+    setUnitCap(15)
+    setSemesters(makeEmptySemesters(freshTerms))
+    setPinnedIds(new Set())
+    setPool(buildInitialPool(majorCourses, calGetcCourses, selectedCalGetc))
+  }
+
+  const placedIds = new Set(allPlaced.map((c) => c.id))
+  const selectedCalGetcCourses = useMemo(
+    () => calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
+    [calGetcCourses, selectedCalGetc],
+  )
+  const violations = detectPrereqViolations(semesters, PREREQUISITES)
+  const lastSem = semesters[semesters.length - 1]
+  const canRemoveLast = semesters.length > 1 && lastSem && lastSem.courses.length === 0
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <h1 className="text-2xl font-bold">Planner</h1>
+        <div className="flex items-center gap-4">
+          <label className="text-sm">
+            Units / semester:
+            <input
+              type="range"
+              min={6}
+              max={21}
+              value={unitCap}
+              onChange={(e) => setUnitCap(Number(e.target.value))}
+              className="mx-2 align-middle"
+            />
+            <span className="font-medium">{unitCap}</span>
+          </label>
+          <AutoPlanButton onClick={handleAutoPlan} />
+          <button
+            onClick={handleReset}
+            className="text-sm px-3 py-1.5 rounded-md border border-red-200 bg-white text-red-600 hover:bg-red-50"
+            title="Clear all placed courses and reset planner to defaults"
+          >
+            ↺ Reset
+          </button>
+        </div>
+      </div>
+
+      <ConfiguredCoursesPanel
+        majorCourses={majorCourses}
+        calGetcCourses={selectedCalGetcCourses}
+        placedIds={placedIds}
+        directRequiredIds={directRequiredIds}
+      />
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={pointerWithin}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={() => setActiveCourse(null)}
+      >
+        <div className="flex items-center justify-end gap-2 mb-3">
+          <button
+            onClick={handleRemoveLastSemester}
+            disabled={!canRemoveLast}
+            className="text-sm px-3 py-1.5 rounded-md border bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            title={canRemoveLast ? 'Remove last empty semester' : 'Last semester must be empty to remove'}
+          >
+            − Remove last
+          </button>
+          <button
+            onClick={handleAddSemester}
+            className="text-sm px-3 py-1.5 rounded-md bg-slate-900 text-white hover:bg-slate-800"
+          >
+            + Add semester
+          </button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+          {semesters.map((s) => (
+            <SemesterColumn
+              key={s.id}
+              semester={s}
+              unitCap={unitCap}
+              violations={violations.get(s.id) || new Set()}
+              pinnedIds={pinnedIds}
+              majorIds={majorIds}
+              onRemove={handleRemoveFromSemester}
+            />
+          ))}
+        </div>
+
+        <PoolDropZone>
+          {(() => {
+            const unplaced = pool.filter((c) => !placedIds.has(c.id))
+            if (unplaced.length === 0) {
+              return (
+                <div className="text-sm text-slate-400 italic">
+                  Nothing unplaced. Pick Cal-GETC courses in{' '}
+                  <Link to="/requirements" className="underline">Requirements</Link> to add more.
+                </div>
+              )
+            }
+            const majorUnplaced = unplaced.filter((c) => majorIds.has(c.id))
+            const calGetcUnplaced = unplaced.filter((c) => !majorIds.has(c.id))
+            return (
+              <div className="space-y-2">
+                <PoolSubSection label="Major" tone="slate" courses={majorUnplaced} />
+                <PoolSubSection label="Cal-GETC" tone="emerald" courses={calGetcUnplaced} />
+              </div>
+            )
+          })()}
+        </PoolDropZone>
+
+        <DragOverlay>
+          {activeCourse ? (
+            <div className="rounded-md border px-3 py-2 text-sm bg-white shadow-lg">
+              <div className="font-medium">{activeCourse.code}</div>
+              <div className="text-xs text-slate-500">{activeCourse.units}u</div>
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </div>
+  )
+}
+
+function PoolCard({ course }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: course.id })
+  return (
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className={`px-3 py-2 bg-slate-100 rounded-md text-sm border cursor-grab select-none ${
+        isDragging ? 'opacity-40' : ''
+      }`}
+    >
+      <span className="font-medium">{course.code}</span>
+      <span className="ml-2 text-slate-500">{course.units}u</span>
+    </div>
+  )
+}
+
+function PoolDropZone({ children }) {
+  const { setNodeRef, isOver } = useDroppable({ id: 'pool' })
+  return (
+    <section
+      ref={setNodeRef}
+      className={`bg-white border rounded-lg p-4 ${isOver ? 'ring-2 ring-slate-900' : ''}`}
+    >
+      <h2 className="font-semibold mb-3">Unplaced courses</h2>
+      <div className="min-h-[40px]">{children}</div>
+    </section>
+  )
+}
+
+function PoolSubSection({ label, tone, courses }) {
+  const toneClass = tone === 'emerald'
+    ? 'border-emerald-200 bg-emerald-50/40'
+    : 'border-slate-200 bg-slate-50/50'
+  const labelTone = tone === 'emerald' ? 'text-emerald-700' : 'text-slate-600'
+  return (
+    <div className={`border rounded-md p-2 ${toneClass}`}>
+      <div className={`text-[10px] uppercase tracking-wide font-semibold mb-1 ${labelTone}`}>
+        {label}
+      </div>
+      <div className="flex flex-wrap gap-2 min-h-[28px]">
+        {courses.length === 0 ? (
+          <div className="text-xs text-slate-400 italic">—</div>
+        ) : (
+          courses.map((c) => <PoolCard key={c.id} course={c} />)
+        )}
+      </div>
+    </div>
+  )
+}
+
+function subjectOf(course) {
+  const m = (course.code || '').match(/^([A-Za-z]+)/)
+  return m ? m[1].toUpperCase() : '其他'
+}
+
+function groupBySubject(courses) {
+  const groups = new Map()
+  for (const c of courses) {
+    const key = subjectOf(c)
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(c)
+  }
+  return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+}
+
+function ConfiguredCoursesPanel({ majorCourses, calGetcCourses, placedIds, directRequiredIds }) {
+  return (
+    <section className="mb-4 border rounded-lg bg-white p-3">
+      <div className="text-xs uppercase tracking-wide font-semibold text-slate-500 mb-2">
+        Configured courses
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <ConfiguredRow
+          label="Major"
+          tone="slate"
+          courses={majorCourses}
+          placedIds={placedIds}
+          directRequiredIds={directRequiredIds}
+        />
+        <ConfiguredRow
+          label="Cal-GETC"
+          tone="emerald"
+          courses={calGetcCourses}
+          placedIds={placedIds}
+          emptyHint={
+            <>
+              None selected — pick in{' '}
+              <Link to="/requirements" className="underline">Requirements</Link>.
+            </>
+          }
+        />
+      </div>
+    </section>
+  )
+}
+
+function ConfiguredRow({ label, tone, courses, placedIds, emptyHint, directRequiredIds }) {
+  const toneClass = tone === 'emerald'
+    ? 'border-emerald-200 bg-emerald-50/40'
+    : 'border-slate-200 bg-slate-50/50'
+  const labelTone = tone === 'emerald' ? 'text-emerald-700' : 'text-slate-600'
+  const badgeTone = tone === 'emerald'
+    ? 'bg-emerald-100 text-emerald-700'
+    : 'bg-slate-200 text-slate-700'
+  const totalUnits = courses.reduce((sum, c) => sum + (c.units || 0), 0)
+  const assignedCount = courses.filter((c) => placedIds?.has(c.id)).length
+  const groups = groupBySubject(courses)
+  return (
+    <div className={`border rounded-md p-2 ${toneClass}`}>
+      <div className="flex items-center justify-between mb-1.5">
+        <div className={`text-[10px] uppercase tracking-wide font-semibold ${labelTone}`}>
+          {label}
+        </div>
+        <div className={`text-[10px] px-1.5 py-0.5 rounded ${badgeTone}`}>
+          {assignedCount}/{courses.length} assigned · {totalUnits}u
+        </div>
+      </div>
+      {courses.length === 0 ? (
+        <div className="text-xs text-slate-400 italic">{emptyHint ?? '—'}</div>
+      ) : (
+        <div className="flex flex-wrap gap-x-3 gap-y-2">
+          {groups.map(([subject, list]) => (
+            <div key={subject} className="flex flex-col gap-1">
+              <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
+                {subject}
+              </div>
+              <div className="flex flex-col gap-1">
+                {list.map((c) => {
+                  const assigned = placedIds?.has(c.id)
+                  const isPrereq = directRequiredIds && !directRequiredIds.has(c.id)
+                  return (
+                    <span
+                      key={c.id}
+                      className={`text-xs px-2 py-1 rounded border inline-flex flex-col leading-tight ${
+                        assigned ? 'bg-blue-50 border-blue-200' : 'bg-white'
+                      }`}
+                      title={`${c.name} · ${c.units}u${isPrereq ? ' · prereq' : ''}`}
+                    >
+                      <span>{c.code}</span>
+                      {assigned ? (
+                        <span className="text-[9px] text-blue-600 uppercase tracking-wide">
+                          assigned
+                        </span>
+                      ) : isPrereq ? (
+                        <span className="text-[9px] text-amber-700 uppercase tracking-wide">
+                          prereq
+                        </span>
+                      ) : null}
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function detectPrereqViolations(semesters, prereqs) {
+  const semOf = new Map()
+  semesters.forEach((s, i) => s.courses.forEach((c) => semOf.set(c.id, i)))
+  const violations = new Map()
+  for (const { course_id, prerequisite_id } of prereqs) {
+    const a = semOf.get(course_id)
+    const b = semOf.get(prerequisite_id)
+    if (a === undefined || b === undefined) continue
+    if (b >= a) {
+      const semId = semesters[a].id
+      if (!violations.has(semId)) violations.set(semId, new Set())
+      violations.get(semId).add(course_id)
+    }
+  }
+  return violations
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "label": "Major",
+    "code": "major",
+    "reportType": 3,
+    "reportCategoryType": 0,
+    "courseTransferItemType": 0,
+    "hasReports": false
+  },
+  {
+    "label": "Department",
+    "code": "dept",
+    "reportType": 2,
+    "reportCategoryType": 0,
+    "courseTransferItemType": 0,
+    "hasReports": false
+  },
+  {
+    "label": "Prefix",
+    "code": "prefix",
+    "reportType": 10,
+    "reportCategoryType": 0,
+    "courseTransferItemType": 0,
+    "hasReports": false
+  },
+  {
+    "label": "General Education / Breadth",
+    "code": "breadth",
+    "reportType": 1,
+    "reportCategoryType": 0,
+    "courseTransferItemType": 0,
+    "hasReports": false
+  }
+]
