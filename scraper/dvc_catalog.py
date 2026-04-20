@@ -46,6 +46,30 @@ DEPT_SLUGS = {
     "chem": "dvc-chemistry-course",
     "engl": "dvc-english-course",
     "psyc": "dvc-psychology-course",
+    # Biological & physical sciences
+    "biosc": "dvc-biological-science-course",
+    "astro": "dvc-astronomy-course",
+    "geol": "dvc-geology-course",
+    "nutri": "dvc-nutrition-course",
+    # Social sciences
+    "econ": "dvc-economics-course",
+    "pols": "dvc-political-science-course",
+    "socio": "dvc-sociology-course",
+    "anthr": "dvc-anthropology-course",
+    "geog": "dvc-geography-course",
+    "hist": "dvc-history-course",
+    "ethn": "dvc-ethnic-studies-course",
+    # Humanities & arts
+    "philo": "dvc-philosophy-course",
+    "drama": "dvc-drama-course",
+    "archi": "dvc-architecture-course",
+    # Languages
+    "span": "dvc-spanish-course",
+    "ital": "dvc-italian-course",
+    "grman": "dvc-german-course",
+    "russ": "dvc-russian-course",
+    # Business
+    "bus": "dvc-business-course",
 }
 
 SAMPLES = Path(__file__).parent / "samples"
