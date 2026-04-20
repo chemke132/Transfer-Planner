@@ -30,6 +30,35 @@ export default function App() {
           )}
         </nav>
       </header>
+      <div className="bg-amber-50 border-b border-amber-200">
+        <div className="max-w-6xl mx-auto px-4 py-2 text-xs text-amber-900 flex items-start gap-2">
+          <span aria-hidden className="font-semibold">⚠️</span>
+          <span>
+            <span className="font-semibold">Work in progress — always double-check with your counselor and the official{' '}
+              <a
+                href="https://assist.org"
+                target="_blank"
+                rel="noreferrer"
+                className="underline hover:no-underline"
+              >
+                assist.org
+              </a>{' '}/{' '}
+              <a
+                href="https://icc.dvc.edu"
+                target="_blank"
+                rel="noreferrer"
+                className="underline hover:no-underline"
+              >
+                DVC catalog
+              </a>.
+            </span>{' '}
+            Articulation and prerequisite data is auto-scraped; alternative
+            OR-paths, advisories, and some humanities majors may be missing
+            or simplified. Do not rely on this tool as your sole source of
+            truth for course registration.
+          </span>
+        </div>
+      </div>
       <main className="flex-1">
         {loading ? (
           <div className="max-w-6xl mx-auto px-4 py-16 text-center text-slate-500">
