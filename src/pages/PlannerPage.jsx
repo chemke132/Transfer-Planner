@@ -195,8 +195,7 @@ export default function PlannerPage() {
 
   function handleAutoPlan() {
     const selectedCalGetcCourses = calGetcCourses.filter((c) => selectedCalGetc.has(c.id))
-    const planPool = [...majorCourses, ...selectedCalGetcCourses]
-    if (!planPool.length) return
+    if (!majorCourses.length && !selectedCalGetcCourses.length) return
 
     // Pinned courses stay where they are; everything else gets (re)placed.
     const pinnedBySem = new Map()
@@ -206,7 +205,6 @@ export default function PlannerPage() {
         s.courses.filter((c) => pinnedIds.has(c.id)),
       )
     }
-    const coursesToPlan = planPool.filter((c) => !pinnedIds.has(c.id))
 
     // Runway = user's current semesters + buffer for overflow.
     const last = semesters[semesters.length - 1]
@@ -215,23 +213,75 @@ export default function PlannerPage() {
     }))
     const runway = [...currentRunway, ...extendTerms({ season: last.season, year: last.year }, 6)]
 
-    const slots = runway.map((t) => ({
+    const baseSlots = runway.map((t) => ({
       id: t.id,
       unitCap: t.season === 'SU' ? SUMMER_AUTO_CAP : unitCap,
       maxCourses: t.season === 'SU' ? SUMMER_AUTO_MAX_COURSES : Infinity,
       pinnedCourses: pinnedBySem.get(t.id) || [],
     }))
 
-    const relevantPrereqs = filterPrerequisites(planPool.map((c) => c.id))
-    const plan = autoPlanSemesters(coursesToPlan, relevantPrereqs, slots)
-    const planById = new Map(plan.map((p) => [p.id, p]))
+    // Phase 1: place major courses first so every non-summer semester gets
+    // one of each major subject (COMSC/MATH/PHYS) before Cal-GETC fills in.
+    // autoPlanSemesters already enforces subject uniqueness per semester, so
+    // running it on majors alone distributes them evenly in topo order.
+    const majorsToPlan = majorCourses.filter((c) => !pinnedIds.has(c.id))
+    const majorPrereqs = filterPrerequisites(majorCourses.map((c) => c.id))
+    const majorPlan = majorsToPlan.length
+      ? autoPlanSemesters(majorsToPlan, majorPrereqs, baseSlots)
+      : baseSlots.map((s) => ({ id: s.id, courses: [], pinnedCourses: s.pinnedCourses }))
 
-    const next = runway.map((t) => {
-      const entry = planById.get(t.id)
+    // Phase 2: Cal-GETC fills remaining capacity. Treat phase-1 majors as
+    // pinned so prereqs still resolve and subject-uniqueness still applies.
+    const phase2Slots = majorPlan.map((entry, idx) => {
+      const base = baseSlots[idx] ?? baseSlots[baseSlots.length - 1]
+      return {
+        id: entry.id,
+        unitCap: base.unitCap ?? 15,
+        maxCourses: base.maxCourses ?? Infinity,
+        pinnedCourses: [...(entry.pinnedCourses || []), ...(entry.courses || [])],
+      }
+    })
+    // If phase-1 used fewer slots than baseSlots had, append the remainder.
+    for (let i = majorPlan.length; i < baseSlots.length; i++) {
+      phase2Slots.push(baseSlots[i])
+    }
+
+    const calGetcToPlan = selectedCalGetcCourses.filter((c) => !pinnedIds.has(c.id))
+    const allPrereqs = filterPrerequisites([
+      ...majorCourses.map((c) => c.id),
+      ...selectedCalGetcCourses.map((c) => c.id),
+    ])
+    const finalPlan = calGetcToPlan.length
+      ? autoPlanSemesters(calGetcToPlan, allPrereqs, phase2Slots)
+      : phase2Slots.map((s) => ({
+          id: s.id,
+          courses: [],
+          pinnedCourses: s.pinnedCourses,
+        }))
+
+    // Ensure runway is at least as long as the plan (phase-1 or phase-2 may
+    // have spilled past our pre-extended buffer).
+    let plannedRunway = runway
+    if (finalPlan.length > plannedRunway.length) {
+      const tail = plannedRunway[plannedRunway.length - 1]
+      plannedRunway = [
+        ...plannedRunway,
+        ...extendTerms(
+          { season: tail.season, year: tail.year },
+          finalPlan.length - plannedRunway.length,
+        ),
+      ]
+    }
+
+    const next = plannedRunway.slice(0, finalPlan.length).map((t, idx) => {
+      const entry = finalPlan[idx]
       const pinned = entry?.pinnedCourses ?? pinnedBySem.get(t.id) ?? []
       const planned = entry?.courses ?? []
       return {
-        id: t.id, name: t.name, season: t.season, year: t.year,
+        id: entry?.id ?? t.id,
+        name: t.name,
+        season: t.season,
+        year: t.year,
         courses: [...pinned, ...planned],
       }
     })

@@ -81,16 +81,54 @@ def detect_area(line: str) -> str | None:
     return None
 
 
+CODE_SIMPLE_RE = re.compile(r"([A-Z]{2,6})-([A-Z]?\d+[A-Z]*)")
+
+
+def detect_underlined_codes(page) -> set[str]:
+    """Find course codes rendered with an underline on this page. The DVC
+    Cal-GETC PDF underlines 5A/5B course codes that have a matching lab
+    (satisfies 5C). Underlines are drawn as thin short horizontal rects."""
+    underlines = [r for r in page.rects
+                  if r.get("height", 99) < 1
+                  and 5 < (r["x1"] - r["x0"]) < 20]
+    found: set[str] = set()
+    for u in underlines:
+        # Chars whose bottom is 2-10pt above the underline top (they sit on it)
+        above = [c for c in page.chars
+                 if u["x0"] - 1 <= c["x0"] <= u["x1"] + 1
+                 and 2 <= (u["top"] - c["bottom"]) <= 10]
+        if not above:
+            continue
+        y = above[0]["bottom"]
+        line = sorted(
+            [c for c in page.chars if abs(c["bottom"] - y) < 1.5],
+            key=lambda c: c["x0"],
+        )
+        text = "".join(c["text"] for c in line)
+        under_cx = (min(c["x0"] for c in above) + max(c["x1"] for c in above)) / 2
+        for m in CODE_SIMPLE_RE.finditer(text):
+            s, e = m.start(), m.end()
+            if e > len(line):
+                continue
+            cx0, cx1 = line[s]["x0"], line[e - 1]["x1"]
+            if cx0 - 2 <= under_cx <= cx1 + 2:
+                found.add(f"{m.group(1)} {m.group(2)}")
+                break
+    return found
+
+
 def parse_pdf(pdf_path: Path) -> dict:
     # area -> list of course codes (order-preserving, unique)
     areas: dict[str, list[str]] = {}
     # code -> {name, units} gathered across all pages (first occurrence wins)
     catalog: dict[str, dict] = {}
     uc_cap: set[str] = set()
+    lab_paired: set[str] = set()
     current: str | None = None
 
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
+            lab_paired |= detect_underlined_codes(page)
             text = page.extract_text(layout=True) or ""
             for line in text.splitlines():
                 # Terminator first (UC-only add-ons after Area 6).
@@ -135,6 +173,7 @@ def parse_pdf(pdf_path: Path) -> dict:
         "areas": areas,
         "catalog": catalog,
         "uc_cap_courses": sorted(uc_cap),
+        "lab_paired_courses": sorted(lab_paired),
     }
 
 
@@ -157,6 +196,7 @@ def main() -> int:
         total += len(codes)
     print(f"  total: {total}")
     print(f"  uc_cap: {len(data['uc_cap_courses'])}")
+    print(f"  lab_paired (5C): {len(data['lab_paired_courses'])}")
     print(f"wrote {args.out}")
     return 0
 

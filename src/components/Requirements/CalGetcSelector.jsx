@@ -15,6 +15,8 @@ export default function CalGetcSelector() {
     for (const code of areaCodes) map.set(code, [])
     for (const c of getCalGetcCourses(setup.cc_id)) {
       if (map.has(c.cal_getc_area)) map.get(c.cal_getc_area).push(c)
+      // 5C (Laboratory) is satisfied by 5A/5B courses flagged lab-paired.
+      if (c.cal_getc_lab_paired && map.has('5C')) map.get('5C').push(c)
     }
     return map
   }, [areaCodes, setup.cc_id])

@@ -64,6 +64,7 @@ def main() -> int:
     data = json.loads(args.input.read_text())
     areas = data.get("areas") or {}
     catalog = data.get("catalog") or {}
+    lab_paired = set(data.get("lab_paired_courses") or [])
     total = sum(len(v) for v in areas.values())
     print(f"input: {len(areas)} areas, {total} course-area mappings, "
           f"{len(catalog)} catalog entries")
@@ -146,10 +147,27 @@ def main() -> int:
             client.table("courses").upsert(chunk, on_conflict="id").execute()
         print(f"  ✓ inserted {len(new_inserts)} new courses")
 
-    # 4) Clear existing cal_getc_area for school, then set fresh.
-    client.table("courses").update({"cal_getc_area": None}) \
-        .eq("school_id", args.school_id).execute()
-    print(f"  ✓ cleared cal_getc_area for {args.school_id}")
+    # 4) Clear existing cal_getc_area + lab flag for school, then set fresh.
+    client.table("courses").update(
+        {"cal_getc_area": None, "cal_getc_lab_paired": False}
+    ).eq("school_id", args.school_id).execute()
+    print(f"  ✓ cleared cal_getc_area + lab flag for {args.school_id}")
+
+    # Set lab_paired flag for underlined 5A/5B courses.
+    lab_ids: list[str] = []
+    for code in lab_paired:
+        cid = code_to_id.get(normalize_code(code))
+        if cid is None:
+            # maybe newly inserted
+            cid = make_id(code) if code in catalog else None
+        if cid:
+            lab_ids.append(cid)
+    if lab_ids:
+        for i in range(0, len(lab_ids), 200):
+            chunk = lab_ids[i : i + 200]
+            client.table("courses").update({"cal_getc_lab_paired": True}) \
+                .in_("id", chunk).execute()
+        print(f"  ✓ flagged {len(lab_ids)} courses as lab-paired (5C)")
 
     # 5) Apply assignments (existing + newly inserted) grouped by area.
     all_assignments = {**assignments, **new_assignments}
