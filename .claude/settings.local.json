@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm create *)"
+      "Bash(npm create *)",
+      "Bash(kill %1)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(mkdir -p .claude)"
     ]
   }
 }
