@@ -13,3 +13,6 @@ dist-ssr
 npm-debug.log*
 scraper/.venv
 scraper/__pycache__
+scraper/samples/cache/
+.claude/scheduled_tasks.lock
+.claude/launch.json
