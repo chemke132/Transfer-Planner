@@ -1,0 +1,1516 @@
+{
+  "source_url": "https://www.csueastbay.edu/aps/cccge2526/diablo-valley-college-cal-getc-25-26.pdf",
+  "areas": {
+    "1A": [
+      "ENGL C1000",
+      "ENGL 122AL",
+      "ENGL C1000E"
+    ],
+    "1B": [
+      "ARTHS 191",
+      "ENGL 126A",
+      "COMM 121",
+      "HIST 122",
+      "DANCE 201",
+      "KINES 249",
+      "ENGL C1001",
+      "PHILO 130",
+      "ENGL 123",
+      "PSYC 145",
+      "ENGL 123A",
+      "SOCIO 122"
+    ],
+    "1C": [
+      "COMM C1000"
+    ],
+    "2": [
+      "BUS 240",
+      "MATH 192",
+      "MATH 124",
+      "MATH 193",
+      "MATH 135",
+      "MATH 194",
+      "MATH 135L",
+      "MATH 195",
+      "MATH 181",
+      "MATH 292",
+      "MATH 181L",
+      "MATH 294",
+      "MATH 182",
+      "PSYC 214",
+      "MATH 183",
+      "STAT C1000",
+      "MATH 191",
+      "STAT C1000E",
+      "MATH 191L"
+    ],
+    "3A": [
+      "ARCHI 156",
+      "FTVE 200",
+      "ARCHI 157",
+      "FTVE 205",
+      "ARCHI 158",
+      "FTVE 210",
+      "ART 151",
+      "FTVE 280",
+      "ARTDM 214",
+      "FTVE 281",
+      "ARTHS 100",
+      "FTVE 282",
+      "ARTHS 193",
+      "FTVE 283",
+      "ARTHS 195",
+      "MUSIC 110",
+      "ARTHS 196",
+      "MUSIC 112",
+      "ARTHS 197",
+      "MUSIC 114",
+      "ARTHS 199",
+      "MUSIC 115",
+      "DANCE 200",
+      "MUSIC 117",
+      "DANCE 201",
+      "MUSIC 118",
+      "DRAMA 139",
+      "MUSIC 119",
+      "DRAMA 142",
+      "MUSX 110"
+    ],
+    "3B": [
+      "ARABC 121",
+      "HIST 135",
+      "ARCHI 151",
+      "HIST 136",
+      "ARCHI 160",
+      "HIST 140",
+      "CHIN 121",
+      "HIST 141",
+      "CHIN 220",
+      "HIST 142",
+      "CHIN 221",
+      "HIST 150",
+      "ENGL 150",
+      "HIST 151",
+      "ENGL 151",
+      "HIST 170",
+      "ENGL 152",
+      "HIST 171",
+      "ENGL 153",
+      "HIST 180",
+      "ENGL 154",
+      "HIST 181",
+      "ENGL 163",
+      "HUMAN 105",
+      "ENGL 164",
+      "HUMAN 108",
+      "ENGL 166",
+      "HUMAN 110",
+      "ENGL 167",
+      "HUMAN 111",
+      "ENGL 168",
+      "HUMAN 112",
+      "ENGL 170",
+      "HUMAN 115",
+      "ENGL 173",
+      "HUMAN 116",
+      "ENGL 175",
+      "HUMAN 118",
+      "ENGL 176",
+      "HUMAN 123",
+      "ENGL 177",
+      "HUMAN 124",
+      "ENGL 178",
+      "ITAL 121",
+      "ENGL 180",
+      "ITAL 220",
+      "ENGL 190",
+      "ITAL 221",
+      "ENGL 252",
+      "ITAL 230",
+      "ENGL 253",
+      "ITAL 231",
+      "ENGL 262",
+      "JAPAN 121",
+      "ENGL 263",
+      "JAPAN 220",
+      "ENGL 272",
+      "JAPAN 221",
+      "ENGL 273",
+      "KINES 247",
+      "FRNCH 121",
+      "PERSN 121",
+      "FRNCH 220",
+      "PHILO 120",
+      "FRNCH 221",
+      "PHILO 122",
+      "FRNCH 230",
+      "PHILO 141",
+      "FRNCH 231",
+      "PHILO 145",
+      "FTVE 260",
+      "PHILO 160",
+      "GRMAN 121",
+      "PHILO 220",
+      "GRMAN 220",
+      "PHILO 224",
+      "GRMAN 221",
+      "PHILO 225",
+      "GRMAN 230",
+      "RUSS 121",
+      "GRMAN 231",
+      "RUSS 220",
+      "HIST 120",
+      "RUSS 221",
+      "HIST 121",
+      "SIGN 282",
+      "HIST 124",
+      "SIGN 283",
+      "HIST 125",
+      "SPAN 121",
+      "HIST 126",
+      "SPAN 220",
+      "HIST 127",
+      "SPAN 221",
+      "HIST 128",
+      "SPAN 230",
+      "HIST 129",
+      "SPAN 231"
+    ],
+    "4": [
+      "ADJUS 120",
+      "KINES 248",
+      "ADJUS 126",
+      "NUTRI 130",
+      "ANTHR 120",
+      "PH 127",
+      "ANTHR 125",
+      "PH 130",
+      "ANTHR 130",
+      "PH 132",
+      "COMM 125",
+      "PH 135",
+      "COMM 180",
+      "PH 137",
+      "ECE 124",
+      "PH 140",
+      "ECE 130",
+      "PH 145",
+      "ECON 101",
+      "PH 170",
+      "ECON 200",
+      "POLS C1000",
+      "ECON 210",
+      "POLS 120",
+      "ECON 220",
+      "POLS 122",
+      "ECON 221",
+      "POLS 123",
+      "EDUSP 101",
+      "POLS 127",
+      "EDUSP 102",
+      "POLS 151",
+      "ENGIN 130",
+      "POLS 210",
+      "ENGIN 131",
+      "POLS 220",
+      "ETHN 101",
+      "POLS 240",
+      "ETHN 108",
+      "POLS 250",
+      "ETHN 120",
+      "PSYC C1000",
+      "ETHN 160",
+      "PSYC 122",
+      "FTVE 240",
+      "PSYC 140",
+      "GEOG 130",
+      "PSYC 141",
+      "GEOG 135",
+      "PSYC 160",
+      "HIST 120",
+      "PSYC 190",
+      "HIST 121",
+      "PSYC 195",
+      "HIST 124",
+      "PSYC 200",
+      "HIST 125",
+      "PSYC 220",
+      "HIST 126",
+      "PSYC 225",
+      "HIST 127",
+      "PSYC 230",
+      "HIST 128",
+      "PSYC 240",
+      "HIST 129",
+      "SOCIO 120",
+      "HIST 135",
+      "SOCIO 121",
+      "HIST 136",
+      "SOCIO 123",
+      "HIST 140",
+      "SOCIO 124",
+      "HIST 141",
+      "SOCIO 125",
+      "HIST 142",
+      "SOCIO 131",
+      "HIST 150",
+      "SOCIO 135",
+      "HIST 151",
+      "SOCSC 101",
+      "HIST 170",
+      "SOCSC 111",
+      "HIST 171",
+      "SOCSC 120",
+      "HIST 180",
+      "SOCSC 123",
+      "HIST 181",
+      "SOCSC 130",
+      "JRNAL 110",
+      "SOCSC 220"
+    ],
+    "5A": [
+      "ASTRO 110",
+      "GEOL 121",
+      "ASTRO 112",
+      "GEOL 125",
+      "ASTRO 114",
+      "GEOL 130",
+      "ASTRO 120",
+      "GEOL 140",
+      "CHEM 107",
+      "OCEAN 101",
+      "CHEM 108",
+      "OCEAN 102",
+      "CHEM 109",
+      "PHYS 110",
+      "CHEM 120",
+      "PHYS 112",
+      "CHEM 121",
+      "PHYS 120",
+      "CHEM 226",
+      "PHYS 121",
+      "CHEM 227",
+      "PHYS 129",
+      "GEOG 120",
+      "PHYS 130",
+      "GEOG 122",
+      "PHYS 230",
+      "GEOG 140",
+      "PHYS 231",
+      "GEOL 120",
+      "PHYSC 112"
+    ],
+    "5B": [
+      "ANTHR 115",
+      "BIOSC 131",
+      "ANTHR 140",
+      "BIOSC 139",
+      "BIOSC 101",
+      "BIOSC 140",
+      "BIOSC 102",
+      "BIOSC 146",
+      "BIOSC 116",
+      "BIOSC 161",
+      "BIOSC 117",
+      "BIOSC 162",
+      "BIOSC 119",
+      "BIOSC 170",
+      "BIOSC 120",
+      "BIOSC 171",
+      "BIOSC 126",
+      "PSYC 130",
+      "BIOSC 130"
+    ],
+    "5C": [],
+    "6": [
+      "ETHN 101",
+      "ETHN 120",
+      "ETHN 108",
+      "ETHN 160"
+    ]
+  },
+  "catalog": {
+    "ENGL C1000": {
+      "name": "Academic Reading and Writing",
+      "units": 3
+    },
+    "ENGL 122AL": {
+      "name": "Academic Reading and Writing for Multilingual Students",
+      "units": 5
+    },
+    "ENGL C1000E": {
+      "name": "Academic Reading and Writing",
+      "units": 5
+    },
+    "ARTHS 191": {
+      "name": "Critical Thinking in Visual Studies",
+      "units": 3
+    },
+    "ENGL 126A": {
+      "name": "Critical Thinking and Writing for Multilingual Student",
+      "units": 4
+    },
+    "COMM 121": {
+      "name": "Persuasion and Critical Thinking",
+      "units": 3
+    },
+    "HIST 122": {
+      "name": "Critical Reasoning in History",
+      "units": 3
+    },
+    "DANCE 201": {
+      "name": "Critical Thinking in Western Culture Dance History: 20th Century to…",
+      "units": 3
+    },
+    "KINES 249": {
+      "name": "Gender and Sport: A Critical Thinking Approach",
+      "units": 3
+    },
+    "ENGL C1001": {
+      "name": "Critical Thinking and Writing",
+      "units": 3
+    },
+    "PHILO 130": {
+      "name": "Logic and Critical Thinking",
+      "units": 3
+    },
+    "ENGL 123": {
+      "name": "Critical Thinking: Writing about Literature",
+      "units": 3
+    },
+    "PSYC 145": {
+      "name": "Critical Thinking in Psychology",
+      "units": 3
+    },
+    "ENGL 123A": {
+      "name": "Critical Thinking: Writing about Literature for Multilingual Students",
+      "units": 4
+    },
+    "SOCIO 122": {
+      "name": "Critical Thinking About Social and Cultural Issues",
+      "units": 3
+    },
+    "COMM C1000": {
+      "name": "Introduction to Public Speaking",
+      "units": 3
+    },
+    "BUS 240": {
+      "name": "Business Statistics",
+      "units": 3
+    },
+    "MATH 192": {
+      "name": "Analytic Geometry and Calculus I",
+      "units": 5
+    },
+    "MATH 124": {
+      "name": "Mathematics for Liberal Arts",
+      "units": 3
+    },
+    "MATH 193": {
+      "name": "Analytic Geometry and Calculus II",
+      "units": 5
+    },
+    "MATH 135": {
+      "name": "College Algebra",
+      "units": 4
+    },
+    "MATH 194": {
+      "name": "Linear Algebra",
+      "units": 3
+    },
+    "MATH 135L": {
+      "name": "College Algebra with Support",
+      "units": 6
+    },
+    "MATH 195": {
+      "name": "Discrete Mathematics",
+      "units": 4
+    },
+    "MATH 181": {
+      "name": "Finite Mathematics",
+      "units": 3
+    },
+    "MATH 292": {
+      "name": "Analytic Geometry and Calculus III",
+      "units": 5
+    },
+    "MATH 181L": {
+      "name": "Finite Mathematics with Support",
+      "units": 4
+    },
+    "MATH 294": {
+      "name": "Differential Equations",
+      "units": 5
+    },
+    "MATH 182": {
+      "name": "Calculus for Management, Life Science, and Social Science I",
+      "units": 4
+    },
+    "PSYC 214": {
+      "name": "Introduction to Statistics for Psychology",
+      "units": 4
+    },
+    "MATH 183": {
+      "name": "Calculus for Management, Life Science, and Social Science II",
+      "units": 4
+    },
+    "STAT C1000": {
+      "name": "Introduction to Statistics",
+      "units": 4
+    },
+    "MATH 191": {
+      "name": "Pre-Calculus",
+      "units": 5
+    },
+    "STAT C1000E": {
+      "name": "Introduction to Statistics",
+      "units": 5
+    },
+    "MATH 191L": {
+      "name": "Pre-Calculus with Support",
+      "units": 6
+    },
+    "ARCHI 156": {
+      "name": "History of World Architecture: Early Civilizations to Middle Ages",
+      "units": 3
+    },
+    "FTVE 200": {
+      "name": "American Cinema/American Culture",
+      "units": 3
+    },
+    "ARCHI 157": {
+      "name": "History of World Architecture: Middle Ages to 18th Century",
+      "units": 3
+    },
+    "FTVE 205": {
+      "name": "Introduction to Film and Media Arts",
+      "units": 3
+    },
+    "ARCHI 158": {
+      "name": "History of World Architecture: 18th Century to Present",
+      "units": 3
+    },
+    "FTVE 210": {
+      "name": "American Ethnic Cultures in Film",
+      "units": 3
+    },
+    "ART 151": {
+      "name": "Visual Theory and Practice - Ceramic Art",
+      "units": 3
+    },
+    "FTVE 280": {
+      "name": "American Cinema 1900-1950",
+      "units": 3
+    },
+    "ARTDM 214": {
+      "name": "Introduction to Graphic Design",
+      "units": 3
+    },
+    "FTVE 281": {
+      "name": "World Cinema 1900-1960",
+      "units": 3
+    },
+    "ARTHS 100": {
+      "name": "Art Appreciation",
+      "units": 3
+    },
+    "FTVE 282": {
+      "name": "American Cinema 1950 to the Present",
+      "units": 3
+    },
+    "ARTHS 193": {
+      "name": "History of Asian Art",
+      "units": 3
+    },
+    "FTVE 283": {
+      "name": "World Cinema 1960 to the Present",
+      "units": 3
+    },
+    "ARTHS 195": {
+      "name": "History of Prehistoric and Ancient Art",
+      "units": 3
+    },
+    "MUSIC 110": {
+      "name": "Music Appreciation",
+      "units": 3
+    },
+    "ARTHS 196": {
+      "name": "History of Medieval and Renaissance Art",
+      "units": 3
+    },
+    "MUSIC 112": {
+      "name": "America’s Music – A Multicultural Perspective",
+      "units": 3
+    },
+    "ARTHS 197": {
+      "name": "History of Baroque to 20th Century Art",
+      "units": 3
+    },
+    "MUSIC 114": {
+      "name": "World Music",
+      "units": 3
+    },
+    "ARTHS 199": {
+      "name": "Contemporary Art History",
+      "units": 3
+    },
+    "MUSIC 115": {
+      "name": "Music of the Middle East/North Africa and South Asia",
+      "units": 3
+    },
+    "DANCE 200": {
+      "name": "Dance Appreciation",
+      "units": 3
+    },
+    "MUSIC 117": {
+      "name": "History of Rock and R&B",
+      "units": 3
+    },
+    "MUSIC 118": {
+      "name": "History of Jazz",
+      "units": 3
+    },
+    "DRAMA 139": {
+      "name": "Introduction to Theater",
+      "units": 3
+    },
+    "MUSIC 119": {
+      "name": "The History and Culture of Hip Hop Music",
+      "units": 3
+    },
+    "DRAMA 142": {
+      "name": "Multicultural Perspectives in American Theater",
+      "units": 3
+    },
+    "MUSX 110": {
+      "name": "History of Electronic Music",
+      "units": 3
+    },
+    "ARABC 121": {
+      "name": "Second Term Arabic",
+      "units": 5
+    },
+    "HIST 135": {
+      "name": "History of Latin America – The Colonial Period",
+      "units": 3
+    },
+    "ARCHI 151": {
+      "name": "Introduction to Architectural Theory",
+      "units": 3
+    },
+    "HIST 136": {
+      "name": "History of Latin America – The National Period",
+      "units": 3
+    },
+    "ARCHI 160": {
+      "name": "History of American Architecture",
+      "units": 3
+    },
+    "HIST 140": {
+      "name": "History of Western Civilization to the Renaissance",
+      "units": 3
+    },
+    "CHIN 121": {
+      "name": "Second Term Mandarin Chinese",
+      "units": 5
+    },
+    "HIST 141": {
+      "name": "History of Western Civilization since the Renaissance",
+      "units": 3
+    },
+    "CHIN 220": {
+      "name": "Third Term Mandarin Chinese",
+      "units": 5
+    },
+    "HIST 142": {
+      "name": "Contemporary European History",
+      "units": 3
+    },
+    "CHIN 221": {
+      "name": "Fourth Term Mandarin Chinese",
+      "units": 5
+    },
+    "HIST 150": {
+      "name": "History of East Asia (to 1600)",
+      "units": 3
+    },
+    "ENGL 150": {
+      "name": "Introduction to Literature",
+      "units": 3
+    },
+    "HIST 151": {
+      "name": "History of East Asia (from 1600 – Present)",
+      "units": 3
+    },
+    "ENGL 151": {
+      "name": "The Short Story",
+      "units": 3
+    },
+    "HIST 170": {
+      "name": "History of Women in the United States before 1877",
+      "units": 3
+    },
+    "ENGL 152": {
+      "name": "Film and Literature",
+      "units": 3
+    },
+    "HIST 171": {
+      "name": "History of Women in the United States after 1865",
+      "units": 3
+    },
+    "ENGL 153": {
+      "name": "Contemporary Poetry",
+      "units": 3
+    },
+    "HIST 180": {
+      "name": "World History to 1500",
+      "units": 3
+    },
+    "ENGL 154": {
+      "name": "Shakespeare and His World",
+      "units": 3
+    },
+    "HIST 181": {
+      "name": "World History since 1500",
+      "units": 3
+    },
+    "ENGL 163": {
+      "name": "Asian American Literature",
+      "units": 3
+    },
+    "HUMAN 105": {
+      "name": "Introduction to Humanities: Arts and Ideas",
+      "units": 3
+    },
+    "ENGL 164": {
+      "name": "Native American Literatures",
+      "units": 3
+    },
+    "HUMAN 108": {
+      "name": "Humanities: The Roots of Hell",
+      "units": 3
+    },
+    "ENGL 166": {
+      "name": "African American Literature",
+      "units": 3
+    },
+    "HUMAN 110": {
+      "name": "Humanities: Ancient Civilizations",
+      "units": 3
+    },
+    "ENGL 167": {
+      "name": "Latin American Literature",
+      "units": 3
+    },
+    "HUMAN 111": {
+      "name": "Humanities: The Middle Ages and Renaissance",
+      "units": 3
+    },
+    "ENGL 168": {
+      "name": "Multiethnic Literatures of the United States",
+      "units": 3
+    },
+    "HUMAN 112": {
+      "name": "Humanities: The Modern World",
+      "units": 3
+    },
+    "ENGL 170": {
+      "name": "World Mythology",
+      "units": 3
+    },
+    "HUMAN 115": {
+      "name": "Humanities: The Multicultural American Experience",
+      "units": 3
+    },
+    "ENGL 173": {
+      "name": "Queer Literature Across Cultures",
+      "units": 3
+    },
+    "HUMAN 116": {
+      "name": "Humanities: The Arts and Culture of Asia",
+      "units": 3
+    },
+    "ENGL 175": {
+      "name": "Science Fiction and Fantasy Literature",
+      "units": 3
+    },
+    "HUMAN 118": {
+      "name": "Humanities: Film, Fiction, and Criticism",
+      "units": 3
+    },
+    "ENGL 176": {
+      "name": "The Graphic Novel as Literature",
+      "units": 3
+    },
+    "HUMAN 123": {
+      "name": "Humanities: American Popular Culture",
+      "units": 3
+    },
+    "ENGL 177": {
+      "name": "Children’s Literature",
+      "units": 3
+    },
+    "HUMAN 124": {
+      "name": "Humanities: California Culture",
+      "units": 3
+    },
+    "ENGL 178": {
+      "name": "Young Adult Literature",
+      "units": 3
+    },
+    "ITAL 121": {
+      "name": "Second Term Italian",
+      "units": 5
+    },
+    "ENGL 180": {
+      "name": "Drama and Performance as Literature",
+      "units": 3
+    },
+    "ITAL 220": {
+      "name": "Third Term Italian",
+      "units": 5
+    },
+    "ENGL 190": {
+      "name": "Multicultural Literature by American Women",
+      "units": 3
+    },
+    "ITAL 221": {
+      "name": "Fourth Term Italian",
+      "units": 5
+    },
+    "ENGL 252": {
+      "name": "Survey of Early English Literature",
+      "units": 3
+    },
+    "ITAL 230": {
+      "name": "Fifth Term Italian",
+      "units": 3
+    },
+    "ENGL 253": {
+      "name": "Survey of Late English Literature",
+      "units": 3
+    },
+    "ITAL 231": {
+      "name": "Sixth Term Italian",
+      "units": 3
+    },
+    "ENGL 262": {
+      "name": "Survey of Early American Literature",
+      "units": 3
+    },
+    "JAPAN 121": {
+      "name": "Second Term Japanese",
+      "units": 5
+    },
+    "ENGL 263": {
+      "name": "Survey of Late American Literature",
+      "units": 3
+    },
+    "JAPAN 220": {
+      "name": "Third Term Japanese",
+      "units": 5
+    },
+    "ENGL 272": {
+      "name": "Survey of Early World Literature",
+      "units": 3
+    },
+    "JAPAN 221": {
+      "name": "Fourth Term Japanese",
+      "units": 5
+    },
+    "ENGL 273": {
+      "name": "Survey of Late World Literature",
+      "units": 3
+    },
+    "KINES 247": {
+      "name": "Sports in Film",
+      "units": 3
+    },
+    "FRNCH 121": {
+      "name": "Second Term French",
+      "units": 5
+    },
+    "PERSN 121": {
+      "name": "Second Term Persian",
+      "units": 5
+    },
+    "FRNCH 220": {
+      "name": "Third Term French",
+      "units": 5
+    },
+    "PHILO 120": {
+      "name": "Introduction to Philosophy",
+      "units": 3
+    },
+    "FRNCH 221": {
+      "name": "Fourth Term French",
+      "units": 5
+    },
+    "PHILO 122": {
+      "name": "Introduction to Ethics",
+      "units": 3
+    },
+    "FRNCH 230": {
+      "name": "Fifth Term French",
+      "units": 3
+    },
+    "PHILO 141": {
+      "name": "Introduction to the Philosophy of Religion",
+      "units": 3
+    },
+    "FRNCH 231": {
+      "name": "Sixth Term French",
+      "units": 3
+    },
+    "PHILO 145": {
+      "name": "Introduction to Asian Philosophy",
+      "units": 3
+    },
+    "FTVE 260": {
+      "name": "Ethnic Images in United States (U.S.) Television",
+      "units": 3
+    },
+    "PHILO 160": {
+      "name": "Introduction to Social and Political Philosophy",
+      "units": 3
+    },
+    "GRMAN 121": {
+      "name": "Second Term German",
+      "units": 5
+    },
+    "PHILO 220": {
+      "name": "Comparative Religion",
+      "units": 3
+    },
+    "GRMAN 220": {
+      "name": "Third Term German",
+      "units": 5
+    },
+    "PHILO 224": {
+      "name": "History of Western Philosophy: Pre-Socratic to Medieval Period",
+      "units": 3
+    },
+    "GRMAN 221": {
+      "name": "Fourth Term German",
+      "units": 5
+    },
+    "PHILO 225": {
+      "name": "History of Western Philosophy: Descartes to Present",
+      "units": 3
+    },
+    "GRMAN 230": {
+      "name": "Fifth Term German",
+      "units": 3
+    },
+    "RUSS 121": {
+      "name": "Second Term Russian",
+      "units": 5
+    },
+    "GRMAN 231": {
+      "name": "Sixth Term German",
+      "units": 3
+    },
+    "RUSS 220": {
+      "name": "Third Term Russian",
+      "units": 5
+    },
+    "HIST 120": {
+      "name": "History of the United States before 1865",
+      "units": 3
+    },
+    "RUSS 221": {
+      "name": "Fourth Term Russian",
+      "units": 5
+    },
+    "HIST 121": {
+      "name": "History of the United States after 1865",
+      "units": 3
+    },
+    "SIGN 282": {
+      "name": "American Sign Language (ASL) III",
+      "units": 3
+    },
+    "HIST 124": {
+      "name": "History of California",
+      "units": 3
+    },
+    "SIGN 283": {
+      "name": "American Sign Language (ASL) IV",
+      "units": 3
+    },
+    "HIST 125": {
+      "name": "History of the United States: A Mexican American Perspective",
+      "units": 3
+    },
+    "SPAN 121": {
+      "name": "Second Term Spanish",
+      "units": 5
+    },
+    "HIST 126": {
+      "name": "The American West",
+      "units": 3
+    },
+    "SPAN 220": {
+      "name": "Third Term Spanish",
+      "units": 5
+    },
+    "HIST 127": {
+      "name": "African American Perspective History of the US to 1865",
+      "units": 3
+    },
+    "SPAN 221": {
+      "name": "Fourth Term Spanish",
+      "units": 5
+    },
+    "HIST 128": {
+      "name": "African American Perspective History of the US after 1865",
+      "units": 3
+    },
+    "SPAN 230": {
+      "name": "Fifth Term Spanish",
+      "units": 3
+    },
+    "HIST 129": {
+      "name": "History of Asians and Pacific Islanders in the United States",
+      "units": 3
+    },
+    "SPAN 231": {
+      "name": "Sixth Term Spanish",
+      "units": 3
+    },
+    "ADJUS 120": {
+      "name": "Introduction to the Administration of Justice",
+      "units": 3
+    },
+    "KINES 248": {
+      "name": "Sport and Society",
+      "units": 3
+    },
+    "ADJUS 126": {
+      "name": "Leadership and Ethics",
+      "units": 3
+    },
+    "NUTRI 130": {
+      "name": "Food and Nutrition: Cross Cultural Perspectives",
+      "units": 3
+    },
+    "ANTHR 120": {
+      "name": "Magic, Witchcraft, and Religion in the Americas",
+      "units": 3
+    },
+    "PH 127": {
+      "name": "Drugs, Health, and Society",
+      "units": 3
+    },
+    "ANTHR 125": {
+      "name": "Introduction to Archaeology and Prehistory",
+      "units": 3
+    },
+    "PH 130": {
+      "name": "Introduction to Community and Public Health",
+      "units": 3
+    },
+    "ANTHR 130": {
+      "name": "Cultural Anthropology",
+      "units": 3
+    },
+    "PH 132": {
+      "name": "Global Health",
+      "units": 3
+    },
+    "COMM 125": {
+      "name": "Intercultural Communication",
+      "units": 3
+    },
+    "PH 135": {
+      "name": "Health and Social Justice",
+      "units": 3
+    },
+    "COMM 180": {
+      "name": "Introduction to Communication Theory",
+      "units": 3
+    },
+    "PH 137": {
+      "name": "Cultural Competence in Health and Social Service",
+      "units": 3
+    },
+    "ECE 124": {
+      "name": "Child Development and Psychology",
+      "units": 3
+    },
+    "PH 140": {
+      "name": "Human Sexuality",
+      "units": 3
+    },
+    "ECE 130": {
+      "name": "Child, Family, and Community",
+      "units": 3
+    },
+    "PH 145": {
+      "name": "Social Determinants of Health, Disparities, and Health Equity",
+      "units": 3
+    },
+    "ECON 101": {
+      "name": "Economics of Public Issues",
+      "units": 3
+    },
+    "PH 170": {
+      "name": "Women’s Health",
+      "units": 3
+    },
+    "ECON 200": {
+      "name": "Introduction to Economics",
+      "units": 3
+    },
+    "POLS C1000": {
+      "name": "American Government and Politics",
+      "units": 3
+    },
+    "ECON 210": {
+      "name": "Economic Justice",
+      "units": 3
+    },
+    "POLS 120": {
+      "name": "Introduction to Politics",
+      "units": 3
+    },
+    "ECON 220": {
+      "name": "Principles of Macroeconomics",
+      "units": 3
+    },
+    "POLS 122": {
+      "name": "Latinx Politics and American Government",
+      "units": 3
+    },
+    "ECON 221": {
+      "name": "Principles of Microeconomics",
+      "units": 3
+    },
+    "POLS 123": {
+      "name": "Black Politics and American Government",
+      "units": 3
+    },
+    "EDUSP 101": {
+      "name": "Introduction to Disabilities",
+      "units": 3
+    },
+    "POLS 127": {
+      "name": "Introduction to Law and Democracy",
+      "units": 3
+    },
+    "EDUSP 102": {
+      "name": "Historical Perspectives of Disabilities and the Law",
+      "units": 3
+    },
+    "POLS 151": {
+      "name": "California Politics",
+      "units": 3
+    },
+    "ENGIN 130": {
+      "name": "Energy, Society, and the Environment",
+      "units": 3
+    },
+    "POLS 210": {
+      "name": "Political Ideology",
+      "units": 3
+    },
+    "ENGIN 131": {
+      "name": "Technology and Society",
+      "units": 3
+    },
+    "POLS 220": {
+      "name": "Comparative Politics",
+      "units": 3
+    },
+    "ETHN 101": {
+      "name": "Introduction to Ethnic Studies",
+      "units": 3
+    },
+    "POLS 240": {
+      "name": "Political Theory",
+      "units": 3
+    },
+    "ETHN 108": {
+      "name": "Introduction to African American Studies",
+      "units": 3
+    },
+    "POLS 250": {
+      "name": "International Relations",
+      "units": 3
+    },
+    "ETHN 120": {
+      "name": "Introduction to Native American Studies",
+      "units": 3
+    },
+    "PSYC C1000": {
+      "name": "Introduction to Psychology",
+      "units": 3
+    },
+    "ETHN 160": {
+      "name": "Introduction to Latino American Studies",
+      "units": 3
+    },
+    "PSYC 122": {
+      "name": "Psychology in Modern Life",
+      "units": 3
+    },
+    "FTVE 240": {
+      "name": "Survey of Broadcasting and Electronic Media",
+      "units": 3
+    },
+    "PSYC 140": {
+      "name": "Psychology of African-Americans in a Multicultural Society",
+      "units": 3
+    },
+    "GEOG 130": {
+      "name": "Cultural Geography",
+      "units": 3
+    },
+    "PSYC 141": {
+      "name": "Psychology of Latinos/Chicanos in the U.S.",
+      "units": 3
+    },
+    "GEOG 135": {
+      "name": "World Regional Geography",
+      "units": 3
+    },
+    "PSYC 160": {
+      "name": "Psychology of Women",
+      "units": 3
+    },
+    "PSYC 190": {
+      "name": "Psychology of Adolescence",
+      "units": 3
+    },
+    "PSYC 195": {
+      "name": "Psychology of Adult Development and Aging",
+      "units": 3
+    },
+    "PSYC 200": {
+      "name": "Life Span Development",
+      "units": 3
+    },
+    "PSYC 220": {
+      "name": "Psychology of Personality: Personal, Social, Cultural Differences",
+      "units": 3
+    },
+    "PSYC 225": {
+      "name": "Social Psychology",
+      "units": 3
+    },
+    "PSYC 230": {
+      "name": "Abnormal Psychology",
+      "units": 3
+    },
+    "PSYC 240": {
+      "name": "Transpersonal Psychology",
+      "units": 3
+    },
+    "SOCIO 120": {
+      "name": "Introduction to Sociology",
+      "units": 3
+    },
+    "SOCIO 121": {
+      "name": "Introduction to Social Problems",
+      "units": 3
+    },
+    "SOCIO 123": {
+      "name": "Introduction to Social Research",
+      "units": 3
+    },
+    "SOCIO 124": {
+      "name": "Gender, Culture, and Society",
+      "units": 3
+    },
+    "SOCIO 125": {
+      "name": "Families, Relationships, and Commitment",
+      "units": 3
+    },
+    "SOCIO 131": {
+      "name": "The Urban Community",
+      "units": 3
+    },
+    "SOCIO 135": {
+      "name": "Introduction to Race and Ethnicity",
+      "units": 3
+    },
+    "SOCSC 101": {
+      "name": "Introduction to Social Justice",
+      "units": 3
+    },
+    "SOCSC 111": {
+      "name": "Money, Power, and Politics in the United States",
+      "units": 3
+    },
+    "SOCSC 120": {
+      "name": "Women and Social Change in the United States: 1890-Present",
+      "units": 3
+    },
+    "SOCSC 123": {
+      "name": "American Popular Culture",
+      "units": 3
+    },
+    "SOCSC 130": {
+      "name": "Introduction to LGBTQ Studies",
+      "units": 3
+    },
+    "JRNAL 110": {
+      "name": "Mass Media of Communication",
+      "units": 3
+    },
+    "SOCSC 220": {
+      "name": "Women in United States Society",
+      "units": 3
+    },
+    "ASTRO 110": {
+      "name": "The Visible Universe (add ASTRO 130 for lab)",
+      "units": 3
+    },
+    "GEOL 121": {
+      "name": "Earth and Life Through Time (add GEOL-124 for lab)",
+      "units": 3
+    },
+    "ASTRO 112": {
+      "name": "The Visible Universe with Laboratory",
+      "units": 4
+    },
+    "GEOL 125": {
+      "name": "Geology of California (no lab)",
+      "units": 3
+    },
+    "ASTRO 114": {
+      "name": "Life in the Universe (no lab)",
+      "units": 3
+    },
+    "GEOL 130": {
+      "name": "Earth Science",
+      "units": 4
+    },
+    "ASTRO 120": {
+      "name": "Elementary Astronomy (add ASTRO-130 for lab)",
+      "units": 3
+    },
+    "GEOL 140": {
+      "name": "Environmental Geology (no lab)",
+      "units": 3
+    },
+    "CHEM 107": {
+      "name": "Integrated Inorganic, Organic, and Biological Chemistry",
+      "units": 5
+    },
+    "OCEAN 101": {
+      "name": "Fundamentals of Oceanography (no lab)",
+      "units": 3
+    },
+    "CHEM 108": {
+      "name": "Introductory Chemistry",
+      "units": 4
+    },
+    "OCEAN 102": {
+      "name": "Fundamentals of Oceanography with Laboratory",
+      "units": 4
+    },
+    "CHEM 109": {
+      "name": "Introduction to Organic and Biochemistry",
+      "units": 4
+    },
+    "PHYS 110": {
+      "name": "Elementary Physics (add PHYS 111+ for lab)",
+      "units": 3
+    },
+    "CHEM 120": {
+      "name": "General College Chemistry I",
+      "units": 5
+    },
+    "PHYS 112": {
+      "name": "Elementary Physics with Laboratory",
+      "units": 4
+    },
+    "CHEM 121": {
+      "name": "General College Chemistry II",
+      "units": 5
+    },
+    "PHYS 120": {
+      "name": "General College Physics I",
+      "units": 4
+    },
+    "CHEM 226": {
+      "name": "Organic Chemistry I",
+      "units": 5
+    },
+    "PHYS 121": {
+      "name": "General College Physics II",
+      "units": 4
+    },
+    "CHEM 227": {
+      "name": "Organic Chemistry II",
+      "units": 5
+    },
+    "PHYS 129": {
+      "name": "Introductory Physics for Engineers",
+      "units": 4
+    },
+    "GEOG 120": {
+      "name": "Physical Geography (add GEOG-121 for lab)",
+      "units": 3
+    },
+    "PHYS 130": {
+      "name": "Physics for Engineers and Scientists A: Mechanics and Wave Motion",
+      "units": 4
+    },
+    "GEOG 122": {
+      "name": "Physical Geography with Laboratory",
+      "units": 4
+    },
+    "PHYS 230": {
+      "name": "Physics for Engineers and Scientists B: Heat and Electro-Magnetism",
+      "units": 4
+    },
+    "GEOG 140": {
+      "name": "Introduction to Weather (add GEOG-141 for lab)",
+      "units": 3
+    },
+    "PHYS 231": {
+      "name": "Physics for Engineers and Scientists C: Optics and Modern Physics",
+      "units": 4
+    },
+    "GEOL 120": {
+      "name": "Physical Geology (add GEOL-122 for lab)",
+      "units": 3
+    },
+    "PHYSC 112": {
+      "name": "Fundamentals of Physical Science (no lab)",
+      "units": 3
+    },
+    "ANTHR 115": {
+      "name": "Primate Evolution and Adaptation (no lab)",
+      "units": 3
+    },
+    "BIOSC 131": {
+      "name": "Principles of Organismal Biology, Evolution, and Ecology",
+      "units": 5
+    },
+    "ANTHR 140": {
+      "name": "Biological Anthropology (add ANTHR-141L for lab)",
+      "units": 3
+    },
+    "BIOSC 139": {
+      "name": "Human Anatomy",
+      "units": 5
+    },
+    "BIOSC 101": {
+      "name": "Fundamentals of Biological Science (no lab)",
+      "units": 3
+    },
+    "BIOSC 140": {
+      "name": "Human Physiology",
+      "units": 5
+    },
+    "BIOSC 102": {
+      "name": "Fundamentals of Biological Science with Laboratory",
+      "units": 4
+    },
+    "BIOSC 146": {
+      "name": "Principles of Microbiology",
+      "units": 5
+    },
+    "BIOSC 116": {
+      "name": "Human Biology (no lab)",
+      "units": 3
+    },
+    "BIOSC 161": {
+      "name": "Fundamentals of Marine Biology (no lab)",
+      "units": 3
+    },
+    "BIOSC 117": {
+      "name": "Human Biology with Laboratory",
+      "units": 4
+    },
+    "BIOSC 162": {
+      "name": "Fundamentals of Marine Biology with Laboratory",
+      "units": 4
+    },
+    "BIOSC 119": {
+      "name": "Fundamentals of Microbiology",
+      "units": 4
+    },
+    "BIOSC 170": {
+      "name": "Environmental Science (no lab)",
+      "units": 3
+    },
+    "BIOSC 120": {
+      "name": "Introduction to Human Anatomy and Physiology",
+      "units": 5
+    },
+    "BIOSC 171": {
+      "name": "Environmental Science with Laboratory",
+      "units": 4
+    },
+    "BIOSC 126": {
+      "name": "Ecology and Field Biology",
+      "units": 4
+    },
+    "PSYC 130": {
+      "name": "Introduction to Biological Psychology (no lab)",
+      "units": 3
+    },
+    "BIOSC 130": {
+      "name": "Principles of Cellular and Molecular Biology",
+      "units": 5
+    }
+  },
+  "uc_cap_courses": [
+    "ASTRO 120",
+    "BIOSC 101",
+    "BIOSC 102",
+    "BIOSC 116",
+    "BIOSC 117",
+    "BIOSC 119",
+    "BIOSC 120",
+    "BIOSC 139",
+    "BIOSC 140",
+    "BIOSC 146",
+    "BIOSC 161",
+    "BIOSC 162",
+    "BIOSC 170",
+    "BIOSC 171",
+    "BUS 240",
+    "CHEM 107",
+    "CHEM 108",
+    "CHEM 109",
+    "ECON 200",
+    "ENGL 122AL",
+    "ENGL 123",
+    "ENGL 123A",
+    "ENGL 126A",
+    "ENGL C1000",
+    "ENGL C1000E",
+    "ENGL C1001",
+    "MATH 135",
+    "MATH 135L",
+    "MATH 181",
+    "MATH 181L",
+    "MATH 182",
+    "MATH 183",
+    "MATH 191",
+    "MATH 191L",
+    "MATH 192",
+    "MATH 193",
+    "OCEAN 101",
+    "OCEAN 102",
+    "PH 127",
+    "PH 170",
+    "PHYS 110",
+    "PHYS 112",
+    "PHYS 120",
+    "PHYS 121",
+    "PHYS 129",
+    "PHYS 130",
+    "PHYS 230",
+    "PHYS 231",
+    "PHYSC 112",
+    "PSYC 214",
+    "STAT C1000",
+    "STAT C1000E"
+  ]
+}
