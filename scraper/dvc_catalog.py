@@ -139,10 +139,14 @@ def parse_course(html: str, slug: str) -> dict[str, Any] | None:
     # DVC catalog structures multi-path requisites with <p class="my-2">
     # <strong>OR</strong></p> dividers between alternative branches. Within a
     # branch, <strong>AND</strong> combines multiple requirements. Since our
-    # schema doesn't model prereq OR groups yet, pick the LAST OR branch that
-    # contains course references — for STEM courses this is typically the
-    # calculus-based / engineering track (e.g. PHYS 130's last branch is
-    # PHYS 129, which matches what transfer students actually take).
+    # schema doesn't model prereq OR groups yet, we pick a single branch with
+    # this priority:
+    #   1. A branch whose prereqs share this course's department prefix
+    #      (e.g. COMSC 165 picks "COMSC 110" over "ENGIN 135") — students
+    #      naturally stay within their department's ladder.
+    #   2. Otherwise, the LAST OR branch — for cross-discipline STEM courses
+    #      this is usually the calculus-based / university track (e.g. PHYS 130
+    #      lands on PHYS 129 rather than the high-school-level fallback).
     prereq_slugs: list[str] = []
     req_block = REQ_BLOCK_RE.search(html)
     if req_block:
@@ -171,13 +175,22 @@ def parse_course(html: str, slug: str) -> dict[str, Any] | None:
                     slugs.append(m.group(1))
             return slugs
 
-        # Pick the LAST OR branch that has any course refs. If no OR dividers,
-        # or_branches has a single entry — that's the only branch.
-        for branch in reversed(or_branches):
-            slugs = extract_prereq_courses(branch)
-            if slugs:
-                prereq_slugs = slugs
-                break
+        own_prefix = prefix.lower()
+        candidates = [extract_prereq_courses(b) for b in or_branches]
+        # Prefer the first branch whose prereq slugs start with the course's
+        # own department prefix (same-dept ladder).
+        same_dept = next(
+            (slugs for slugs in candidates if slugs and any(s.startswith(own_prefix) for s in slugs)),
+            None,
+        )
+        if same_dept:
+            prereq_slugs = same_dept
+        else:
+            # Fall back to the LAST branch that has any course refs.
+            for slugs in reversed(candidates):
+                if slugs:
+                    prereq_slugs = slugs
+                    break
 
     return {
         "slug": slug,

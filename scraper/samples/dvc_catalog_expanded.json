@@ -3212,11 +3212,11 @@
   "prerequisites": [
     {
       "course_id": "dvc_comsc120",
-      "prerequisite_id": "dvc_engin135"
+      "prerequisite_id": "dvc_comsc110"
     },
     {
       "course_id": "dvc_comsc165",
-      "prerequisite_id": "dvc_engin135"
+      "prerequisite_id": "dvc_comsc110"
     },
     {
       "course_id": "dvc_comsc200",
@@ -3228,7 +3228,7 @@
     },
     {
       "course_id": "dvc_comsc230",
-      "prerequisite_id": "dvc_comsc140"
+      "prerequisite_id": "dvc_comsc165"
     },
     {
       "course_id": "dvc_comsc240",
@@ -3280,7 +3280,11 @@
     },
     {
       "course_id": "dvc_phys124",
-      "prerequisite_id": "dvc_math192"
+      "prerequisite_id": "dvc_math182"
+    },
+    {
+      "course_id": "dvc_phys124",
+      "prerequisite_id": "dvc_phys120"
     },
     {
       "course_id": "dvc_phys125",
@@ -3296,7 +3300,7 @@
     },
     {
       "course_id": "dvc_phys130",
-      "prerequisite_id": "dvc_phys129"
+      "prerequisite_id": "dvc_phys110"
     },
     {
       "course_id": "dvc_phys230",
@@ -3364,7 +3368,7 @@
     },
     {
       "course_id": "dvc_chem109",
-      "prerequisite_id": "dvc_chem120"
+      "prerequisite_id": "dvc_chem107"
     },
     {
       "course_id": "dvc_chem120",
@@ -3452,7 +3456,11 @@
     },
     {
       "course_id": "dvc_psyc215",
-      "prerequisite_id": "dvc_psyc214"
+      "prerequisite_id": "dvc_bus240"
+    },
+    {
+      "course_id": "dvc_psyc215",
+      "prerequisite_id": "dvc_psycc1000"
     },
     {
       "course_id": "dvc_biosc119",
@@ -3468,7 +3476,7 @@
     },
     {
       "course_id": "dvc_biosc140",
-      "prerequisite_id": "dvc_chem120"
+      "prerequisite_id": "dvc_biosc120"
     },
     {
       "course_id": "dvc_biosc146",
@@ -3476,7 +3484,7 @@
     },
     {
       "course_id": "dvc_astro130",
-      "prerequisite_id": "dvc_astro120"
+      "prerequisite_id": "dvc_astro110"
     },
     {
       "course_id": "dvc_geol124",
@@ -3632,6 +3640,11 @@
     }
   ],
   "unresolved_prereqs": [
+    {
+      "course": "PHYS 130",
+      "prereq_slug": "phys111",
+      "reason": "slug not in scraped set — department not included?"
+    },
     {
       "course": "ARCHI 121",
       "prereq_slug": "archi120",
