@@ -2,6 +2,7 @@ import { Routes, Route, NavLink } from 'react-router-dom'
 import SetupPage from './pages/SetupPage.jsx'
 import RequirementsPage from './pages/RequirementsPage.jsx'
 import PlannerPage from './pages/PlannerPage.jsx'
+import FeedbackButton from './components/FeedbackButton.jsx'
 import { useAppData } from './hooks/useAppData.jsx'
 
 const navClass = ({ isActive }) =>
@@ -76,6 +77,7 @@ export default function App() {
           </Routes>
         )}
       </main>
+      <FeedbackButton />
     </div>
   )
 }
