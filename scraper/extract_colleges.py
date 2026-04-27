@@ -71,10 +71,31 @@ def extract_college(template_assets_raw: str) -> str | None:
     return blob
 
 
-def classify(blob: str) -> tuple[str, bool]:
+# Fallback: classify directly from the major name when templateAssets doesn't
+# carry the college affiliation (UCLA / UCSD agreements often don't).
+NAME_NO_CALGETC = re.compile(
+    # Any major with "Engineering" in its name lives in CoE / HSSEAS / Jacobs.
+    r"\bengineer(ing)?\b|"
+    # UCLA / UCSD CS variants are in the engineering school (unlike UCB CS / L&S).
+    r"\bcomputer (science(\s+and\s+engineering)?|engineering)\b",
+    re.I,
+)
+# A handful of programs LOOK like engineering by name but aren't in the
+# engineering school (UCLA Engineering Geology is in L&S Earth Sciences;
+# Linguistics and Computer Science is in L&S linguistics, not HSSEAS).
+NAME_CS_LS = re.compile(
+    r"\b(linguistics and computer science|engineering geology)\b",
+    re.I,
+)
+
+
+def classify(blob: str, name: str = "") -> tuple[str, bool]:
     for pat, label, req in COLLEGE_RULES:
         if pat.search(blob):
             return label, req
+    # Name-based fallback for agreements without college info in templateAssets.
+    if name and NAME_NO_CALGETC.search(name) and not NAME_CS_LS.search(name):
+        return "Engineering (by name)", False
     return "unknown", True  # default: assume Cal-GETC OK
 
 
@@ -97,9 +118,22 @@ def main() -> int:
     client = create_client(url, key)
 
     def normalize_name(n: str) -> str:
-        # Strip degree suffix (", B.A.", ", B.S.", " - B.S.", etc.) for matching.
-        n = re.sub(r"\s*[,/]\s*(B\.?[AS]\.?|M\.?[AS]\.?|B\.?M\.?)(\s+and\s+B\.?[AS]\.?)?\.?\s*$", "", n, flags=re.I)
-        return n.strip().lower()
+        # Strip degree suffix in any of these formats:
+        #   "Sociology B.A."         (UCSD: just a space)
+        #   "Spanish/B.A."           (UCLA: slash)
+        #   "Computer Science, B.A." (UCB: comma)
+        #   "Music/B.M."             (UCLA Music)
+        # Also handle UCLA quirk where DB stored "Asian Studies/" (trailing
+        # slash, no degree word).
+        n = re.sub(
+            r"[\s,/\-]+(B\.?[AS]\.?|M\.?[AS]\.?|B\.?M\.?|Ph\.?D\.?)"
+            r"(\s+and\s+B\.?[AS]\.?)?\.?\s*$",
+            "",
+            n,
+            flags=re.I,
+        )
+        n = n.rstrip("/ ").strip()
+        return n.lower()
 
     # Build name -> classification map from cached agreements.
     name_to_class: dict[str, tuple[str, bool]] = {}
@@ -118,7 +152,7 @@ def main() -> int:
             continue
         ta_raw = res.get("templateAssets") or "[]"
         blob = extract_college(ta_raw) or ""
-        label, req = classify(blob)
+        label, req = classify(blob, name)
         name_to_class[normalize_name(name)] = (label, req)
 
     print(f"  parsed {len(name_to_class)} agreements")
