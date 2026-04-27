@@ -6,25 +6,86 @@ import * as seed from '../data/seed.js'
 // interchangeably. If Supabase isn't configured or a query fails, falls back
 // to the bundled seed data.
 
+// PostgREST caps `select('*')` at 1000 rows by default. Fetch in 1000-row
+// pages until we've drained the table, so larger tables (3000+ rows for
+// path_articulations / options / requirements after UCLA+UCSD scrape) load
+// completely. Each call uses a stable order on (id) to avoid duplicates or
+// gaps if rows shift between requests.
+async function fetchAllPaged(table, pageSize = 1000) {
+  const out = []
+  for (let from = 0; ; from += pageSize) {
+    const to = from + pageSize - 1
+    const { data, error } = await supabase
+      .from(table)
+      .select('*')
+      .order('id', { ascending: true })
+      .range(from, to)
+    if (error) throw new Error(`${table}: ${error.message}`)
+    if (!data || data.length === 0) break
+    out.push(...data)
+    if (data.length < pageSize) break
+  }
+  return out
+}
+
 async function fetchAll() {
   if (!isSupabaseConfigured || !supabase) throw new Error('Supabase not configured')
 
-  const [schoolsR, majorsR, coursesR, prereqsR, pathsR, pathReqR, artR, optR] =
-    await Promise.all([
-      supabase.from('schools').select('*'),
-      supabase.from('target_majors').select('*'),
-      supabase.from('courses').select('*'),
-      supabase.from('prerequisites').select('*'),
-      supabase.from('transfer_paths').select('*'),
-      supabase.from('path_requirements').select('*'),
-      supabase.from('path_articulations').select('*'),
-      supabase.from('path_articulation_options').select('*'),
-    ])
+  const [
+    schoolsData, majorsData, coursesData, prereqsData,
+    pathsData, pathReqData, artData, optData,
+  ] = await Promise.all([
+    fetchAllPaged('schools'),
+    fetchAllPaged('target_majors'),
+    fetchAllPaged('courses'),
+    // prerequisites has a composite PK (course_id, prerequisite_id) and no
+    // single `id` column — order by course_id for paging.
+    (async () => {
+      const out = []
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await supabase
+          .from('prerequisites')
+          .select('*')
+          .order('course_id', { ascending: true })
+          .order('prerequisite_id', { ascending: true })
+          .range(from, from + 999)
+        if (error) throw new Error(`prerequisites: ${error.message}`)
+        if (!data || data.length === 0) break
+        out.push(...data)
+        if (data.length < 1000) break
+      }
+      return out
+    })(),
+    fetchAllPaged('transfer_paths'),
+    // path_requirements has composite PK (path_id, course_id) — same trick.
+    (async () => {
+      const out = []
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await supabase
+          .from('path_requirements')
+          .select('*')
+          .order('path_id', { ascending: true })
+          .order('course_id', { ascending: true })
+          .range(from, from + 999)
+        if (error) throw new Error(`path_requirements: ${error.message}`)
+        if (!data || data.length === 0) break
+        out.push(...data)
+        if (data.length < 1000) break
+      }
+      return out
+    })(),
+    fetchAllPaged('path_articulations'),
+    fetchAllPaged('path_articulation_options'),
+  ])
 
-  const errors = [schoolsR, majorsR, coursesR, prereqsR, pathsR, pathReqR, artR, optR]
-    .map((r) => r.error)
-    .filter(Boolean)
-  if (errors.length) throw new Error(errors.map((e) => e.message).join('; '))
+  const schoolsR = { data: schoolsData }
+  const majorsR = { data: majorsData }
+  const coursesR = { data: coursesData }
+  const prereqsR = { data: prereqsData }
+  const pathsR = { data: pathsData }
+  const pathReqR = { data: pathReqData }
+  const artR = { data: artData }
+  const optR = { data: optData }
 
   // Shape transfer_paths so each path carries its required_course_ids (like seed.js).
   const reqByPath = new Map()
