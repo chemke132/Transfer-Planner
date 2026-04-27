@@ -40,7 +40,7 @@ function makeEmptySemesters(terms) {
 
 export default function PlannerPage() {
   const { setup } = useSetup()
-  const { selected: selectedCalGetc } = useCalGetcSelections()
+  const { selected: rawSelectedCalGetc } = useCalGetcSelections()
   const { choices: orChoices } = useOrChoices()
   const {
     findTransferPath,
@@ -49,7 +49,18 @@ export default function PlannerPage() {
     getCalGetcCourses,
     filterPrerequisites,
     PREREQUISITES,
+    TARGET_MAJORS,
   } = useAppData()
+
+  // If the active major's college doesn't use Cal-GETC (e.g. CoE EECS,
+  // College of Chemistry, Haas), force-empty the selected set so any prior
+  // Cal-GETC selections from a different major don't leak into the planner.
+  const requiresCalGetc =
+    TARGET_MAJORS?.[setup.target_major_id]?.requires_cal_getc !== false
+  const selectedCalGetc = useMemo(
+    () => (requiresCalGetc ? rawSelectedCalGetc : new Set()),
+    [requiresCalGetc, rawSelectedCalGetc],
+  )
 
   // Derived per-setup context.
   const path = useMemo(
@@ -450,6 +461,7 @@ export default function PlannerPage() {
         calGetcCourses={selectedCalGetcCourses}
         placedIds={placedIds}
         directRequiredIds={directRequiredIds}
+        showCalGetc={requiresCalGetc}
       />
 
       <DndContext
@@ -505,7 +517,9 @@ export default function PlannerPage() {
             return (
               <div className="space-y-2">
                 <PoolSubSection label="Major" tone="slate" courses={majorUnplaced} />
-                <PoolSubSection label="Cal-GETC" tone="emerald" courses={calGetcUnplaced} />
+                {requiresCalGetc && (
+                  <PoolSubSection label="Cal-GETC" tone="emerald" courses={calGetcUnplaced} />
+                )}
               </div>
             )
           })()}
@@ -590,13 +604,19 @@ function groupBySubject(courses) {
   return [...groups.entries()].sort((a, b) => a[0].localeCompare(b[0]))
 }
 
-function ConfiguredCoursesPanel({ majorCourses, calGetcCourses, placedIds, directRequiredIds }) {
+function ConfiguredCoursesPanel({
+  majorCourses,
+  calGetcCourses,
+  placedIds,
+  directRequiredIds,
+  showCalGetc = true,
+}) {
   return (
     <section className="mb-4 border rounded-lg bg-white p-3">
       <div className="text-xs uppercase tracking-wide font-semibold text-slate-500 mb-2">
         Configured courses
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div className={`grid grid-cols-1 ${showCalGetc ? 'md:grid-cols-2' : ''} gap-2`}>
         <ConfiguredRow
           label="Major"
           tone="slate"
@@ -604,18 +624,20 @@ function ConfiguredCoursesPanel({ majorCourses, calGetcCourses, placedIds, direc
           placedIds={placedIds}
           directRequiredIds={directRequiredIds}
         />
-        <ConfiguredRow
-          label="Cal-GETC"
-          tone="emerald"
-          courses={calGetcCourses}
-          placedIds={placedIds}
-          emptyHint={
-            <>
-              None selected — pick in{' '}
-              <Link to="/requirements" className="underline">Requirements</Link>.
-            </>
-          }
-        />
+        {showCalGetc && (
+          <ConfiguredRow
+            label="Cal-GETC"
+            tone="emerald"
+            courses={calGetcCourses}
+            placedIds={placedIds}
+            emptyHint={
+              <>
+                None selected — pick in{' '}
+                <Link to="/requirements" className="underline">Requirements</Link>.
+              </>
+            }
+          />
+        )}
       </div>
     </section>
   )
