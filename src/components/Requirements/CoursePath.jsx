@@ -3,103 +3,173 @@ import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
 
-// Course Path is a flat, top-to-bottom reading order of every CC course the
-// student needs to take — sorted so that prereqs always come before their
-// dependents. Replaces the prior ReactFlow graph, which was harder to read at
-// a glance once a major had 15+ nodes.
+// Course Path: each row is one prereq chain (typically one department's
+// ladder), laid out left-to-right with arrows. Courses without prereqs
+// in the major start the row; their dependents follow rightward.
+//
+// Grouping: courses are bucketed by subject prefix (the first word of the
+// course code: COMSC, MATH, PHYS, ENGL, ...). Within each bucket, courses
+// are topologically sorted so prereqs come before dependents on the same
+// row. Cross-subject prereqs are shown as a small note under the dependent.
 export default function CoursePath() {
   const { setup } = useSetup()
   const { findTransferPath, getMajorCourses, getDirectRequiredIds, filterPrerequisites } =
     useAppData()
   const { choices } = useOrChoices()
 
-  const { ordered, prereqByCourse, directIds, totalUnits } = useMemo(() => {
+  const { rows, prereqByCourse, directIds, totalUnits, codeById } = useMemo(() => {
     const path = findTransferPath({
       cc_id: setup.cc_id,
       target_major_id: setup.target_major_id,
     })
     const major = getMajorCourses(path, choices)
     if (!major.length) {
-      return { ordered: [], prereqByCourse: new Map(), directIds: new Set(), totalUnits: 0 }
+      return {
+        rows: [],
+        prereqByCourse: new Map(),
+        directIds: new Set(),
+        totalUnits: 0,
+        codeById: new Map(),
+      }
     }
     const prereqs = filterPrerequisites(major.map((c) => c.id))
-    const sorted = topoSort(major, prereqs)
-    const map = new Map(major.map((c) => [c.id, []]))
+    const prMap = new Map(major.map((c) => [c.id, []]))
     for (const p of prereqs) {
-      if (map.has(p.course_id)) map.get(p.course_id).push(p.prerequisite_id)
+      if (prMap.has(p.course_id)) prMap.get(p.course_id).push(p.prerequisite_id)
     }
+
+    // Group by subject prefix.
+    const subjectOf = (c) => (c.code || '').split(/\s+/)[0] || 'OTHER'
+    const groups = new Map()
+    for (const c of major) {
+      const s = subjectOf(c)
+      if (!groups.has(s)) groups.set(s, [])
+      groups.get(s).push(c)
+    }
+
+    // Within each group, topo-sort using only prereqs that are also in the group.
+    const groupRows = []
+    for (const [subject, courses] of groups) {
+      const ids = new Set(courses.map((c) => c.id))
+      const localPrereqs = prereqs.filter(
+        (p) => ids.has(p.course_id) && ids.has(p.prerequisite_id),
+      )
+      const sorted = topoSort(courses, localPrereqs)
+      groupRows.push({ subject, courses: sorted })
+    }
+
+    // Sort rows: bigger groups first, then alphabetical.
+    groupRows.sort((a, b) => {
+      if (b.courses.length !== a.courses.length) return b.courses.length - a.courses.length
+      return a.subject.localeCompare(b.subject)
+    })
+
     return {
-      ordered: sorted,
-      prereqByCourse: map,
+      rows: groupRows,
+      prereqByCourse: prMap,
       directIds: getDirectRequiredIds(path, choices),
       totalUnits: major.reduce((sum, c) => sum + (c.units || 0), 0),
+      codeById: new Map(major.map((c) => [c.id, c.code])),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setup.cc_id, setup.target_major_id, choices])
 
-  if (!ordered.length) {
-    return (
-      <div className="text-sm text-slate-400 italic">No transfer path data yet.</div>
-    )
+  if (!rows.length) {
+    return <div className="text-sm text-slate-400 italic">No transfer path data yet.</div>
   }
 
-  const codeById = new Map(ordered.map((c) => [c.id, c.code]))
+  const totalCourses = rows.reduce((n, r) => n + r.courses.length, 0)
 
   return (
     <section>
       <div className="flex items-baseline justify-between mb-3 flex-wrap gap-2">
-        <h2 className="font-semibold">Suggested course order</h2>
+        <h2 className="font-semibold">Course chains by subject</h2>
         <div className="text-sm text-slate-500">
-          {ordered.length} courses · {totalUnits} units
+          {totalCourses} courses · {totalUnits} units
         </div>
       </div>
       <p className="text-xs text-slate-500 mb-4">
-        Courses listed in prerequisite order — take earlier items before later ones. Prereq
-        chains are resolved, so you can start from the top and work down.
+        Each row is one subject's prereq chain. Read left-to-right within a row —
+        earlier courses are prereqs for the ones to their right.
       </p>
-      <ol className="space-y-2">
-        {ordered.map((c, idx) => {
-          const prereqs = (prereqByCourse.get(c.id) || [])
-            .map((id) => codeById.get(id))
-            .filter(Boolean)
-          const isDirect = directIds.has(c.id)
-          return (
-            <li
-              key={c.id}
-              className="bg-white border rounded-md px-3 py-2 flex items-start gap-3"
-            >
-              <div className="text-xs font-mono text-slate-400 w-6 text-right pt-0.5 shrink-0">
-                {idx + 1}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium text-sm">
-                    {c.code} — {c.name}
-                  </span>
-                  {!isDirect && (
-                    <span className="text-[10px] uppercase tracking-wide bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">
-                      prereq
-                    </span>
-                  )}
-                  {c.cal_getc_area && (
-                    <span className="text-[10px] uppercase tracking-wide bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
-                      Cal-GETC {c.cal_getc_area}
-                      {c.cal_getc_lab_paired ? ' + 5C' : ''}
-                    </span>
-                  )}
-                </div>
-                {prereqs.length > 0 && (
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    prereq: {prereqs.join(', ')}
-                  </div>
-                )}
-              </div>
-              <div className="text-xs text-slate-500 shrink-0">{c.units}u</div>
-            </li>
-          )
-        })}
-      </ol>
+
+      <div className="space-y-4">
+        {rows.map((row) => (
+          <div key={row.subject} className="bg-white border rounded-md p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                {row.subject}
+              </span>
+              <span className="text-xs text-slate-400">
+                {row.courses.length} course{row.courses.length > 1 ? 's' : ''}
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              <ol className="flex items-stretch gap-2 min-w-min">
+                {row.courses.map((c, idx) => {
+                  const isDirect = directIds.has(c.id)
+                  const allPrereqIds = prereqByCourse.get(c.id) || []
+                  // External prereqs = prereqs in the major but in another subject.
+                  const externalPrereqs = allPrereqIds
+                    .map((id) => codeById.get(id))
+                    .filter((code) => code && code.split(/\s+/)[0] !== row.subject)
+                  return (
+                    <li key={c.id} className="flex items-center shrink-0">
+                      {idx > 0 && (
+                        <span className="text-slate-300 mx-1 select-none" aria-hidden>
+                          →
+                        </span>
+                      )}
+                      <CourseChip
+                        course={c}
+                        isDirect={isDirect}
+                        externalPrereqs={externalPrereqs}
+                      />
+                    </li>
+                  )
+                })}
+              </ol>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
+  )
+}
+
+function CourseChip({ course, isDirect, externalPrereqs }) {
+  return (
+    <div
+      className={`min-w-[160px] max-w-[220px] rounded-md border px-2.5 py-2 text-left ${
+        isDirect ? 'border-slate-900 bg-slate-50' : 'border-slate-200 bg-white'
+      }`}
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <div className="font-medium text-sm font-mono">{course.code}</div>
+        <div className="text-[10px] text-slate-400 shrink-0">{course.units}u</div>
+      </div>
+      <div className="text-xs text-slate-600 leading-tight mt-0.5 line-clamp-2">
+        {course.name}
+      </div>
+      <div className="flex flex-wrap gap-1 mt-1.5">
+        {!isDirect && (
+          <span className="text-[9px] uppercase tracking-wide bg-amber-100 text-amber-800 px-1 py-0.5 rounded">
+            prereq
+          </span>
+        )}
+        {course.cal_getc_area && (
+          <span className="text-[9px] uppercase tracking-wide bg-emerald-100 text-emerald-800 px-1 py-0.5 rounded">
+            GE {course.cal_getc_area}
+            {course.cal_getc_lab_paired ? '+5C' : ''}
+          </span>
+        )}
+      </div>
+      {externalPrereqs.length > 0 && (
+        <div className="text-[10px] text-slate-500 mt-1 leading-tight">
+          also needs: {externalPrereqs.join(', ')}
+        </div>
+      )}
+    </div>
   )
 }
 
