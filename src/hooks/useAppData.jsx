@@ -85,10 +85,14 @@ function buildHelpers(data) {
     )
   }
   function targetMajorsForSchool(schoolId) {
-    return Object.values(data.TARGET_MAJORS).filter((m) => m.school_id === schoolId)
+    return Object.values(data.TARGET_MAJORS)
+      .filter((m) => m.school_id === schoolId)
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   }
   function schoolsByType(type) {
-    return Object.values(data.SCHOOLS).filter((s) => s.type === type)
+    return Object.values(data.SCHOOLS)
+      .filter((s) => s.type === type)
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   }
 
   return {
