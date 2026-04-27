@@ -257,7 +257,14 @@ def main() -> int:
                 print(f"  [{i:3d}/{len(all_slugs)}] !! could not parse {slug}")
                 continue
             parsed_by_slug[slug] = parsed
-            slug_to_id[slug] = _course_id(args.school_id, parsed["code"])
+            cid = _course_id(args.school_id, parsed["code"])
+            slug_to_id[slug] = cid
+            # DVC catalog sometimes versions slugs (e.g. "phys111v2" in the
+            # department index, but prereqs reference "phys111"). Register an
+            # unversioned alias so prereq lookups still resolve.
+            stripped = re.sub(r"v\d+$", "", slug)
+            if stripped != slug and stripped not in slug_to_id:
+                slug_to_id[stripped] = cid
             if i % 10 == 0:
                 print(f"  [{i:3d}/{len(all_slugs)}] {parsed['code']}")
 

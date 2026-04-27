@@ -3303,6 +3303,10 @@
       "prerequisite_id": "dvc_phys110"
     },
     {
+      "course_id": "dvc_phys130",
+      "prerequisite_id": "dvc_phys111"
+    },
+    {
       "course_id": "dvc_phys230",
       "prerequisite_id": "dvc_math292"
     },
@@ -3544,6 +3548,10 @@
     },
     {
       "course_id": "dvc_archi121",
+      "prerequisite_id": "dvc_archi120"
+    },
+    {
+      "course_id": "dvc_archi121",
       "prerequisite_id": "dvc_archi130"
     },
     {
@@ -3553,6 +3561,10 @@
     {
       "course_id": "dvc_archi131",
       "prerequisite_id": "dvc_archi130"
+    },
+    {
+      "course_id": "dvc_archi220",
+      "prerequisite_id": "dvc_archi121"
     },
     {
       "course_id": "dvc_archi220",
@@ -3639,21 +3651,5 @@
       "prerequisite_id": "dvc_russ220"
     }
   ],
-  "unresolved_prereqs": [
-    {
-      "course": "PHYS 130",
-      "prereq_slug": "phys111",
-      "reason": "slug not in scraped set — department not included?"
-    },
-    {
-      "course": "ARCHI 121",
-      "prereq_slug": "archi120",
-      "reason": "slug not in scraped set — department not included?"
-    },
-    {
-      "course": "ARCHI 220",
-      "prereq_slug": "archi121",
-      "reason": "slug not in scraped set — department not included?"
-    }
-  ]
+  "unresolved_prereqs": []
 }
