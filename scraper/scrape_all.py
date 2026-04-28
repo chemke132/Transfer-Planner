@@ -235,9 +235,15 @@ def load_cached_agreements(uc_id: str) -> list[dict[str, Any]]:
 
 
 def ensure_uc_school(client: Client, uc_id: str, uc_name: str) -> None:
-    client.table("schools").upsert(
-        {"id": uc_id, "name": uc_name, "type": "UC"}, on_conflict="id"
-    ).execute()
+    # Only insert if missing — never overwrite an existing row's name. The
+    # full assist.org name ("University of California, Davis") is verbose;
+    # we want curated short names ("UC Davis") in the schools table, so
+    # don't clobber whatever's already there.
+    existing = client.table("schools").select("id").eq("id", uc_id).execute()
+    if not existing.data:
+        client.table("schools").insert(
+            {"id": uc_id, "name": uc_name, "type": "UC"}
+        ).execute()
 
 
 def upsert_major_and_path(
