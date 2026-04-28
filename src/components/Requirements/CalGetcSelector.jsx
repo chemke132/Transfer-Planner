@@ -10,8 +10,7 @@ export default function CalGetcSelector() {
   const {
     CAL_GETC_AREAS,
     getCalGetcCourses,
-    findTransferPath,
-    getMajorCourses,
+    getMajorCoursesForTargets,
   } = useAppData()
   const { choices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
@@ -19,15 +18,16 @@ export default function CalGetcSelector() {
   const [activeArea, setActiveArea] = useState(areaCodes[0])
   const { selected, toggle } = useCalGetcSelections()
 
-  // Courses required by the major that also happen to satisfy a Cal-GETC area.
-  // Students don't need to double up — if the major covers the whole area
-  // requirement, we disable manual selection there.
+  // Courses required by ANY target's major that also happen to satisfy a
+  // Cal-GETC area. Students don't double up; we disable manual selection
+  // for areas the union of major requirements already covers.
   const majorCoveredByArea = useMemo(() => {
-    const path = findTransferPath({
-      cc_id: setup.cc_id,
-      target_major_id: setup.target_major_id,
-    })
-    const major = getMajorCourses(path, choices, trackChoices)
+    const major = getMajorCoursesForTargets(
+      setup.cc_id,
+      setup.targets,
+      choices,
+      trackChoices,
+    )
     const map = new Map()
     for (const code of areaCodes) map.set(code, [])
     for (const c of major) {
@@ -37,7 +37,7 @@ export default function CalGetcSelector() {
     }
     return map
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, choices, trackChoices])
+  }, [setup.cc_id, setup.targets, choices, trackChoices])
 
   const byArea = useMemo(() => {
     const map = new Map()

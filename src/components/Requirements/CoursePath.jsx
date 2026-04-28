@@ -14,17 +14,21 @@ import { useTrackChoices } from '../../hooks/useTrackChoices.js'
 // row. Cross-subject prereqs are shown as a small note under the dependent.
 export default function CoursePath() {
   const { setup } = useSetup()
-  const { findTransferPath, getMajorCourses, getDirectRequiredIds, filterPrerequisites } =
-    useAppData()
+  const {
+    getMajorCoursesForTargets,
+    getDirectRequiredIdsForTargets,
+    filterPrerequisites,
+  } = useAppData()
   const { choices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
 
   const { rows, prereqByCourse, directIds, totalUnits, codeById } = useMemo(() => {
-    const path = findTransferPath({
-      cc_id: setup.cc_id,
-      target_major_id: setup.target_major_id,
-    })
-    const major = getMajorCourses(path, choices, trackChoices)
+    const major = getMajorCoursesForTargets(
+      setup.cc_id,
+      setup.targets,
+      choices,
+      trackChoices,
+    )
     if (!major.length) {
       return {
         rows: [],
@@ -69,12 +73,17 @@ export default function CoursePath() {
     return {
       rows: groupRows,
       prereqByCourse: prMap,
-      directIds: getDirectRequiredIds(path, choices, trackChoices),
+      directIds: getDirectRequiredIdsForTargets(
+        setup.cc_id,
+        setup.targets,
+        choices,
+        trackChoices,
+      ),
       totalUnits: major.reduce((sum, c) => sum + (c.units || 0), 0),
       codeById: new Map(major.map((c) => [c.id, c.code])),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, choices, trackChoices])
+  }, [setup.cc_id, setup.targets, choices, trackChoices])
 
   if (!rows.length) {
     return <div className="text-sm text-slate-400 italic">No transfer path data yet.</div>

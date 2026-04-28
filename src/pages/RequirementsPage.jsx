@@ -14,15 +14,20 @@ const ALL_TABS = [
 export default function RequirementsPage() {
   const { setup } = useSetup()
   const { TARGET_MAJORS } = useAppData()
-  const major = TARGET_MAJORS?.[setup.target_major_id]
-  // requires_cal_getc defaults to true; only false when explicitly flagged
-  // (engineering / chemistry / Haas-style colleges).
-  const calGetcRequired = major?.requires_cal_getc !== false
+  // Cal-GETC is hidden only when EVERY selected target opts out (e.g. all
+  // CoE engineering majors). If even one target uses Cal-GETC, show the tab —
+  // courses that fulfill it for that target are still useful info.
+  const calGetcRequired = (setup.targets || []).some((t) => {
+    const m = TARGET_MAJORS?.[t.major_id]
+    return m?.requires_cal_getc !== false
+  })
+  const allMajorsOptOut = (setup.targets || []).every((t) => {
+    const m = TARGET_MAJORS?.[t.major_id]
+    return m?.requires_cal_getc === false
+  })
 
   const tabs = calGetcRequired ? ALL_TABS : ALL_TABS.filter((t) => t.id !== 'calgetc')
   const [tab, setTab] = useState('major')
-  // If user had calgetc selected and switches to a major that doesn't need it,
-  // fall back to major tab.
   const safeTab = tabs.some((t) => t.id === tab) ? tab : 'major'
 
   return (
@@ -35,15 +40,15 @@ export default function RequirementsPage() {
           </TabButton>
         ))}
       </div>
-      {!calGetcRequired && (
+      {allMajorsOptOut && (
         <div className="mb-6 rounded-md border border-sky-200 bg-sky-50 p-3 text-sm">
           <div className="font-semibold text-sky-900 mb-1">
-            This major doesn't use Cal-GETC
+            None of your targets use Cal-GETC
           </div>
           <div className="text-xs text-sky-800/90">
-            {major?.name} is offered by a college (CoE / Chemistry / Haas / similar) that
-            uses its own Humanities &amp; Social Sciences breadth pattern instead of
-            Cal-GETC. Confirm the exact list with{' '}
+            All selected majors are offered by colleges (CoE / Chemistry / Haas /
+            similar) that use their own Humanities &amp; Social Sciences breadth
+            pattern instead of Cal-GETC. Confirm the exact list with{' '}
             <a
               href="https://assist.org"
               target="_blank"

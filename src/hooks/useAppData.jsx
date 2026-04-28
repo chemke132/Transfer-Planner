@@ -112,6 +112,58 @@ function buildHelpers(data) {
   function getDirectRequiredIds(path, orChoices, trackChoices) {
     return new Set(getRequiredCourseIds(path, orChoices, trackChoices))
   }
+
+  // ── Multi-target helpers ────────────────────────────────────────────────
+  // A "target" = { school_id, major_id }. Transfer applicants typically apply
+  // to multiple UC campuses, so the planner unions the requirements across
+  // every chosen target. For each course we also track WHICH targets need it,
+  // so the UI can prioritize "needed by all 3 schools" over "UCB only".
+
+  // Returns Map<courseId, { course, targets: Set<targetIndex>, isDirect: boolean }>.
+  // - targets: which target indexes (in `targets` array) require this course
+  //   (either directly, or indirectly via prereq chain)
+  // - isDirect: true if at least one target lists the course directly
+  //   (not just as a transitive prereq)
+  function getRequirementMap(cc_id, targets, orChoices = {}, trackChoices = {}) {
+    const map = new Map()
+    if (!targets || !targets.length) return map
+    targets.forEach((t, idx) => {
+      const path = findTransferPath({
+        cc_id,
+        target_major_id: t.major_id,
+      })
+      if (!path) return
+      const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
+      const directSet = new Set(directIds)
+      const allIds = expandPrereqs(directIds)
+      for (const id of allIds) {
+        const course = coursesById.get(id)
+        if (!course) continue
+        let entry = map.get(id)
+        if (!entry) {
+          entry = { course, targets: new Set(), isDirect: false }
+          map.set(id, entry)
+        }
+        entry.targets.add(idx)
+        if (directSet.has(id)) entry.isDirect = true
+      }
+    })
+    return map
+  }
+
+  // Convenience: flat array of courses across all targets (deduped).
+  function getMajorCoursesForTargets(cc_id, targets, orChoices, trackChoices) {
+    const reqMap = getRequirementMap(cc_id, targets, orChoices, trackChoices)
+    return [...reqMap.values()].map((e) => e.course)
+  }
+
+  // Convenience: set of ids that are directly required by at least one target.
+  function getDirectRequiredIdsForTargets(cc_id, targets, orChoices, trackChoices) {
+    const reqMap = getRequirementMap(cc_id, targets, orChoices, trackChoices)
+    const out = new Set()
+    for (const [id, e] of reqMap) if (e.isDirect) out.add(id)
+    return out
+  }
   function getCalGetcCourses(cc_id) {
     return data.COURSES.filter((c) => c.school_id === cc_id && c.cal_getc_area)
   }
@@ -137,6 +189,9 @@ function buildHelpers(data) {
     getRequiredCourseIds,
     getDirectRequiredIds,
     getMajorCourses,
+    getRequirementMap,
+    getMajorCoursesForTargets,
+    getDirectRequiredIdsForTargets,
     getCalGetcCourses,
     filterPrerequisites,
     targetMajorsForSchool,

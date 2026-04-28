@@ -45,40 +45,41 @@ export default function PlannerPage() {
   const { choices: orChoices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
   const {
-    findTransferPath,
-    getMajorCourses,
-    getDirectRequiredIds,
+    getMajorCoursesForTargets,
+    getDirectRequiredIdsForTargets,
     getCalGetcCourses,
     filterPrerequisites,
     PREREQUISITES,
     TARGET_MAJORS,
   } = useAppData()
 
-  // If the active major's college doesn't use Cal-GETC (e.g. CoE EECS,
-  // College of Chemistry, Haas), force-empty the selected set so any prior
-  // Cal-GETC selections from a different major don't leak into the planner.
-  const requiresCalGetc =
-    TARGET_MAJORS?.[setup.target_major_id]?.requires_cal_getc !== false
+  // Cal-GETC is suppressed only if EVERY selected target's major opts out.
+  // If at least one target uses Cal-GETC, the planner still shows it.
+  const requiresCalGetc = (setup.targets || []).some((t) => {
+    const m = TARGET_MAJORS?.[t.major_id]
+    return m?.requires_cal_getc !== false
+  })
   const selectedCalGetc = useMemo(
     () => (requiresCalGetc ? rawSelectedCalGetc : new Set()),
     [requiresCalGetc, rawSelectedCalGetc],
   )
 
-  // Derived per-setup context.
-  const path = useMemo(
-    () => findTransferPath({ cc_id: setup.cc_id, target_major_id: setup.target_major_id }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setup.cc_id, setup.target_major_id],
-  )
+  // Derived per-setup context (UNION across all targets).
   const majorCourses = useMemo(
-    () => getMajorCourses(path, orChoices, trackChoices),
+    () => getMajorCoursesForTargets(setup.cc_id, setup.targets, orChoices, trackChoices),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, orChoices, trackChoices],
+    [setup.cc_id, setup.targets, orChoices, trackChoices],
   )
   const directRequiredIds = useMemo(
-    () => getDirectRequiredIds(path, orChoices, trackChoices),
+    () =>
+      getDirectRequiredIdsForTargets(
+        setup.cc_id,
+        setup.targets,
+        orChoices,
+        trackChoices,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, orChoices, trackChoices],
+    [setup.cc_id, setup.targets, orChoices, trackChoices],
   )
   const majorIds = useMemo(() => new Set(majorCourses.map((c) => c.id)), [majorCourses])
   const calGetcCourses = useMemo(
@@ -150,7 +151,7 @@ export default function PlannerPage() {
       return next
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, orChoices, trackChoices])
+  }, [setup.cc_id, setup.targets, orChoices, trackChoices])
 
   // Sync pool when Cal-GETC selection changes.
   useEffect(() => {
