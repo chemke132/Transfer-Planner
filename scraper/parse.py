@@ -37,6 +37,110 @@ def _unwrap_articulations(raw: Any) -> list[dict[str, Any]]:
     return raw or []
 
 
+def _walk_section_codes(section: dict[str, Any]) -> list[str]:
+    """Pull every receiving course code out of a RequirementGroup section.
+
+    Sections wrap rows → cells. Most cells are type=Course with a course
+    dict; some are type=Series with a `courses` list. We only need the
+    receiving identifiers (prefix + courseNumber) so we can match them
+    back to path_articulations by receiving_code.
+    """
+    out: list[str] = []
+
+    def add_course_dict(c: dict[str, Any]) -> None:
+        prefix = (c.get("prefix") or "").strip()
+        num = (c.get("courseNumber") or "").strip()
+        if prefix and num:
+            out.append(f"{prefix} {num}")
+
+    for row in section.get("rows") or []:
+        for cell in row.get("cells") or []:
+            t = cell.get("type")
+            if t == "Course":
+                c = cell.get("course") or {}
+                add_course_dict(c)
+            elif t == "Series":
+                # Series wraps a list of courses (all required together).
+                for c in cell.get("courses") or []:
+                    add_course_dict(c)
+            elif t == "GeneralEducationArea":
+                # Skip GE area placeholders — not real receiving courses.
+                continue
+    # Dedup while preserving order.
+    seen: set[str] = set()
+    deduped: list[str] = []
+    for code in out:
+        if code not in seen:
+            seen.add(code)
+            deduped.append(code)
+    return deduped
+
+
+def _extract_or_groups(template_assets_raw: Any, path_id: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Extract top-level RequirementGroups whose conjunction is 'Or'.
+
+    Returns (groups, sections) ready for upsert into path_or_groups and
+    path_or_sections. Groups with no Or conjunction (i.e. plain "complete
+    all") are skipped — those don't represent a user choice point.
+    """
+    if isinstance(template_assets_raw, str):
+        try:
+            ta = json.loads(template_assets_raw)
+        except Exception:
+            return [], []
+    elif isinstance(template_assets_raw, list):
+        ta = template_assets_raw
+    else:
+        return [], []
+
+    groups: list[dict[str, Any]] = []
+    sections: list[dict[str, Any]] = []
+    for asset in ta:
+        if not isinstance(asset, dict):
+            continue
+        if asset.get("type") != "RequirementGroup":
+            continue
+        instr = asset.get("instruction") or {}
+        conjunction = (instr.get("conjunction") or "").strip()
+        if conjunction.lower() != "or":
+            continue
+        secs = asset.get("sections") or []
+        if len(secs) < 2:
+            # A single-section "Or" is meaningless — skip.
+            continue
+        position = asset.get("position") or 0
+        group_id = f"{path_id}:grp:{position}"
+        section_payloads: list[dict[str, Any]] = []
+        any_codes = False
+        for sec_idx, sec in enumerate(secs):
+            codes = _walk_section_codes(sec)
+            if not codes:
+                continue
+            any_codes = True
+            section_payloads.append(
+                {
+                    "id": f"{group_id}:s{sec_idx}",
+                    "group_id": group_id,
+                    "section_index": sec_idx,
+                    "receiving_codes": codes,
+                }
+            )
+        if not any_codes:
+            continue
+        groups.append(
+            {
+                "id": group_id,
+                "path_id": path_id,
+                "position": position,
+                "conjunction": "Or",
+                "selection_type": instr.get("selectionType"),
+            }
+        )
+        sections.extend(section_payloads)
+
+    return groups, sections
+
+
 def _receiving_code(course: dict[str, Any]) -> str:
     prefix = (course.get("prefix") or "").strip()
     number = (course.get("courseNumber") or "").strip()
@@ -169,6 +273,10 @@ def parse_agreement(
         for cid in default_ids:
             requirements.add((path_id, cid))
 
+    or_groups, or_sections = _extract_or_groups(
+        result.get("templateAssets"), path_id
+    )
+
     return {
         "articulations": articulations,
         "options": options,
@@ -176,6 +284,8 @@ def parse_agreement(
             {"path_id": pid, "course_id": cid, "is_required": True}
             for (pid, cid) in sorted(requirements)
         ],
+        "or_groups": or_groups,
+        "or_sections": or_sections,
         "missing_courses": list(missing.values()),
         "unmapped_articulations": unmapped,
     }

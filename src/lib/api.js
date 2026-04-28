@@ -34,6 +34,7 @@ async function fetchAll() {
   const [
     schoolsData, majorsData, coursesData, prereqsData,
     pathsData, pathReqData, artData, optData,
+    orGroupsData, orSectionsData,
   ] = await Promise.all([
     fetchAllPaged('schools'),
     fetchAllPaged('target_majors'),
@@ -76,6 +77,8 @@ async function fetchAll() {
     })(),
     fetchAllPaged('path_articulations'),
     fetchAllPaged('path_articulation_options'),
+    fetchAllPaged('path_or_groups'),
+    fetchAllPaged('path_or_sections'),
   ])
 
   const schoolsR = { data: schoolsData }
@@ -107,6 +110,30 @@ async function fetchAll() {
   // Sort options by option_index so index 0 is always the default.
   for (const list of optsByArt.values()) list.sort((a, b) => a.option_index - b.option_index)
 
+  // OR-groups: each transfer path can have multiple "pick one section"
+  // groups (e.g. UCSD Pharma Chem has separate Or-groups for the math
+  // track and the physics track). Sections list receiving_codes; the
+  // frontend cross-references those with the path's articulations to
+  // figure out which articulations to include based on the user's pick.
+  const sectionsByGroup = new Map()
+  for (const s of orSectionsData) {
+    if (!sectionsByGroup.has(s.group_id)) sectionsByGroup.set(s.group_id, [])
+    sectionsByGroup.get(s.group_id).push(s)
+  }
+  for (const list of sectionsByGroup.values()) {
+    list.sort((a, b) => a.section_index - b.section_index)
+  }
+  const orGroupsByPath = new Map()
+  for (const g of orGroupsData) {
+    const sections = sectionsByGroup.get(g.id) || []
+    if (!sections.length) continue
+    if (!orGroupsByPath.has(g.path_id)) orGroupsByPath.set(g.path_id, [])
+    orGroupsByPath.get(g.path_id).push({ ...g, sections })
+  }
+  for (const list of orGroupsByPath.values()) {
+    list.sort((a, b) => (a.position || 0) - (b.position || 0))
+  }
+
   const transferPaths = pathsR.data.map((p) => {
     const arts = (artsByPath.get(p.id) || []).map((a) => ({
       ...a,
@@ -118,6 +145,7 @@ async function fetchAll() {
       target_major_id: p.target_major_id,
       required_course_ids: reqByPath.get(p.id) || [],
       articulations: arts,
+      or_groups: orGroupsByPath.get(p.id) || [],
     }
   })
 

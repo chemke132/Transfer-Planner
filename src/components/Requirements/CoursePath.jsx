@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
+import { useTrackChoices } from '../../hooks/useTrackChoices.js'
 
 // Course Path: each row is one prereq chain (typically one department's
 // ladder), laid out left-to-right with arrows. Courses without prereqs
@@ -16,13 +17,14 @@ export default function CoursePath() {
   const { findTransferPath, getMajorCourses, getDirectRequiredIds, filterPrerequisites } =
     useAppData()
   const { choices } = useOrChoices()
+  const { choices: trackChoices } = useTrackChoices()
 
   const { rows, prereqByCourse, directIds, totalUnits, codeById } = useMemo(() => {
     const path = findTransferPath({
       cc_id: setup.cc_id,
       target_major_id: setup.target_major_id,
     })
-    const major = getMajorCourses(path, choices)
+    const major = getMajorCourses(path, choices, trackChoices)
     if (!major.length) {
       return {
         rows: [],
@@ -67,12 +69,12 @@ export default function CoursePath() {
     return {
       rows: groupRows,
       prereqByCourse: prMap,
-      directIds: getDirectRequiredIds(path, choices),
+      directIds: getDirectRequiredIds(path, choices, trackChoices),
       totalUnits: major.reduce((sum, c) => sum + (c.units || 0), 0),
       codeById: new Map(major.map((c) => [c.id, c.code])),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, choices])
+  }, [setup.cc_id, setup.target_major_id, choices, trackChoices])
 
   if (!rows.length) {
     return <div className="text-sm text-slate-400 italic">No transfer path data yet.</div>

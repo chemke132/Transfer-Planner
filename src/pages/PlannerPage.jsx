@@ -9,6 +9,7 @@ import { useCalGetcSelections } from '../hooks/useCalGetcSelections.js'
 import { useSetup } from '../hooks/useSetup.js'
 import { useAppData } from '../hooks/useAppData.jsx'
 import { useOrChoices } from '../hooks/useOrChoices.js'
+import { useTrackChoices } from '../hooks/useTrackChoices.js'
 
 const SUMMER_AUTO_CAP = 6
 const SUMMER_AUTO_MAX_COURSES = 1
@@ -42,6 +43,7 @@ export default function PlannerPage() {
   const { setup } = useSetup()
   const { selected: rawSelectedCalGetc } = useCalGetcSelections()
   const { choices: orChoices } = useOrChoices()
+  const { choices: trackChoices } = useTrackChoices()
   const {
     findTransferPath,
     getMajorCourses,
@@ -69,14 +71,14 @@ export default function PlannerPage() {
     [setup.cc_id, setup.target_major_id],
   )
   const majorCourses = useMemo(
-    () => getMajorCourses(path, orChoices),
+    () => getMajorCourses(path, orChoices, trackChoices),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, orChoices],
+    [path, orChoices, trackChoices],
   )
   const directRequiredIds = useMemo(
-    () => getDirectRequiredIds(path, orChoices),
+    () => getDirectRequiredIds(path, orChoices, trackChoices),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, orChoices],
+    [path, orChoices, trackChoices],
   )
   const majorIds = useMemo(() => new Set(majorCourses.map((c) => c.id)), [majorCourses])
   const calGetcCourses = useMemo(
@@ -148,7 +150,7 @@ export default function PlannerPage() {
       return next
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, orChoices])
+  }, [setup.cc_id, setup.target_major_id, orChoices, trackChoices])
 
   // Sync pool when Cal-GETC selection changes.
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useSetup } from '../../hooks/useSetup.js'
 import { useCalGetcSelections } from '../../hooks/useCalGetcSelections.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
+import { useTrackChoices } from '../../hooks/useTrackChoices.js'
 
 export default function CalGetcSelector() {
   const { setup } = useSetup()
@@ -13,6 +14,7 @@ export default function CalGetcSelector() {
     getMajorCourses,
   } = useAppData()
   const { choices } = useOrChoices()
+  const { choices: trackChoices } = useTrackChoices()
   const areaCodes = Object.keys(CAL_GETC_AREAS)
   const [activeArea, setActiveArea] = useState(areaCodes[0])
   const { selected, toggle } = useCalGetcSelections()
@@ -25,7 +27,7 @@ export default function CalGetcSelector() {
       cc_id: setup.cc_id,
       target_major_id: setup.target_major_id,
     })
-    const major = getMajorCourses(path, choices)
+    const major = getMajorCourses(path, choices, trackChoices)
     const map = new Map()
     for (const code of areaCodes) map.set(code, [])
     for (const c of major) {
@@ -35,7 +37,7 @@ export default function CalGetcSelector() {
     }
     return map
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.target_major_id, choices])
+  }, [setup.cc_id, setup.target_major_id, choices, trackChoices])
 
   const byArea = useMemo(() => {
     const map = new Map()

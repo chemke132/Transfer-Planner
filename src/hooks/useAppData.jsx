@@ -19,18 +19,55 @@ function buildHelpers(data) {
     )
   }
   // Resolve effective required course ids for a path, honoring the user's
-  // OR-branch selections. For paths without articulation data (hand-seeded
-  // UCLA/UCSD) this falls back to path.required_course_ids directly.
-  function getRequiredCourseIds(path, orChoices = {}) {
+  // OR-branch selections AND OR-group track selections. For paths without
+  // articulation data this falls back to path.required_course_ids directly.
+  //
+  // Two distinct levels of "OR":
+  //   - orChoices    : per-articulation OR (e.g. MATH 11 = STAT C1000E vs C1000)
+  //   - trackChoices : path-level "pick a track" (e.g. MATH 10-series vs 20-series)
+  //
+  // For track gating, each OR-group's sections list `receiving_codes`. We
+  // build the set of codes that count as "currently active" — codes from
+  // chosen sections + codes that are NOT in any group at all (always
+  // required). Articulations whose receiving_code is in a non-chosen
+  // section are skipped.
+  function getRequiredCourseIds(path, orChoices = {}, trackChoices = {}) {
     if (!path) return []
     const arts = path.articulations || []
     if (!arts.length) return path.required_course_ids || []
+
+    const groups = path.or_groups || []
+    let activeCodes = null
+    if (groups.length) {
+      // Codes appearing in any group's sections (could be active or inactive).
+      const inAnyGroup = new Set()
+      // Codes the user has currently chosen.
+      const chosenCodes = new Set()
+      for (const g of groups) {
+        const chosenIdx = trackChoices[g.id] ?? 0
+        for (const sec of g.sections || []) {
+          for (const code of sec.receiving_codes || []) {
+            inAnyGroup.add(code)
+            if (sec.section_index === chosenIdx) chosenCodes.add(code)
+          }
+        }
+      }
+      activeCodes = { inAnyGroup, chosenCodes }
+    }
 
     const ids = new Set()
     for (const art of arts) {
       if (!art.has_articulation) continue
       const opts = art.options || []
       if (!opts.length) continue
+      // Track filter: if this art's receiving_code lives in some OR-group,
+      // include only when it's in the chosen section.
+      if (activeCodes) {
+        const code = art.receiving_code
+        if (activeCodes.inAnyGroup.has(code) && !activeCodes.chosenCodes.has(code)) {
+          continue
+        }
+      }
       const chosenIdx = orChoices[art.id] ?? 0
       const chosen = opts.find((o) => o.option_index === chosenIdx) || opts[0]
       for (const cid of chosen.course_ids || []) ids.add(cid)
@@ -63,8 +100,8 @@ function buildHelpers(data) {
     return all
   }
 
-  function getMajorCourses(path, orChoices) {
-    const directIds = getRequiredCourseIds(path, orChoices)
+  function getMajorCourses(path, orChoices, trackChoices) {
+    const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
     const allIds = expandPrereqs(directIds)
     return [...allIds].map((id) => coursesById.get(id)).filter(Boolean)
   }
@@ -72,8 +109,8 @@ function buildHelpers(data) {
   // Returns the subset of required course ids that are DIRECTLY listed by
   // the UC (articulation/hand-seed), not pulled in via transitive prereqs.
   // UI can use this to distinguish "required" vs "prereq-for-required".
-  function getDirectRequiredIds(path, orChoices) {
-    return new Set(getRequiredCourseIds(path, orChoices))
+  function getDirectRequiredIds(path, orChoices, trackChoices) {
+    return new Set(getRequiredCourseIds(path, orChoices, trackChoices))
   }
   function getCalGetcCourses(cc_id) {
     return data.COURSES.filter((c) => c.school_id === cc_id && c.cal_getc_area)

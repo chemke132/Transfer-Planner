@@ -386,6 +386,16 @@ def upsert_path_payload(
         for i in range(0, len(reqs), 200):
             client.table("path_requirements").insert(reqs[i : i + 200]).execute()
 
+    # Replace OR-groups + sections for this path. Sections cascade-delete via FK.
+    client.table("path_or_groups").delete().eq("path_id", path_id).execute()
+    or_groups = parsed.get("or_groups") or []
+    or_sections = parsed.get("or_sections") or []
+    if or_groups:
+        client.table("path_or_groups").insert(or_groups).execute()
+    if or_sections:
+        for i in range(0, len(or_sections), 100):
+            client.table("path_or_sections").insert(or_sections[i : i + 100]).execute()
+
 
 def run(
     cc_id: str,
