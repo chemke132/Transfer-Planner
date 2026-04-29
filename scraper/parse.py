@@ -264,8 +264,12 @@ def _cc_code(item: dict[str, Any]) -> str:
 
 
 def _branch_courses(branch: dict[str, Any]) -> list[dict[str, Any]]:
-    """A top-level OR branch is an AND of leaf courses (+ optional nested groups).
-    Returns flat list of CC course leaf dicts required by this branch."""
+    """Flatten one top-level branch into all leaf Course dicts (AND-style).
+
+    Used as a fallback when a branch is genuinely AND'd. For OR-internal
+    structures use ``_expand_branch_to_options`` instead, which respects
+    nested ``courseConjunction`` markers.
+    """
     out: list[dict[str, Any]] = []
 
     def walk(node: dict[str, Any]) -> None:
@@ -282,6 +286,59 @@ def _branch_courses(branch: dict[str, Any]) -> list[dict[str, Any]]:
     else:
         walk(branch)
     return out
+
+
+def _expand_branch_to_options(branch: dict[str, Any]) -> list[list[dict[str, Any]]]:
+    """Expand one top-level branch into a list of "AND-bundles" (each bundle
+    is itself a list of leaf Course dicts).
+
+    A branch can be:
+      - A single ``Course`` leaf → 1 option of [course]
+      - A ``CourseGroup`` with ``courseConjunction == "Or"`` →
+        each child becomes its OWN option (the user picks one of them)
+      - A ``CourseGroup`` with ``courseConjunction == "And"`` (default) →
+        all children combined into a single AND-bundle option
+      - Nested mixes are handled by Cartesian-producting Or-children with
+        the surrounding And-children, producing one option per OR pick.
+
+    This matters because assist.org commonly nests an "MATH 182 OR MATH 192"
+    OR-group inside what we treated as a single AND-leaf, silently joining
+    them with " + " and double-counting.
+    """
+    def expand(node: dict[str, Any]) -> list[list[dict[str, Any]]]:
+        # Leaf course → one option containing just this course.
+        if node.get("type") == "Course" or (
+            node.get("prefix") and node.get("courseNumber")
+        ):
+            return [[node]]
+        items = node.get("items")
+        if not isinstance(items, list):
+            return []
+        # Each child contributes its own list-of-options.
+        child_options = [expand(child) for child in items]
+        # Filter out empty (non-course) children.
+        child_options = [opts for opts in child_options if opts]
+        if not child_options:
+            return []
+        conj = (node.get("courseConjunction") or "And").strip().lower()
+        if conj == "or":
+            # OR: just concatenate — each child option becomes a top-level option.
+            out: list[list[dict[str, Any]]] = []
+            for opts in child_options:
+                out.extend(opts)
+            return out
+        # AND (default): Cartesian product — combine each combination of
+        # child picks into one AND-bundle.
+        result: list[list[dict[str, Any]]] = [[]]
+        for opts in child_options:
+            new_result = []
+            for partial in result:
+                for option in opts:
+                    new_result.append(partial + option)
+            result = new_result
+        return result
+
+    return expand(branch)
 
 
 def _branch_label(leaves: list[dict[str, Any]]) -> str:
@@ -343,28 +400,35 @@ def parse_agreement(
         if not has_articulation:
             continue
 
-        # Each top-level item is one OR branch.
+        # Each top-level item is one OR branch. Expand branches that
+        # contain nested courseConjunction=Or groups into separate options
+        # (e.g. UCI MATH 2A's "MATH 182 OR MATH 192" was previously joined
+        # with AND, forcing the student to take both).
         parsed_branches: list[tuple[list[dict[str, Any]], list[str]]] = []
         for branch in top_items:
-            leaves = _branch_courses(branch)
-            ids: list[str] = []
-            for leaf in leaves:
-                code = _cc_code(leaf)
-                cid = lookup.get(code)
-                if cid:
-                    ids.append(cid)
-                else:
-                    missing.setdefault(
-                        code,
-                        {
-                            "code": code,
-                            "name": leaf.get("courseTitle"),
-                            "assist_id": leaf.get("courseIdentifierParentId"),
-                            "school_id": cc_school_id,
-                            "units": leaf.get("maxUnits") or leaf.get("minUnits"),
-                        },
-                    )
-            parsed_branches.append((leaves, ids))
+            sub_options = _expand_branch_to_options(branch)
+            if not sub_options:
+                # No course leaves at all (e.g. attribute-only branch); skip.
+                continue
+            for leaves in sub_options:
+                ids: list[str] = []
+                for leaf in leaves:
+                    code = _cc_code(leaf)
+                    cid = lookup.get(code)
+                    if cid:
+                        ids.append(cid)
+                    else:
+                        missing.setdefault(
+                            code,
+                            {
+                                "code": code,
+                                "name": leaf.get("courseTitle"),
+                                "assist_id": leaf.get("courseIdentifierParentId"),
+                                "school_id": cc_school_id,
+                                "units": leaf.get("maxUnits") or leaf.get("minUnits"),
+                            },
+                        )
+                parsed_branches.append((leaves, ids))
 
         # Emit an option row for every branch (including single-branch
         # articulations). This lets the frontend compute effective requirements
