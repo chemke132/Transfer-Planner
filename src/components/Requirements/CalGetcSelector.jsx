@@ -16,7 +16,16 @@ export default function CalGetcSelector() {
   const { choices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
   const { choices: prereqChoices } = usePrereqChoices()
-  const areaCodes = Object.keys(CAL_GETC_AREAS)
+  // Sort by leading number, then suffix letter. Object.keys would otherwise
+  // hoist purely-numeric keys ('2', '4', '6') ahead of '1A', '1B', etc.
+  const areaCodes = useMemo(() => {
+    return Object.keys(CAL_GETC_AREAS).sort((a, b) => {
+      const na = parseInt(a, 10)
+      const nb = parseInt(b, 10)
+      if (na !== nb) return na - nb
+      return a.localeCompare(b)
+    })
+  }, [CAL_GETC_AREAS])
   const [activeArea, setActiveArea] = useState(areaCodes[0])
   const { selected, toggle, removeMany } = useCalGetcSelections()
 
