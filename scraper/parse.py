@@ -170,18 +170,31 @@ def _extract_or_groups(
                         "position": position,
                         "conjunction": "Or",
                         "selection_type": instr.get("selectionType"),
+                        "min_count": 1,
                     }
                 )
                 sections.extend(section_payloads)
             continue
 
-        # Form 2: NFromArea with amount=1 and unit=Course → rows are the alternatives.
-        if (
-            instr_type == "NFromArea"
-            and (amount or 0) == 1
-            and unit_type.lower() == "course"
+        # Form 2: NFromArea/NFromConjunction with unit=Course (or Series),
+        # amount=N → user picks N rows. Each row becomes one section.
+        # qual=UpTo means "at most N" → treat the whole group as electives.
+        # qual=None or AtLeast → real requirement: floor of N selections.
+        course_like_units = ("course", "series", "sequence", "courseorcombination", "ormorecourses")
+        amt_qual = (instr.get("amountQuantifier") or "").strip().lower()
+        is_n_from_listed = (
+            instr_type in ("NFromArea", "NFromConjunction")
+            and isinstance(amount, (int, float))
+            and amount >= 1
+            and unit_type.lower() in course_like_units
             and len(secs) >= 1
-        ):
+        )
+        if is_n_from_listed:
+            if amt_qual == "upto":
+                # "Up to N" — listed courses are optional; bucket as electives.
+                for sec in secs:
+                    elective_codes.extend(_walk_section_codes(sec))
+                continue
             sec = secs[0]
             row_payloads: list[dict[str, Any]] = []
             for row_idx, row in enumerate(sec.get("rows") or []):
@@ -196,23 +209,26 @@ def _extract_or_groups(
                         "receiving_codes": codes,
                     }
                 )
-            if len(row_payloads) >= 2:
+            min_count = int(amount)
+            # Need at least min_count+1 rows for there to be an actual choice;
+            # otherwise the group is just "take all of these" (no choice point).
+            if len(row_payloads) > min_count:
                 groups.append(
                     {
                         "id": group_id,
                         "path_id": path_id,
                         "position": position,
                         "conjunction": "Or",
-                        "selection_type": "NFromArea-1Course",
+                        "selection_type": f"{instr_type}-{int(amount)}{unit_type}",
+                        "min_count": min_count,
                     }
                 )
                 sections.extend(row_payloads)
             continue
 
-        # Form 3: NFromArea with QuarterUnit/SemesterUnit — elective bucket.
-        # Treat all listed courses as electives so they don't bloat the
-        # default required list. The user can elect them later via the UI.
-        if instr_type == "NFromArea" and unit_type.lower().endswith("unit"):
+        # Form 3: NFromArea/NFromConjunction with QuarterUnit/SemesterUnit/Unit
+        # → elective bucket (advisor-pick). Drop courses from required default.
+        if instr_type in ("NFromArea", "NFromConjunction") and unit_type.lower().endswith("unit"):
             for sec in secs:
                 elective_codes.extend(_walk_section_codes(sec))
             continue

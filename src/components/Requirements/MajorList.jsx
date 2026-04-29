@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
-import { useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { choiceToSet, useTrackChoices } from '../../hooks/useTrackChoices.js'
 
 export default function MajorList() {
   const { setup } = useSetup()
@@ -12,11 +12,21 @@ export default function MajorList() {
     getSectionCourseIds,
     getOtherTargetsRequiredIds,
     PREREQUISITES,
+    COURSES,
     TARGET_MAJORS,
     SCHOOLS,
   } = useAppData()
+  const courseCodeById = useMemo(() => {
+    const m = new Map()
+    for (const c of COURSES || []) m.set(c.id, c.code)
+    return m
+  }, [COURSES])
   const { choices, setChoice } = useOrChoices()
-  const { choices: trackChoices, setChoice: setTrackChoice } = useTrackChoices()
+  const {
+    choices: trackChoices,
+    setChoice: setTrackChoice,
+    toggleChoice: toggleTrackChoice,
+  } = useTrackChoices()
 
   // Per-target paths, articulations, and OR-groups for the rich UI.
   const perTarget = useMemo(() => {
@@ -143,7 +153,16 @@ export default function MajorList() {
                 </p>
                 <ul className="space-y-3">
                   {pt.orGroups.map((group, gIdx) => {
-                    const chosenIdx = trackChoices[group.id] ?? 0
+                    const minCount = group.min_count || 1
+                    const isMulti = minCount >= 2
+                    let chosenSet
+                    const stored = trackChoices[group.id]
+                    if (Array.isArray(stored)) chosenSet = new Set(stored)
+                    else if (typeof stored === 'number') chosenSet = new Set([stored])
+                    else {
+                      chosenSet = new Set()
+                      for (let i = 0; i < minCount; i++) chosenSet.add(i)
+                    }
                     // For multi-target setups, compute how many CC courses
                     // each section shares with the user's OTHER targets so
                     // we can highlight the overlap-maximizing pick.
@@ -160,11 +179,15 @@ export default function MajorList() {
                     const sectionsRanked = group.sections
                       .map((sec) => {
                         const cids = getSectionCourseIds(pt.path, sec, choices)
+                        const ccCodes = [...cids]
+                          .map((id) => courseCodeById.get(id))
+                          .filter(Boolean)
+                          .sort()
                         let overlap = 0
                         if (otherIds) {
                           for (const id of cids) if (otherIds.has(id)) overlap++
                         }
-                        return { sec, overlap, total: cids.size }
+                        return { sec, overlap, total: cids.size, ccCodes }
                       })
                       .sort((a, b) => {
                         // Higher overlap first; ties broken by lower section index.
@@ -176,24 +199,39 @@ export default function MajorList() {
                       <li key={group.id} className="text-sm">
                         <div className="font-medium text-slate-800 mb-2">
                           Group {gIdx + 1}
+                          <span className="text-[10px] text-slate-500 font-normal ml-2">
+                            {isMulti
+                              ? `pick ${minCount} sections`
+                              : 'pick 1 section'}
+                          </span>
                           {otherIds && maxOverlap > 0 && (
                             <span className="text-[10px] text-slate-500 font-normal ml-2">
-                              · sections sorted by overlap with your other targets
+                              · sorted by overlap with your other targets
                             </span>
                           )}
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {sectionsRanked.map(({ sec, overlap }) => {
-                            const active = chosenIdx === sec.section_index
+                          {sectionsRanked.map(({ sec, overlap, ccCodes }) => {
+                            const active = chosenSet.has(sec.section_index)
                             const codes = sec.receiving_codes || []
                             const isBest =
                               otherIds && overlap > 0 && overlap === maxOverlap
                             return (
                               <button
                                 key={sec.id}
-                                onClick={() =>
-                                  setTrackChoice(group.id, sec.section_index)
-                                }
+                                onClick={() => {
+                                  if (isMulti) {
+                                    toggleTrackChoice(
+                                      group.id,
+                                      sec.section_index,
+                                    )
+                                  } else {
+                                    setTrackChoice(
+                                      group.id,
+                                      sec.section_index,
+                                    )
+                                  }
+                                }}
                                 className={`px-3 py-2 rounded-md border text-xs text-left max-w-xs ${
                                   active
                                     ? 'bg-slate-900 text-white border-slate-900'
@@ -210,7 +248,33 @@ export default function MajorList() {
                                   {codes.slice(0, 4).join(' · ')}
                                   {codes.length > 4 && ` …+${codes.length - 4}`}
                                 </div>
-                                <div className="flex items-center gap-2 mt-0.5">
+                                <div
+                                  className={`mt-1 text-[10px] leading-tight ${
+                                    active ? 'text-slate-200' : 'text-slate-600'
+                                  }`}
+                                >
+                                  <span
+                                    className={
+                                      active ? 'text-slate-400' : 'text-slate-400'
+                                    }
+                                  >
+                                    take:
+                                  </span>{' '}
+                                  {ccCodes.length > 0 ? (
+                                    <span className="font-mono">
+                                      {ccCodes.join(', ')}
+                                    </span>
+                                  ) : (
+                                    <span
+                                      className={`italic ${
+                                        active ? 'text-slate-400' : 'text-amber-700'
+                                      }`}
+                                    >
+                                      no DVC equivalent — take at UC after transfer
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 mt-1">
                                   {sec.section_index === 0 && (
                                     <span
                                       className={`text-[10px] ${

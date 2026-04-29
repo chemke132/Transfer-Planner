@@ -41,14 +41,25 @@ function buildHelpers(data) {
     if (groups.length) {
       // Codes appearing in any group's sections (could be active or inactive).
       const inAnyGroup = new Set()
-      // Codes the user has currently chosen.
+      // Codes the user has currently chosen across all groups.
       const chosenCodes = new Set()
       for (const g of groups) {
-        const chosenIdx = trackChoices[g.id] ?? 0
+        // Default selection: first `min_count` section indexes.
+        const minCount = g.min_count || 1
+        const stored = trackChoices[g.id]
+        let chosenIndexes
+        if (Array.isArray(stored)) {
+          chosenIndexes = new Set(stored)
+        } else if (typeof stored === 'number') {
+          chosenIndexes = new Set([stored])
+        } else {
+          chosenIndexes = new Set()
+          for (let i = 0; i < minCount; i++) chosenIndexes.add(i)
+        }
         for (const sec of g.sections || []) {
           for (const code of sec.receiving_codes || []) {
             inAnyGroup.add(code)
-            if (sec.section_index === chosenIdx) chosenCodes.add(code)
+            if (chosenIndexes.has(sec.section_index)) chosenCodes.add(code)
           }
         }
       }

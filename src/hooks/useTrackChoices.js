@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 
 const KEY = 'tp:track_choices'
 
-// User's pick for each OR-group on a transfer path (e.g. "MATH 10-series
-// vs MATH 20-series" at UCSD). Stored as { [or_group_id]: section_index }.
-// Default is section_index=0 for any group the user hasn't touched.
+// User's pick(s) for each OR-group on a transfer path.
+// Stored as { [or_group_id]: number | number[] }:
+//   - number: legacy single-pick (still supported on read)
+//   - number[]: multi-pick (used when group.min_count >= 2)
+// Default for any unset group is [0] — pick the first section.
 function read() {
   try {
     const raw = localStorage.getItem(KEY)
@@ -14,6 +16,13 @@ function read() {
   } catch {
     return {}
   }
+}
+
+// Normalize a stored choice (single or array) into a Set of section indexes.
+export function choiceToSet(choice) {
+  if (Array.isArray(choice)) return new Set(choice)
+  if (typeof choice === 'number') return new Set([choice])
+  return new Set()
 }
 
 export function useTrackChoices() {
@@ -31,9 +40,20 @@ export function useTrackChoices() {
     return () => window.removeEventListener('storage', onStorage)
   }, [])
 
+  // Single-pick (legacy / min_count=1): replace the choice with one index.
   const setChoice = useCallback((groupId, sectionIndex) => {
     setChoicesState((prev) => ({ ...prev, [groupId]: sectionIndex }))
   }, [])
 
-  return { choices, setChoice }
+  // Multi-pick (min_count>=2): toggle one section in the group's array.
+  const toggleChoice = useCallback((groupId, sectionIndex) => {
+    setChoicesState((prev) => {
+      const cur = choiceToSet(prev[groupId])
+      if (cur.has(sectionIndex)) cur.delete(sectionIndex)
+      else cur.add(sectionIndex)
+      return { ...prev, [groupId]: [...cur].sort((a, b) => a - b) }
+    })
+  }, [])
+
+  return { choices, setChoice, toggleChoice }
 }
