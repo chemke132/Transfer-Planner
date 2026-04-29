@@ -170,18 +170,32 @@ def _extract_or_groups(
                         "position": position,
                         "conjunction": "Or",
                         "selection_type": instr.get("selectionType"),
+                        "min_count": 1,
+                        "allow_multi": False,
                     }
                 )
                 sections.extend(section_payloads)
             continue
 
-        # Form 2: NFromArea with amount=1 and unit=Course → rows are the alternatives.
-        if (
-            instr_type == "NFromArea"
-            and (amount or 0) == 1
-            and unit_type.lower() == "course"
+        # Form 2: NFromArea/NFromConjunction with unit=Course (or Series),
+        # amount=N → user picks N rows. Each row becomes one section.
+        # qual=UpTo means "at most N" → treat the whole group as electives.
+        # qual=None or AtLeast → real requirement: floor of N selections.
+        course_like_units = ("course", "series", "sequence", "courseorcombination", "ormorecourses")
+        amt_qual = (instr.get("amountQuantifier") or "").strip().lower()
+        is_n_from_listed = (
+            instr_type in ("NFromArea", "NFromConjunction")
+            and isinstance(amount, (int, float))
+            and amount >= 1
+            and unit_type.lower() in course_like_units
             and len(secs) >= 1
-        ):
+        )
+        if is_n_from_listed:
+            if amt_qual == "upto":
+                # "Up to N" — listed courses are optional; bucket as electives.
+                for sec in secs:
+                    elective_codes.extend(_walk_section_codes(sec))
+                continue
             sec = secs[0]
             row_payloads: list[dict[str, Any]] = []
             for row_idx, row in enumerate(sec.get("rows") or []):
@@ -196,23 +210,32 @@ def _extract_or_groups(
                         "receiving_codes": codes,
                     }
                 )
-            if len(row_payloads) >= 2:
+            min_count = int(amount)
+            # Need at least min_count+1 rows for there to be an actual choice;
+            # otherwise the group is just "take all of these" (no choice point).
+            if len(row_payloads) > min_count:
+                # allow_multi: "at least N" lets the user pick more than the
+                # floor; "exactly N" (default with N>=2) is also rendered as
+                # multi-select so the user can pick the right N. Only
+                # "exactly 1" is a true radio (single-pick).
+                allow_multi = amt_qual == "atleast" or min_count >= 2
                 groups.append(
                     {
                         "id": group_id,
                         "path_id": path_id,
                         "position": position,
                         "conjunction": "Or",
-                        "selection_type": "NFromArea-1Course",
+                        "selection_type": f"{instr_type}-{int(amount)}{unit_type}{'-AtLeast' if amt_qual == 'atleast' else ''}",
+                        "min_count": min_count,
+                        "allow_multi": allow_multi,
                     }
                 )
                 sections.extend(row_payloads)
             continue
 
-        # Form 3: NFromArea with QuarterUnit/SemesterUnit — elective bucket.
-        # Treat all listed courses as electives so they don't bloat the
-        # default required list. The user can elect them later via the UI.
-        if instr_type == "NFromArea" and unit_type.lower().endswith("unit"):
+        # Form 3: NFromArea/NFromConjunction with QuarterUnit/SemesterUnit/Unit
+        # → elective bucket (advisor-pick). Drop courses from required default.
+        if instr_type in ("NFromArea", "NFromConjunction") and unit_type.lower().endswith("unit"):
             for sec in secs:
                 elective_codes.extend(_walk_section_codes(sec))
             continue
@@ -241,8 +264,12 @@ def _cc_code(item: dict[str, Any]) -> str:
 
 
 def _branch_courses(branch: dict[str, Any]) -> list[dict[str, Any]]:
-    """A top-level OR branch is an AND of leaf courses (+ optional nested groups).
-    Returns flat list of CC course leaf dicts required by this branch."""
+    """Flatten one top-level branch into all leaf Course dicts (AND-style).
+
+    Used as a fallback when a branch is genuinely AND'd. For OR-internal
+    structures use ``_expand_branch_to_options`` instead, which respects
+    nested ``courseConjunction`` markers.
+    """
     out: list[dict[str, Any]] = []
 
     def walk(node: dict[str, Any]) -> None:
@@ -259,6 +286,59 @@ def _branch_courses(branch: dict[str, Any]) -> list[dict[str, Any]]:
     else:
         walk(branch)
     return out
+
+
+def _expand_branch_to_options(branch: dict[str, Any]) -> list[list[dict[str, Any]]]:
+    """Expand one top-level branch into a list of "AND-bundles" (each bundle
+    is itself a list of leaf Course dicts).
+
+    A branch can be:
+      - A single ``Course`` leaf → 1 option of [course]
+      - A ``CourseGroup`` with ``courseConjunction == "Or"`` →
+        each child becomes its OWN option (the user picks one of them)
+      - A ``CourseGroup`` with ``courseConjunction == "And"`` (default) →
+        all children combined into a single AND-bundle option
+      - Nested mixes are handled by Cartesian-producting Or-children with
+        the surrounding And-children, producing one option per OR pick.
+
+    This matters because assist.org commonly nests an "MATH 182 OR MATH 192"
+    OR-group inside what we treated as a single AND-leaf, silently joining
+    them with " + " and double-counting.
+    """
+    def expand(node: dict[str, Any]) -> list[list[dict[str, Any]]]:
+        # Leaf course → one option containing just this course.
+        if node.get("type") == "Course" or (
+            node.get("prefix") and node.get("courseNumber")
+        ):
+            return [[node]]
+        items = node.get("items")
+        if not isinstance(items, list):
+            return []
+        # Each child contributes its own list-of-options.
+        child_options = [expand(child) for child in items]
+        # Filter out empty (non-course) children.
+        child_options = [opts for opts in child_options if opts]
+        if not child_options:
+            return []
+        conj = (node.get("courseConjunction") or "And").strip().lower()
+        if conj == "or":
+            # OR: just concatenate — each child option becomes a top-level option.
+            out: list[list[dict[str, Any]]] = []
+            for opts in child_options:
+                out.extend(opts)
+            return out
+        # AND (default): Cartesian product — combine each combination of
+        # child picks into one AND-bundle.
+        result: list[list[dict[str, Any]]] = [[]]
+        for opts in child_options:
+            new_result = []
+            for partial in result:
+                for option in opts:
+                    new_result.append(partial + option)
+            result = new_result
+        return result
+
+    return expand(branch)
 
 
 def _branch_label(leaves: list[dict[str, Any]]) -> str:
@@ -320,28 +400,35 @@ def parse_agreement(
         if not has_articulation:
             continue
 
-        # Each top-level item is one OR branch.
+        # Each top-level item is one OR branch. Expand branches that
+        # contain nested courseConjunction=Or groups into separate options
+        # (e.g. UCI MATH 2A's "MATH 182 OR MATH 192" was previously joined
+        # with AND, forcing the student to take both).
         parsed_branches: list[tuple[list[dict[str, Any]], list[str]]] = []
         for branch in top_items:
-            leaves = _branch_courses(branch)
-            ids: list[str] = []
-            for leaf in leaves:
-                code = _cc_code(leaf)
-                cid = lookup.get(code)
-                if cid:
-                    ids.append(cid)
-                else:
-                    missing.setdefault(
-                        code,
-                        {
-                            "code": code,
-                            "name": leaf.get("courseTitle"),
-                            "assist_id": leaf.get("courseIdentifierParentId"),
-                            "school_id": cc_school_id,
-                            "units": leaf.get("maxUnits") or leaf.get("minUnits"),
-                        },
-                    )
-            parsed_branches.append((leaves, ids))
+            sub_options = _expand_branch_to_options(branch)
+            if not sub_options:
+                # No course leaves at all (e.g. attribute-only branch); skip.
+                continue
+            for leaves in sub_options:
+                ids: list[str] = []
+                for leaf in leaves:
+                    code = _cc_code(leaf)
+                    cid = lookup.get(code)
+                    if cid:
+                        ids.append(cid)
+                    else:
+                        missing.setdefault(
+                            code,
+                            {
+                                "code": code,
+                                "name": leaf.get("courseTitle"),
+                                "assist_id": leaf.get("courseIdentifierParentId"),
+                                "school_id": cc_school_id,
+                                "units": leaf.get("maxUnits") or leaf.get("minUnits"),
+                            },
+                        )
+                parsed_branches.append((leaves, ids))
 
         # Emit an option row for every branch (including single-branch
         # articulations). This lets the frontend compute effective requirements

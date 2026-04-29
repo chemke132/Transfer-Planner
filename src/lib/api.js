@@ -34,7 +34,7 @@ async function fetchAll() {
   const [
     schoolsData, majorsData, coursesData, prereqsData,
     pathsData, pathReqData, artData, optData,
-    orGroupsData, orSectionsData,
+    orGroupsData, orSectionsData, prereqOptionsData,
   ] = await Promise.all([
     fetchAllPaged('schools'),
     fetchAllPaged('target_majors'),
@@ -79,6 +79,7 @@ async function fetchAll() {
     fetchAllPaged('path_articulation_options'),
     fetchAllPaged('path_or_groups'),
     fetchAllPaged('path_or_sections'),
+    fetchAllPaged('course_prereq_options'),
   ])
 
   const schoolsR = { data: schoolsData }
@@ -153,11 +154,24 @@ async function fetchAll() {
   const schoolsById = Object.fromEntries(schoolsR.data.map((s) => [s.id, s]))
   const majorsById = Object.fromEntries(majorsR.data.map((m) => [m.id, m]))
 
+  // Group prereq options by course_id; sort by option_index.
+  const prereqOptionsByCourse = new Map()
+  for (const o of prereqOptionsData || []) {
+    if (!prereqOptionsByCourse.has(o.course_id)) {
+      prereqOptionsByCourse.set(o.course_id, [])
+    }
+    prereqOptionsByCourse.get(o.course_id).push(o)
+  }
+  for (const list of prereqOptionsByCourse.values()) {
+    list.sort((a, b) => a.option_index - b.option_index)
+  }
+
   return {
     SCHOOLS: schoolsById,
     TARGET_MAJORS: majorsById,
     COURSES: coursesR.data,
     PREREQUISITES: prereqsR.data,
+    PREREQ_OPTIONS_BY_COURSE: prereqOptionsByCourse,
     TRANSFER_PATHS: transferPaths,
     CAL_GETC_AREAS: seed.CAL_GETC_AREAS, // static — not in DB yet
     source: 'supabase',
@@ -170,6 +184,7 @@ function seedBundle() {
     TARGET_MAJORS: seed.TARGET_MAJORS,
     COURSES: seed.COURSES,
     PREREQUISITES: seed.PREREQUISITES,
+    PREREQ_OPTIONS_BY_COURSE: new Map(),
     TRANSFER_PATHS: seed.TRANSFER_PATHS,
     CAL_GETC_AREAS: seed.CAL_GETC_AREAS,
     source: 'seed',

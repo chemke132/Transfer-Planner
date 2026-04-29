@@ -98,6 +98,21 @@ def main() -> int:
             client.table("prerequisites").insert(chunk).execute()
         print(f"  ✓ inserted {len(prereqs)} prerequisites")
 
+    # 3) Replace course_prereq_options for the scraped courses.
+    prereq_options = data.get("prereq_options") or []
+    if scraped_ids:
+        for i in range(0, len(scraped_ids), 200):
+            chunk = scraped_ids[i : i + 200]
+            client.table("course_prereq_options").delete().in_(
+                "course_id", chunk
+            ).execute()
+        print(f"  ✓ cleared course_prereq_options for {len(scraped_ids)} courses")
+    if prereq_options:
+        for i in range(0, len(prereq_options), 200):
+            chunk = prereq_options[i : i + 200]
+            client.table("course_prereq_options").insert(chunk).execute()
+        print(f"  ✓ inserted {len(prereq_options)} prereq options")
+
     print("done.")
     return 0
 

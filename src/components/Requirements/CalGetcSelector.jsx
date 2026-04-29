@@ -4,6 +4,7 @@ import { useCalGetcSelections } from '../../hooks/useCalGetcSelections.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
 import { useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { usePrereqChoices } from '../../hooks/usePrereqChoices.js'
 
 export default function CalGetcSelector() {
   const { setup } = useSetup()
@@ -14,6 +15,7 @@ export default function CalGetcSelector() {
   } = useAppData()
   const { choices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
+  const { choices: prereqChoices } = usePrereqChoices()
   const areaCodes = Object.keys(CAL_GETC_AREAS)
   const [activeArea, setActiveArea] = useState(areaCodes[0])
   const { selected, toggle, removeMany } = useCalGetcSelections()
@@ -27,6 +29,7 @@ export default function CalGetcSelector() {
       setup.targets,
       choices,
       trackChoices,
+      prereqChoices,
     )
     const map = new Map()
     for (const code of areaCodes) map.set(code, [])

@@ -41,14 +41,29 @@ function buildHelpers(data) {
     if (groups.length) {
       // Codes appearing in any group's sections (could be active or inactive).
       const inAnyGroup = new Set()
-      // Codes the user has currently chosen.
+      // Codes the user has currently chosen across all groups.
       const chosenCodes = new Set()
       for (const g of groups) {
-        const chosenIdx = trackChoices[g.id] ?? 0
+        // Default selection: first `min_count` section indexes (so the user
+        // sees a fully-satisfied requirement until they pick something).
+        const minCount = g.min_count || 1
+        const stored = trackChoices[g.id]
+        let chosenIndexes
+        if (Array.isArray(stored)) {
+          chosenIndexes = new Set(stored)
+        } else if (typeof stored === 'number') {
+          chosenIndexes = new Set([stored])
+        } else {
+          chosenIndexes = new Set()
+          for (let i = 0; i < minCount; i++) chosenIndexes.add(i)
+        }
+        // Note: allow_multi changes UI semantics (radio vs checkbox) but
+        // the union math is the same regardless — chosenIndexes is treated
+        // as a set of "active" sections and we union their codes below.
         for (const sec of g.sections || []) {
           for (const code of sec.receiving_codes || []) {
             inAnyGroup.add(code)
-            if (sec.section_index === chosenIdx) chosenCodes.add(code)
+            if (chosenIndexes.has(sec.section_index)) chosenCodes.add(code)
           }
         }
       }
@@ -77,23 +92,39 @@ function buildHelpers(data) {
     }
     return [...ids]
   }
-  // Build once: course_id -> [prerequisite_id, ...]
+  // Build once: course_id -> [prerequisite_id, ...] (the default branch).
   const prereqByCourse = new Map()
   for (const p of data.PREREQUISITES || []) {
     if (!prereqByCourse.has(p.course_id)) prereqByCourse.set(p.course_id, [])
     prereqByCourse.get(p.course_id).push(p.prerequisite_id)
   }
 
+  const prereqOptionsByCourse =
+    data.PREREQ_OPTIONS_BY_COURSE instanceof Map
+      ? data.PREREQ_OPTIONS_BY_COURSE
+      : new Map()
+
+  // Resolve per-course prereq ids honoring the user's branch choice.
+  // Falls back to the default flat prereqByCourse when no options exist
+  // (or when the chosen branch index isn't found).
+  function getPrereqIdsFor(courseId, prereqChoices = {}) {
+    const opts = prereqOptionsByCourse.get(courseId)
+    if (opts && opts.length) {
+      const chosenIdx = prereqChoices[courseId] ?? 0
+      const chosen = opts.find((o) => o.option_index === chosenIdx) || opts[0]
+      return chosen.prerequisite_ids || []
+    }
+    return prereqByCourse.get(courseId) || []
+  }
+
   // Given a set of course ids, return a Set containing those ids plus all
-  // transitive prerequisites. The DVC catalog imposes internal prereq chains
-  // (e.g. COMSC 210 needs 165, which needs 110) that assist.org doesn't
-  // surface — so we include them implicitly in the plan.
-  function expandPrereqs(seedIds) {
+  // transitive prerequisites along each course's currently-chosen branch.
+  function expandPrereqs(seedIds, prereqChoices = {}) {
     const all = new Set(seedIds)
     const queue = [...seedIds]
     while (queue.length) {
       const id = queue.shift()
-      for (const pid of prereqByCourse.get(id) || []) {
+      for (const pid of getPrereqIdsFor(id, prereqChoices)) {
         if (!all.has(pid)) {
           all.add(pid)
           queue.push(pid)
@@ -103,9 +134,9 @@ function buildHelpers(data) {
     return all
   }
 
-  function getMajorCourses(path, orChoices, trackChoices) {
+  function getMajorCourses(path, orChoices, trackChoices, prereqChoices) {
     const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
-    const allIds = expandPrereqs(directIds)
+    const allIds = expandPrereqs(directIds, prereqChoices)
     return [...allIds].map((id) => coursesById.get(id)).filter(Boolean)
   }
 
@@ -127,7 +158,13 @@ function buildHelpers(data) {
   //   (either directly, or indirectly via prereq chain)
   // - isDirect: true if at least one target lists the course directly
   //   (not just as a transitive prereq)
-  function getRequirementMap(cc_id, targets, orChoices = {}, trackChoices = {}) {
+  function getRequirementMap(
+    cc_id,
+    targets,
+    orChoices = {},
+    trackChoices = {},
+    prereqChoices = {},
+  ) {
     const map = new Map()
     if (!targets || !targets.length) return map
     targets.forEach((t, idx) => {
@@ -138,7 +175,7 @@ function buildHelpers(data) {
       if (!path) return
       const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
       const directSet = new Set(directIds)
-      const allIds = expandPrereqs(directIds)
+      const allIds = expandPrereqs(directIds, prereqChoices)
       for (const id of allIds) {
         const course = coursesById.get(id)
         if (!course) continue
@@ -155,16 +192,84 @@ function buildHelpers(data) {
   }
 
   // Convenience: flat array of courses across all targets (deduped).
-  function getMajorCoursesForTargets(cc_id, targets, orChoices, trackChoices) {
-    const reqMap = getRequirementMap(cc_id, targets, orChoices, trackChoices)
+  function getMajorCoursesForTargets(
+    cc_id,
+    targets,
+    orChoices,
+    trackChoices,
+    prereqChoices,
+  ) {
+    const reqMap = getRequirementMap(
+      cc_id,
+      targets,
+      orChoices,
+      trackChoices,
+      prereqChoices,
+    )
     return [...reqMap.values()].map((e) => e.course)
   }
 
   // Convenience: set of ids that are directly required by at least one target.
-  function getDirectRequiredIdsForTargets(cc_id, targets, orChoices, trackChoices) {
-    const reqMap = getRequirementMap(cc_id, targets, orChoices, trackChoices)
+  function getDirectRequiredIdsForTargets(
+    cc_id,
+    targets,
+    orChoices,
+    trackChoices,
+    prereqChoices,
+  ) {
+    const reqMap = getRequirementMap(
+      cc_id,
+      targets,
+      orChoices,
+      trackChoices,
+      prereqChoices,
+    )
     const out = new Set()
     for (const [id, e] of reqMap) if (e.isDirect) out.add(id)
+    return out
+  }
+
+  // For an OR-group section, return the set of CC course ids that THAT
+  // section would contribute if chosen — by unioning each receiving_code's
+  // articulation's currently-chosen option course_ids.
+  function getSectionCourseIds(path, section, orChoices = {}) {
+    const ids = new Set()
+    if (!path || !section) return ids
+    const arts = path.articulations || []
+    const codes = new Set(section.receiving_codes || [])
+    for (const art of arts) {
+      if (!art.has_articulation) continue
+      if (!codes.has(art.receiving_code)) continue
+      const opts = art.options || []
+      if (!opts.length) continue
+      const chosenIdx = orChoices[art.id] ?? 0
+      const chosen = opts.find((o) => o.option_index === chosenIdx) || opts[0]
+      for (const cid of chosen.course_ids || []) ids.add(cid)
+    }
+    return ids
+  }
+
+  // For a given target (by index), compute the set of CC course ids already
+  // required by all OTHER targets — including their transitive prereqs.
+  // Used to highlight which OR-group section overlaps most with the rest of
+  // the user's plan.
+  function getOtherTargetsRequiredIds(
+    cc_id,
+    targets,
+    excludeIdx,
+    orChoices,
+    trackChoices,
+  ) {
+    const out = new Set()
+    if (!targets) return out
+    targets.forEach((t, i) => {
+      if (i === excludeIdx) return
+      const path = findTransferPath({ cc_id, target_major_id: t.major_id })
+      if (!path) return
+      const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
+      const allIds = expandPrereqs(directIds)
+      for (const id of allIds) out.add(id)
+    })
     return out
   }
   function getCalGetcCourses(cc_id) {
@@ -195,6 +300,9 @@ function buildHelpers(data) {
     getRequirementMap,
     getMajorCoursesForTargets,
     getDirectRequiredIdsForTargets,
+    getSectionCourseIds,
+    getOtherTargetsRequiredIds,
+    getPrereqIdsFor,
     getCalGetcCourses,
     filterPrerequisites,
     targetMajorsForSchool,

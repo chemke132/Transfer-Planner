@@ -2,19 +2,33 @@ import { useMemo } from 'react'
 import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
-import { useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { choiceToSet, useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { usePrereqChoices } from '../../hooks/usePrereqChoices.js'
 
 export default function MajorList() {
   const { setup } = useSetup()
   const {
     findTransferPath,
     getRequirementMap,
+    getSectionCourseIds,
+    getOtherTargetsRequiredIds,
     PREREQUISITES,
+    COURSES,
     TARGET_MAJORS,
     SCHOOLS,
   } = useAppData()
+  const courseCodeById = useMemo(() => {
+    const m = new Map()
+    for (const c of COURSES || []) m.set(c.id, c.code)
+    return m
+  }, [COURSES])
   const { choices, setChoice } = useOrChoices()
-  const { choices: trackChoices, setChoice: setTrackChoice } = useTrackChoices()
+  const {
+    choices: trackChoices,
+    setChoice: setTrackChoice,
+    toggleChoice: toggleTrackChoice,
+  } = useTrackChoices()
+  const { choices: prereqChoices } = usePrereqChoices()
 
   // Per-target paths, articulations, and OR-groups for the rich UI.
   const perTarget = useMemo(() => {
@@ -38,9 +52,16 @@ export default function MajorList() {
   }, [setup.cc_id, setup.targets])
 
   const reqMap = useMemo(
-    () => getRequirementMap(setup.cc_id, setup.targets, choices, trackChoices),
+    () =>
+      getRequirementMap(
+        setup.cc_id,
+        setup.targets,
+        choices,
+        trackChoices,
+        prereqChoices,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setup.cc_id, setup.targets, choices, trackChoices],
+    [setup.cc_id, setup.targets, choices, trackChoices, prereqChoices],
   )
 
   // Group courses by how many targets need them.
@@ -136,30 +157,138 @@ export default function MajorList() {
                   </span>
                 </h3>
                 <p className="text-xs text-violet-800/80 mb-3">
-                  Pick one section per group — only the chosen series counts toward
-                  this major.
+                  Each group lists alternative course series for one
+                  requirement. Pick per the rule shown above each group —
+                  only your selections count toward this major.
                 </p>
                 <ul className="space-y-3">
                   {pt.orGroups.map((group, gIdx) => {
-                    const chosenIdx = trackChoices[group.id] ?? 0
+                    const minCount = group.min_count || 1
+                    const isMulti = group.allow_multi || minCount >= 2
+                    // Pre-compute which sections actually have a DVC course
+                    // articulated so the default auto-pick prefers them.
+                    const ccBySectionIdx = new Map()
+                    for (const sec of group.sections || []) {
+                      const ids = getSectionCourseIds(pt.path, sec, choices)
+                      ccBySectionIdx.set(sec.section_index, ids.size)
+                    }
+                    let chosenSet
+                    const stored = trackChoices[group.id]
+                    if (Array.isArray(stored)) chosenSet = new Set(stored)
+                    else if (typeof stored === 'number') chosenSet = new Set([stored])
+                    else {
+                      // Default: first `minCount` sections with DVC courses.
+                      // Fall back to plain index order if not enough have DVC.
+                      chosenSet = new Set()
+                      const sortedIdx = (group.sections || [])
+                        .map((s) => s.section_index)
+                        .sort((a, b) => {
+                          const ha = (ccBySectionIdx.get(a) || 0) > 0 ? 0 : 1
+                          const hb = (ccBySectionIdx.get(b) || 0) > 0 ? 0 : 1
+                          if (ha !== hb) return ha - hb
+                          return a - b
+                        })
+                      for (const idx of sortedIdx.slice(0, minCount)) {
+                        chosenSet.add(idx)
+                      }
+                    }
+                    const headerLabel = (() => {
+                      if (!isMulti) return 'pick 1 section'
+                      const isAtLeast =
+                        group.selection_type &&
+                        group.selection_type.includes('AtLeast')
+                      if (isAtLeast) {
+                        return minCount === 1
+                          ? 'pick at least 1 section'
+                          : `pick at least ${minCount} sections`
+                      }
+                      return `pick ${minCount} section${minCount > 1 ? 's' : ''}`
+                    })()
+                    // For multi-target setups, compute how many CC courses
+                    // each section shares with the user's OTHER targets so
+                    // we can highlight the overlap-maximizing pick.
+                    const otherIds =
+                      setup.targets.length > 1
+                        ? getOtherTargetsRequiredIds(
+                            setup.cc_id,
+                            setup.targets,
+                            idx,
+                            choices,
+                            trackChoices,
+                          )
+                        : null
+                    const sectionsRanked = group.sections
+                      .map((sec) => {
+                        const cids = getSectionCourseIds(pt.path, sec, choices)
+                        const ccCodes = [...cids]
+                          .map((id) => courseCodeById.get(id))
+                          .filter(Boolean)
+                          .sort()
+                        let overlap = 0
+                        if (otherIds) {
+                          for (const id of cids) if (otherIds.has(id)) overlap++
+                        }
+                        return { sec, overlap, total: cids.size, ccCodes }
+                      })
+                      .sort((a, b) => {
+                        // Higher overlap first; ties broken by lower section index.
+                        if (b.overlap !== a.overlap) return b.overlap - a.overlap
+                        return a.sec.section_index - b.sec.section_index
+                      })
+                    const maxOverlap = sectionsRanked[0]?.overlap ?? 0
                     return (
                       <li key={group.id} className="text-sm">
                         <div className="font-medium text-slate-800 mb-2">
                           Group {gIdx + 1}
+                          <span className="text-[10px] text-slate-500 font-normal ml-2">
+                            {headerLabel}
+                          </span>
+                          {otherIds && maxOverlap > 0 && (
+                            <span className="text-[10px] text-slate-500 font-normal ml-2">
+                              · sorted by overlap with your other targets
+                            </span>
+                          )}
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {group.sections.map((sec) => {
-                            const active = chosenIdx === sec.section_index
+                          {sectionsRanked.map(({ sec, overlap, ccCodes }) => {
+                            const active = chosenSet.has(sec.section_index)
                             const codes = sec.receiving_codes || []
+                            const isBest =
+                              otherIds && overlap > 0 && overlap === maxOverlap
+                            // No DVC equivalent → can't satisfy via DVC; mark
+                            // unselectable so students don't pick a section
+                            // that would contribute zero courses to their plan.
+                            const noDvc = ccCodes.length === 0
                             return (
                               <button
                                 key={sec.id}
-                                onClick={() =>
-                                  setTrackChoice(group.id, sec.section_index)
+                                disabled={noDvc}
+                                title={
+                                  noDvc
+                                    ? 'No DVC equivalent — must take this course at the UC after transfer.'
+                                    : undefined
                                 }
+                                onClick={() => {
+                                  if (noDvc) return
+                                  if (isMulti) {
+                                    toggleTrackChoice(
+                                      group.id,
+                                      sec.section_index,
+                                    )
+                                  } else {
+                                    setTrackChoice(
+                                      group.id,
+                                      sec.section_index,
+                                    )
+                                  }
+                                }}
                                 className={`px-3 py-2 rounded-md border text-xs text-left max-w-xs ${
-                                  active
+                                  noDvc
+                                    ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed opacity-60'
+                                    : active
                                     ? 'bg-slate-900 text-white border-slate-900'
+                                    : isBest
+                                    ? 'bg-emerald-50 text-slate-700 border-emerald-400 hover:border-emerald-600'
                                     : 'bg-white text-slate-700 border-slate-300 hover:border-slate-500'
                                 }`}
                               >
@@ -171,15 +300,59 @@ export default function MajorList() {
                                   {codes.slice(0, 4).join(' · ')}
                                   {codes.length > 4 && ` …+${codes.length - 4}`}
                                 </div>
-                                {sec.section_index === 0 && (
-                                  <div
-                                    className={`text-[10px] mt-0.5 ${
-                                      active ? 'text-slate-300' : 'text-slate-400'
-                                    }`}
+                                <div
+                                  className={`mt-1 text-[10px] leading-tight ${
+                                    active ? 'text-slate-200' : 'text-slate-600'
+                                  }`}
+                                >
+                                  <span
+                                    className={
+                                      active ? 'text-slate-400' : 'text-slate-400'
+                                    }
                                   >
-                                    default
-                                  </div>
-                                )}
+                                    take:
+                                  </span>{' '}
+                                  {ccCodes.length > 0 ? (
+                                    <span className="font-mono">
+                                      {ccCodes.join(', ')}
+                                    </span>
+                                  ) : (
+                                    <span
+                                      className={`italic ${
+                                        active ? 'text-slate-400' : 'text-amber-700'
+                                      }`}
+                                    >
+                                      no DVC equivalent — take at UC after transfer
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 mt-1">
+                                  {sec.section_index === 0 && (
+                                    <span
+                                      className={`text-[10px] ${
+                                        active ? 'text-slate-300' : 'text-slate-400'
+                                      }`}
+                                    >
+                                      default
+                                    </span>
+                                  )}
+                                  {otherIds && overlap > 0 && (
+                                    <span
+                                      className={`text-[10px] font-semibold ${
+                                        active
+                                          ? 'text-emerald-300'
+                                          : 'text-emerald-700'
+                                      }`}
+                                    >
+                                      +{overlap} shared
+                                    </span>
+                                  )}
+                                  {isBest && !active && (
+                                    <span className="text-[10px] text-emerald-700 uppercase tracking-wide">
+                                      ★ best overlap
+                                    </span>
+                                  )}
+                                </div>
                               </button>
                             )
                           })}

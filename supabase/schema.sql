@@ -60,14 +60,8 @@ insert into schools (id, name, type) values
   ('ucsd', 'UC San Diego', 'UC')
 on conflict (id) do nothing;
 
-insert into target_majors (id, school_id, key, name) values
-  ('ucb_cs', 'ucb', 'cs', 'Computer Science'),
-  ('ucla_cs', 'ucla', 'cs', 'Computer Science'),
-  ('ucsd_cs', 'ucsd', 'cs', 'Computer Science')
-on conflict (id) do nothing;
-
-insert into transfer_paths (id, cc_school_id, target_major_id) values
-  ('dvc_ucb_cs', 'dvc', 'ucb_cs'),
-  ('dvc_ucla_cs', 'dvc', 'ucla_cs'),
-  ('dvc_ucsd_cs', 'dvc', 'ucsd_cs')
-on conflict (id) do nothing;
+-- target_majors and transfer_paths are populated entirely by the scraper
+-- (scraper/scrape_all.py). The original schema seeded ucb_cs/ucla_cs/
+-- ucsd_cs as placeholders, but those duplicated the canonical scraped
+-- rows once the assist.org agreements were imported. No longer inserted
+-- here — run scrape_all.py to populate.

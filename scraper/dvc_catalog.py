@@ -177,20 +177,30 @@ def parse_course(html: str, slug: str) -> dict[str, Any] | None:
 
         own_prefix = prefix.lower()
         candidates = [extract_prereq_courses(b) for b in or_branches]
-        # Prefer the first branch whose prereq slugs start with the course's
-        # own department prefix (same-dept ladder).
-        same_dept = next(
-            (slugs for slugs in candidates if slugs and any(s.startswith(own_prefix) for s in slugs)),
-            None,
-        )
+        # Score branches so we can both:
+        #   - pick a default (option_index=0): cheapest same-dept path
+        #   - keep the rest as alternative options the user can pick later
+        same_dept = [s for s in candidates if s and any(x.startswith(own_prefix) for x in s)]
+        def _branch_score(slugs: list[str]) -> tuple[int, int]:
+            num_sum = 0
+            for s in slugs:
+                m = re.search(r"(\d+)", s)
+                if m:
+                    num_sum += int(m.group(1))
+            return (len(slugs), -num_sum)
+        prereq_options: list[list[str]] = []
         if same_dept:
-            prereq_slugs = same_dept
-        else:
-            # Fall back to the LAST branch that has any course refs.
-            for slugs in reversed(candidates):
-                if slugs:
-                    prereq_slugs = slugs
-                    break
+            # Order: cheapest same-dept first, then the rest of same-dept.
+            same_dept_sorted = sorted(same_dept, key=_branch_score)
+            for s in same_dept_sorted:
+                if s not in prereq_options:
+                    prereq_options.append(s)
+        # Fallback / extra: cross-dept branches still go in (after same-dept)
+        # so the user can pick e.g. ENGIN 135 if they prefer.
+        for s in candidates:
+            if s and s not in prereq_options:
+                prereq_options.append(s)
+        prereq_slugs = prereq_options[0] if prereq_options else []
 
     return {
         "slug": slug,
@@ -199,6 +209,9 @@ def parse_course(html: str, slug: str) -> dict[str, Any] | None:
         "units": units,
         "description": description,
         "prereq_slugs": sorted(set(prereq_slugs)),
+        # All same-dept-first OR-branches as alternative options the user
+        # can pick between. Index 0 is the default (matches prereq_slugs).
+        "prereq_options": [list(b) for b in prereq_options],
     }
 
 
@@ -229,6 +242,7 @@ def main() -> int:
 
     courses: list[dict[str, Any]] = []
     prereqs: list[dict[str, Any]] = []
+    prereq_options_rows: list[dict[str, Any]] = []
     unresolved: list[dict[str, Any]] = []
     slug_to_id: dict[str, str] = {}
 
@@ -293,10 +307,43 @@ def main() -> int:
                             "reason": "slug not in scraped set — department not included?",
                         }
                     )
+            # Emit course_prereq_options for branches that fully resolve.
+            # Build a reverse map (course_id → code) from already-accumulated
+            # courses so labels work even when prereq_slugs use aliases like
+            # "phys111" while parsed_by_slug only has "phys111v2".
+            id_to_code = {c["id"]: c["code"] for c in courses}
+            for opt_idx, opt_slugs in enumerate(parsed.get("prereq_options") or []):
+                opt_ids: list[str] = []
+                opt_codes: list[str] = []
+                ok = True
+                for ps in opt_slugs:
+                    pid2 = slug_to_id.get(ps)
+                    if not pid2:
+                        ok = False
+                        break
+                    opt_ids.append(pid2)
+                    code_str = id_to_code.get(pid2)
+                    if code_str:
+                        opt_codes.append(code_str)
+                if not ok or not opt_ids:
+                    continue
+                deduped_ids = sorted(set(opt_ids))
+                prereq_options_rows.append(
+                    {
+                        "id": f"{cid}:{opt_idx}",
+                        "course_id": cid,
+                        "option_index": opt_idx,
+                        "prerequisite_ids": deduped_ids,
+                        "label": " + ".join(sorted(set(opt_codes)))
+                        if opt_codes
+                        else "(prereq)",
+                    }
+                )
 
     out = {
         "courses": courses,
         "prerequisites": prereqs,
+        "prereq_options": prereq_options_rows,
         "unresolved_prereqs": unresolved,
     }
     args.out.write_text(json.dumps(out, indent=2, ensure_ascii=False))

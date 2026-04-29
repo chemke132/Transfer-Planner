@@ -3,6 +3,7 @@ import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
 import { useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { usePrereqChoices } from '../../hooks/usePrereqChoices.js'
 
 // Course Path: each row is one prereq chain (typically one department's
 // ladder), laid out left-to-right with arrows. Courses without prereqs
@@ -18,9 +19,12 @@ export default function CoursePath() {
     getMajorCoursesForTargets,
     getDirectRequiredIdsForTargets,
     filterPrerequisites,
+    PREREQ_OPTIONS_BY_COURSE,
+    getPrereqIdsFor,
   } = useAppData()
   const { choices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
+  const { choices: prereqChoices, setChoice: setPrereqChoice } = usePrereqChoices()
 
   const { rows, prereqByCourse, directIds, totalUnits, codeById } = useMemo(() => {
     const major = getMajorCoursesForTargets(
@@ -28,6 +32,7 @@ export default function CoursePath() {
       setup.targets,
       choices,
       trackChoices,
+      prereqChoices,
     )
     if (!major.length) {
       return {
@@ -38,10 +43,19 @@ export default function CoursePath() {
         codeById: new Map(),
       }
     }
-    const prereqs = filterPrerequisites(major.map((c) => c.id))
+    // Build prereq edges from each course's CURRENTLY-CHOSEN branch (not
+    // the flat default), filtered to courses that are in the major set.
+    const majorIdSet = new Set(major.map((c) => c.id))
     const prMap = new Map(major.map((c) => [c.id, []]))
-    for (const p of prereqs) {
-      if (prMap.has(p.course_id)) prMap.get(p.course_id).push(p.prerequisite_id)
+    const prereqs = []
+    for (const c of major) {
+      const pids = getPrereqIdsFor(c.id, prereqChoices)
+      for (const pid of pids) {
+        if (majorIdSet.has(pid)) {
+          prMap.get(c.id).push(pid)
+          prereqs.push({ course_id: c.id, prerequisite_id: pid })
+        }
+      }
     }
 
     // Group by subject prefix.
@@ -78,12 +92,13 @@ export default function CoursePath() {
         setup.targets,
         choices,
         trackChoices,
+        prereqChoices,
       ),
       totalUnits: major.reduce((sum, c) => sum + (c.units || 0), 0),
       codeById: new Map(major.map((c) => [c.id, c.code])),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.targets, choices, trackChoices])
+  }, [setup.cc_id, setup.targets, choices, trackChoices, prereqChoices])
 
   if (!rows.length) {
     return <div className="text-sm text-slate-400 italic">No transfer path data yet.</div>
@@ -135,6 +150,9 @@ export default function CoursePath() {
                         course={c}
                         isDirect={isDirect}
                         externalPrereqs={externalPrereqs}
+                        prereqOptions={PREREQ_OPTIONS_BY_COURSE?.get(c.id) || []}
+                        chosenPrereqIdx={prereqChoices[c.id] ?? 0}
+                        onPickPrereq={(idx) => setPrereqChoice(c.id, idx)}
                       />
                     </li>
                   )
@@ -148,10 +166,18 @@ export default function CoursePath() {
   )
 }
 
-function CourseChip({ course, isDirect, externalPrereqs }) {
+function CourseChip({
+  course,
+  isDirect,
+  externalPrereqs,
+  prereqOptions,
+  chosenPrereqIdx,
+  onPickPrereq,
+}) {
+  const hasPrereqChoice = prereqOptions && prereqOptions.length >= 2
   return (
     <div
-      className={`min-w-[160px] max-w-[220px] rounded-md border px-2.5 py-2 text-left ${
+      className={`min-w-[160px] max-w-[260px] rounded-md border px-2.5 py-2 text-left ${
         isDirect ? 'border-slate-900 bg-slate-50' : 'border-slate-200 bg-white'
       }`}
     >
@@ -178,6 +204,25 @@ function CourseChip({ course, isDirect, externalPrereqs }) {
       {externalPrereqs.length > 0 && (
         <div className="text-[10px] text-slate-500 mt-1 leading-tight">
           also needs: {externalPrereqs.join(', ')}
+        </div>
+      )}
+      {hasPrereqChoice && (
+        <div className="mt-1.5 pt-1.5 border-t border-dashed border-slate-200">
+          <div className="text-[9px] uppercase tracking-wide text-slate-400 mb-1">
+            prereq path
+          </div>
+          <select
+            value={chosenPrereqIdx}
+            onChange={(e) => onPickPrereq(Number(e.target.value))}
+            className="text-[10px] w-full border border-slate-300 rounded px-1 py-0.5 bg-white"
+          >
+            {prereqOptions.map((o) => (
+              <option key={o.id} value={o.option_index}>
+                {o.label}
+                {o.option_index === 0 ? ' (default)' : ''}
+              </option>
+            ))}
+          </select>
         </div>
       )}
     </div>

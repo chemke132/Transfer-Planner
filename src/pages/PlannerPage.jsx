@@ -11,6 +11,7 @@ import { useSetup } from '../hooks/useSetup.js'
 import { useAppData } from '../hooks/useAppData.jsx'
 import { useOrChoices } from '../hooks/useOrChoices.js'
 import { useTrackChoices } from '../hooks/useTrackChoices.js'
+import { usePrereqChoices } from '../hooks/usePrereqChoices.js'
 
 const SUMMER_AUTO_CAP = 6
 const SUMMER_AUTO_MAX_COURSES = 1
@@ -46,11 +47,13 @@ export default function PlannerPage() {
   const { selected: rawSelectedCalGetc } = useCalGetcSelections()
   const { choices: orChoices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
+  const { choices: prereqChoices } = usePrereqChoices()
   const {
     getMajorCoursesForTargets,
     getDirectRequiredIdsForTargets,
     getCalGetcCourses,
     filterPrerequisites,
+    getPrereqIdsFor,
     PREREQUISITES,
     TARGET_MAJORS,
   } = useAppData()
@@ -68,9 +71,16 @@ export default function PlannerPage() {
 
   // Derived per-setup context (UNION across all targets).
   const majorCourses = useMemo(
-    () => getMajorCoursesForTargets(setup.cc_id, setup.targets, orChoices, trackChoices),
+    () =>
+      getMajorCoursesForTargets(
+        setup.cc_id,
+        setup.targets,
+        orChoices,
+        trackChoices,
+        prereqChoices,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setup.cc_id, setup.targets, orChoices, trackChoices],
+    [setup.cc_id, setup.targets, orChoices, trackChoices, prereqChoices],
   )
   const directRequiredIds = useMemo(
     () =>
@@ -79,9 +89,10 @@ export default function PlannerPage() {
         setup.targets,
         orChoices,
         trackChoices,
+        prereqChoices,
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setup.cc_id, setup.targets, orChoices, trackChoices],
+    [setup.cc_id, setup.targets, orChoices, trackChoices, prereqChoices],
   )
   const majorIds = useMemo(() => new Set(majorCourses.map((c) => c.id)), [majorCourses])
   const calGetcCourses = useMemo(
@@ -153,7 +164,7 @@ export default function PlannerPage() {
       return next
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setup.cc_id, setup.targets, orChoices, trackChoices])
+  }, [setup.cc_id, setup.targets, orChoices, trackChoices, prereqChoices])
 
   // Sync pool when Cal-GETC selection changes.
   useEffect(() => {
@@ -429,7 +440,20 @@ export default function PlannerPage() {
     () => calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
     [calGetcCourses, selectedCalGetc],
   )
-  const violations = detectPrereqViolations(semesters, PREREQUISITES)
+  const violations = useMemo(() => {
+    // Build the active prereq edge set from each placed course's currently-
+    // chosen branch (not the flat default), so swapping prereq paths in the
+    // CoursePath picker reflects in the planner immediately.
+    const placed = new Set()
+    for (const s of semesters) for (const c of s.courses) placed.add(c.id)
+    const edges = []
+    for (const id of placed) {
+      for (const pid of getPrereqIdsFor(id, prereqChoices)) {
+        edges.push({ course_id: id, prerequisite_id: pid })
+      }
+    }
+    return detectPrereqViolations(semesters, edges)
+  }, [semesters, prereqChoices, getPrereqIdsFor])
   const lastSem = semesters[semesters.length - 1]
   const canRemoveLast = semesters.length > 1 && lastSem && lastSem.courses.length === 0
 
@@ -726,7 +750,10 @@ function detectPrereqViolations(semesters, prereqs) {
     const a = semOf.get(course_id)
     const b = semOf.get(prerequisite_id)
     if (a === undefined || b === undefined) continue
-    if (b >= a) {
+    // Strict prereq violation: the prerequisite must be in an EARLIER
+    // semester. Same-semester (b == a) is treated as concurrent enrollment
+    // and is allowed — most CC catalogs permit it for sequence courses.
+    if (b > a) {
       const semId = semesters[a].id
       if (!violations.has(semId)) violations.set(semId, new Set())
       violations.get(semId).add(course_id)
