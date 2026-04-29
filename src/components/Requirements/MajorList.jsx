@@ -3,6 +3,7 @@ import { useSetup } from '../../hooks/useSetup.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
 import { useOrChoices } from '../../hooks/useOrChoices.js'
 import { choiceToSet, useTrackChoices } from '../../hooks/useTrackChoices.js'
+import { usePrereqChoices } from '../../hooks/usePrereqChoices.js'
 
 export default function MajorList() {
   const { setup } = useSetup()
@@ -27,6 +28,7 @@ export default function MajorList() {
     setChoice: setTrackChoice,
     toggleChoice: toggleTrackChoice,
   } = useTrackChoices()
+  const { choices: prereqChoices } = usePrereqChoices()
 
   // Per-target paths, articulations, and OR-groups for the rich UI.
   const perTarget = useMemo(() => {
@@ -50,9 +52,16 @@ export default function MajorList() {
   }, [setup.cc_id, setup.targets])
 
   const reqMap = useMemo(
-    () => getRequirementMap(setup.cc_id, setup.targets, choices, trackChoices),
+    () =>
+      getRequirementMap(
+        setup.cc_id,
+        setup.targets,
+        choices,
+        trackChoices,
+        prereqChoices,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setup.cc_id, setup.targets, choices, trackChoices],
+    [setup.cc_id, setup.targets, choices, trackChoices, prereqChoices],
   )
 
   // Group courses by how many targets need them.

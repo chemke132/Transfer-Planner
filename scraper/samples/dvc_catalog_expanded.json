@@ -3460,7 +3460,7 @@
     },
     {
       "course_id": "dvc_biosc119",
-      "prerequisite_id": "dvc_chem120"
+      "prerequisite_id": "dvc_chem107"
     },
     {
       "course_id": "dvc_biosc130",
@@ -3476,7 +3476,7 @@
     },
     {
       "course_id": "dvc_biosc146",
-      "prerequisite_id": "dvc_chem120"
+      "prerequisite_id": "dvc_chem107"
     },
     {
       "course_id": "dvc_astro130",
@@ -3641,6 +3641,1077 @@
     {
       "course_id": "dvc_russ221",
       "prerequisite_id": "dvc_russ220"
+    }
+  ],
+  "prereq_options": [
+    {
+      "id": "dvc_comsc120:0",
+      "course_id": "dvc_comsc120",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc110"
+      ],
+      "label": "COMSC 110"
+    },
+    {
+      "id": "dvc_comsc120:1",
+      "course_id": "dvc_comsc120",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_engin135"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_comsc165:0",
+      "course_id": "dvc_comsc165",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc110"
+      ],
+      "label": "COMSC 110"
+    },
+    {
+      "id": "dvc_comsc165:1",
+      "course_id": "dvc_comsc165",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_engin135"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_comsc200:0",
+      "course_id": "dvc_comsc200",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc165"
+      ],
+      "label": "COMSC 165"
+    },
+    {
+      "id": "dvc_comsc210:0",
+      "course_id": "dvc_comsc210",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc165"
+      ],
+      "label": "COMSC 165"
+    },
+    {
+      "id": "dvc_comsc230:0",
+      "course_id": "dvc_comsc230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc165"
+      ],
+      "label": "COMSC 165"
+    },
+    {
+      "id": "dvc_comsc230:1",
+      "course_id": "dvc_comsc230",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_comsc140"
+      ],
+      "label": "COMSC 140"
+    },
+    {
+      "id": "dvc_comsc240:0",
+      "course_id": "dvc_comsc240",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc140"
+      ],
+      "label": "COMSC 140"
+    },
+    {
+      "id": "dvc_comsc260:0",
+      "course_id": "dvc_comsc260",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_comsc165"
+      ],
+      "label": "COMSC 165"
+    },
+    {
+      "id": "dvc_math183:0",
+      "course_id": "dvc_math183",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math182"
+      ],
+      "label": "MATH 182"
+    },
+    {
+      "id": "dvc_math193:0",
+      "course_id": "dvc_math193",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math192"
+      ],
+      "label": "MATH 192"
+    },
+    {
+      "id": "dvc_math194:0",
+      "course_id": "dvc_math194",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193"
+      ],
+      "label": "MATH 193"
+    },
+    {
+      "id": "dvc_math195:0",
+      "course_id": "dvc_math195",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193"
+      ],
+      "label": "MATH 193"
+    },
+    {
+      "id": "dvc_math289:0",
+      "course_id": "dvc_math289",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193"
+      ],
+      "label": "MATH 193"
+    },
+    {
+      "id": "dvc_math292:0",
+      "course_id": "dvc_math292",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193"
+      ],
+      "label": "MATH 193"
+    },
+    {
+      "id": "dvc_math294:0",
+      "course_id": "dvc_math294",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math292"
+      ],
+      "label": "MATH 292"
+    },
+    {
+      "id": "dvc_phys111:0",
+      "course_id": "dvc_phys111",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_phys110"
+      ],
+      "label": "PHYS 110"
+    },
+    {
+      "id": "dvc_phys120:0",
+      "course_id": "dvc_phys120",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math121"
+      ],
+      "label": "MATH 121"
+    },
+    {
+      "id": "dvc_phys121:0",
+      "course_id": "dvc_phys121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_phys120"
+      ],
+      "label": "PHYS 120"
+    },
+    {
+      "id": "dvc_phys124:0",
+      "course_id": "dvc_phys124",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math182",
+        "dvc_phys120"
+      ],
+      "label": "MATH 182 + PHYS 120"
+    },
+    {
+      "id": "dvc_phys124:1",
+      "course_id": "dvc_phys124",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_math192"
+      ],
+      "label": "MATH 192"
+    },
+    {
+      "id": "dvc_phys125:0",
+      "course_id": "dvc_phys125",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193",
+        "dvc_phys121"
+      ],
+      "label": "MATH 193 + PHYS 121"
+    },
+    {
+      "id": "dvc_phys125:1",
+      "course_id": "dvc_phys125",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_math183"
+      ],
+      "label": "MATH 183"
+    },
+    {
+      "id": "dvc_phys129:0",
+      "course_id": "dvc_phys129",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math192"
+      ],
+      "label": "MATH 192"
+    },
+    {
+      "id": "dvc_phys130:0",
+      "course_id": "dvc_phys130",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_phys129"
+      ],
+      "label": "PHYS 129"
+    },
+    {
+      "id": "dvc_phys130:1",
+      "course_id": "dvc_phys130",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_phys120"
+      ],
+      "label": "PHYS 120"
+    },
+    {
+      "id": "dvc_phys130:2",
+      "course_id": "dvc_phys130",
+      "option_index": 2,
+      "prerequisite_ids": [
+        "dvc_phys112"
+      ],
+      "label": "PHYS 112"
+    },
+    {
+      "id": "dvc_phys130:3",
+      "course_id": "dvc_phys130",
+      "option_index": 3,
+      "prerequisite_ids": [
+        "dvc_phys110",
+        "dvc_phys111"
+      ],
+      "label": "PHYS 110 + PHYS 111"
+    },
+    {
+      "id": "dvc_phys230:0",
+      "course_id": "dvc_phys230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math292",
+        "dvc_phys130"
+      ],
+      "label": "MATH 292 + PHYS 130"
+    },
+    {
+      "id": "dvc_phys231:0",
+      "course_id": "dvc_phys231",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math294",
+        "dvc_phys230"
+      ],
+      "label": "MATH 294 + PHYS 230"
+    },
+    {
+      "id": "dvc_engin135:0",
+      "course_id": "dvc_engin135",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math192"
+      ],
+      "label": "MATH 192"
+    },
+    {
+      "id": "dvc_engin136:0",
+      "course_id": "dvc_engin136",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math192"
+      ],
+      "label": "MATH 192"
+    },
+    {
+      "id": "dvc_engin140:0",
+      "course_id": "dvc_engin140",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math121"
+      ],
+      "label": "MATH 121"
+    },
+    {
+      "id": "dvc_engin210:0",
+      "course_id": "dvc_engin210",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120",
+        "dvc_phys230"
+      ],
+      "label": "PHYS 230"
+    },
+    {
+      "id": "dvc_engin230:0",
+      "course_id": "dvc_engin230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_phys230"
+      ],
+      "label": "PHYS 230"
+    },
+    {
+      "id": "dvc_engin240:0",
+      "course_id": "dvc_engin240",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120",
+        "dvc_phys130"
+      ],
+      "label": "PHYS 130"
+    },
+    {
+      "id": "dvc_engin255:0",
+      "course_id": "dvc_engin255",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193",
+        "dvc_phys130"
+      ],
+      "label": "MATH 193 + PHYS 130"
+    },
+    {
+      "id": "dvc_engin257:0",
+      "course_id": "dvc_engin257",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_math193",
+        "dvc_phys130"
+      ],
+      "label": "MATH 193 + PHYS 130"
+    },
+    {
+      "id": "dvc_chem109:0",
+      "course_id": "dvc_chem109",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_chem109:1",
+      "course_id": "dvc_chem109",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_chem108"
+      ],
+      "label": "CHEM 108"
+    },
+    {
+      "id": "dvc_chem109:2",
+      "course_id": "dvc_chem109",
+      "option_index": 2,
+      "prerequisite_ids": [
+        "dvc_chem107"
+      ],
+      "label": "CHEM 107"
+    },
+    {
+      "id": "dvc_chem120:0",
+      "course_id": "dvc_chem120",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem108"
+      ],
+      "label": "CHEM 108"
+    },
+    {
+      "id": "dvc_chem121:0",
+      "course_id": "dvc_chem121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_chem226:0",
+      "course_id": "dvc_chem226",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem121"
+      ],
+      "label": "CHEM 121"
+    },
+    {
+      "id": "dvc_chem227:0",
+      "course_id": "dvc_chem227",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem121",
+        "dvc_chem226"
+      ],
+      "label": "CHEM 121 + CHEM 226"
+    },
+    {
+      "id": "dvc_engl123:0",
+      "course_id": "dvc_engl123",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl123a:0",
+      "course_id": "dvc_engl123a",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl126a:0",
+      "course_id": "dvc_engl126a",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl222:0",
+      "course_id": "dvc_engl222",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl223:0",
+      "course_id": "dvc_engl223",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl224:0",
+      "course_id": "dvc_engl224",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl225:0",
+      "course_id": "dvc_engl225",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl252:0",
+      "course_id": "dvc_engl252",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl253:0",
+      "course_id": "dvc_engl253",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl262:0",
+      "course_id": "dvc_engl262",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl263:0",
+      "course_id": "dvc_engl263",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl272:0",
+      "course_id": "dvc_engl272",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_engl273:0",
+      "course_id": "dvc_engl273",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_englc1001:0",
+      "course_id": "dvc_englc1001",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "ENGL C1000"
+    },
+    {
+      "id": "dvc_psyc130:0",
+      "course_id": "dvc_psyc130",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_psycc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_psyc145:0",
+      "course_id": "dvc_psyc145",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "ENGL C1000"
+    },
+    {
+      "id": "dvc_psyc215:0",
+      "course_id": "dvc_psyc215",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_psyc214"
+      ],
+      "label": "PSYC 214"
+    },
+    {
+      "id": "dvc_psyc215:1",
+      "course_id": "dvc_psyc215",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_bus240",
+        "dvc_psycc1000"
+      ],
+      "label": "(prereq)"
+    },
+    {
+      "id": "dvc_biosc119:0",
+      "course_id": "dvc_biosc119",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem107"
+      ],
+      "label": "CHEM 107"
+    },
+    {
+      "id": "dvc_biosc119:1",
+      "course_id": "dvc_biosc119",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_chem108"
+      ],
+      "label": "CHEM 108"
+    },
+    {
+      "id": "dvc_biosc119:2",
+      "course_id": "dvc_biosc119",
+      "option_index": 2,
+      "prerequisite_ids": [
+        "dvc_chem109"
+      ],
+      "label": "CHEM 109"
+    },
+    {
+      "id": "dvc_biosc119:3",
+      "course_id": "dvc_biosc119",
+      "option_index": 3,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_biosc130:0",
+      "course_id": "dvc_biosc130",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_biosc131:0",
+      "course_id": "dvc_biosc131",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_biosc140:0",
+      "course_id": "dvc_biosc140",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_biosc120"
+      ],
+      "label": "BIOSC 120"
+    },
+    {
+      "id": "dvc_biosc140:1",
+      "course_id": "dvc_biosc140",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_biosc139",
+        "dvc_chem107"
+      ],
+      "label": "BIOSC 139 + CHEM 107"
+    },
+    {
+      "id": "dvc_biosc140:2",
+      "course_id": "dvc_biosc140",
+      "option_index": 2,
+      "prerequisite_ids": [
+        "dvc_chem108"
+      ],
+      "label": "CHEM 108"
+    },
+    {
+      "id": "dvc_biosc140:3",
+      "course_id": "dvc_biosc140",
+      "option_index": 3,
+      "prerequisite_ids": [
+        "dvc_chem109"
+      ],
+      "label": "CHEM 109"
+    },
+    {
+      "id": "dvc_biosc140:4",
+      "course_id": "dvc_biosc140",
+      "option_index": 4,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_biosc146:0",
+      "course_id": "dvc_biosc146",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_chem107"
+      ],
+      "label": "CHEM 107"
+    },
+    {
+      "id": "dvc_biosc146:1",
+      "course_id": "dvc_biosc146",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_chem108"
+      ],
+      "label": "CHEM 108"
+    },
+    {
+      "id": "dvc_biosc146:2",
+      "course_id": "dvc_biosc146",
+      "option_index": 2,
+      "prerequisite_ids": [
+        "dvc_chem109"
+      ],
+      "label": "CHEM 109"
+    },
+    {
+      "id": "dvc_biosc146:3",
+      "course_id": "dvc_biosc146",
+      "option_index": 3,
+      "prerequisite_ids": [
+        "dvc_chem120"
+      ],
+      "label": "CHEM 120"
+    },
+    {
+      "id": "dvc_astro130:0",
+      "course_id": "dvc_astro130",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_astro120"
+      ],
+      "label": "ASTRO 120"
+    },
+    {
+      "id": "dvc_astro130:1",
+      "course_id": "dvc_astro130",
+      "option_index": 1,
+      "prerequisite_ids": [
+        "dvc_astro110"
+      ],
+      "label": "ASTRO 110"
+    },
+    {
+      "id": "dvc_geol124:0",
+      "course_id": "dvc_geol124",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_geol121"
+      ],
+      "label": "GEOL 121"
+    },
+    {
+      "id": "dvc_geol135:0",
+      "course_id": "dvc_geol135",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_geol120",
+        "dvc_geol122"
+      ],
+      "label": "GEOL 120 + GEOL 122"
+    },
+    {
+      "id": "dvc_socio122:0",
+      "course_id": "dvc_socio122",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "ENGL C1000"
+    },
+    {
+      "id": "dvc_socio123:0",
+      "course_id": "dvc_socio123",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_socio120"
+      ],
+      "label": "SOCIO 120"
+    },
+    {
+      "id": "dvc_anthr141l:0",
+      "course_id": "dvc_anthr141l",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_anthr140"
+      ],
+      "label": "ANTHR 140"
+    },
+    {
+      "id": "dvc_geog121:0",
+      "course_id": "dvc_geog121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_geog120"
+      ],
+      "label": "GEOG 120"
+    },
+    {
+      "id": "dvc_geog126:0",
+      "course_id": "dvc_geog126",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_geog125"
+      ],
+      "label": "GEOG 125"
+    },
+    {
+      "id": "dvc_hist122:0",
+      "course_id": "dvc_hist122",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "ENGL C1000"
+    },
+    {
+      "id": "dvc_philo130:0",
+      "course_id": "dvc_philo130",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_englc1000"
+      ],
+      "label": "ENGL C1000"
+    },
+    {
+      "id": "dvc_drama124:0",
+      "course_id": "dvc_drama124",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_drama123"
+      ],
+      "label": "DRAMA 123"
+    },
+    {
+      "id": "dvc_drama125:0",
+      "course_id": "dvc_drama125",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_drama124"
+      ],
+      "label": "DRAMA 124"
+    },
+    {
+      "id": "dvc_drama128:0",
+      "course_id": "dvc_drama128",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_drama126"
+      ],
+      "label": "DRAMA 126"
+    },
+    {
+      "id": "dvc_drama171:0",
+      "course_id": "dvc_drama171",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_drama170"
+      ],
+      "label": "DRAMA 170"
+    },
+    {
+      "id": "dvc_archi121:0",
+      "course_id": "dvc_archi121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_archi120",
+        "dvc_archi130",
+        "dvc_archi135"
+      ],
+      "label": "ARCHI 120"
+    },
+    {
+      "id": "dvc_archi131:0",
+      "course_id": "dvc_archi131",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_archi130"
+      ],
+      "label": "ARCHI 130"
+    },
+    {
+      "id": "dvc_archi220:0",
+      "course_id": "dvc_archi220",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_archi121",
+        "dvc_archi136"
+      ],
+      "label": "ARCHI 121 + ARCHI 136"
+    },
+    {
+      "id": "dvc_archi221:0",
+      "course_id": "dvc_archi221",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_archi220"
+      ],
+      "label": "ARCHI 220"
+    },
+    {
+      "id": "dvc_archi244:0",
+      "course_id": "dvc_archi244",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_archi130"
+      ],
+      "label": "ARCHI 130"
+    },
+    {
+      "id": "dvc_span121:0",
+      "course_id": "dvc_span121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_span120"
+      ],
+      "label": "SPAN 120"
+    },
+    {
+      "id": "dvc_span220:0",
+      "course_id": "dvc_span220",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_span121"
+      ],
+      "label": "SPAN 121"
+    },
+    {
+      "id": "dvc_span221:0",
+      "course_id": "dvc_span221",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_span220"
+      ],
+      "label": "SPAN 220"
+    },
+    {
+      "id": "dvc_span230:0",
+      "course_id": "dvc_span230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_span221"
+      ],
+      "label": "SPAN 221"
+    },
+    {
+      "id": "dvc_span231:0",
+      "course_id": "dvc_span231",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_span230"
+      ],
+      "label": "SPAN 230"
+    },
+    {
+      "id": "dvc_ital121:0",
+      "course_id": "dvc_ital121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_ital120"
+      ],
+      "label": "ITAL 120"
+    },
+    {
+      "id": "dvc_ital220:0",
+      "course_id": "dvc_ital220",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_ital121"
+      ],
+      "label": "ITAL 121"
+    },
+    {
+      "id": "dvc_ital221:0",
+      "course_id": "dvc_ital221",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_ital220"
+      ],
+      "label": "ITAL 220"
+    },
+    {
+      "id": "dvc_ital230:0",
+      "course_id": "dvc_ital230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_ital221"
+      ],
+      "label": "ITAL 221"
+    },
+    {
+      "id": "dvc_ital231:0",
+      "course_id": "dvc_ital231",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_ital230"
+      ],
+      "label": "ITAL 230"
+    },
+    {
+      "id": "dvc_grman121:0",
+      "course_id": "dvc_grman121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_grman120"
+      ],
+      "label": "GRMAN 120"
+    },
+    {
+      "id": "dvc_grman220:0",
+      "course_id": "dvc_grman220",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_grman121"
+      ],
+      "label": "GRMAN 121"
+    },
+    {
+      "id": "dvc_grman221:0",
+      "course_id": "dvc_grman221",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_grman220"
+      ],
+      "label": "GRMAN 220"
+    },
+    {
+      "id": "dvc_grman230:0",
+      "course_id": "dvc_grman230",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_grman221"
+      ],
+      "label": "GRMAN 221"
+    },
+    {
+      "id": "dvc_grman231:0",
+      "course_id": "dvc_grman231",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_grman230"
+      ],
+      "label": "GRMAN 230"
+    },
+    {
+      "id": "dvc_russ121:0",
+      "course_id": "dvc_russ121",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_russ120"
+      ],
+      "label": "RUSS 120"
+    },
+    {
+      "id": "dvc_russ220:0",
+      "course_id": "dvc_russ220",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_russ121"
+      ],
+      "label": "RUSS 121"
+    },
+    {
+      "id": "dvc_russ221:0",
+      "course_id": "dvc_russ221",
+      "option_index": 0,
+      "prerequisite_ids": [
+        "dvc_russ220"
+      ],
+      "label": "RUSS 220"
     }
   ],
   "unresolved_prereqs": []
