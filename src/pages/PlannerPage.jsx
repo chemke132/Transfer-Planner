@@ -53,6 +53,7 @@ export default function PlannerPage() {
     getDirectRequiredIdsForTargets,
     getCalGetcCourses,
     filterPrerequisites,
+    getPrereqIdsFor,
     PREREQUISITES,
     TARGET_MAJORS,
   } = useAppData()
@@ -439,7 +440,20 @@ export default function PlannerPage() {
     () => calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
     [calGetcCourses, selectedCalGetc],
   )
-  const violations = detectPrereqViolations(semesters, PREREQUISITES)
+  const violations = useMemo(() => {
+    // Build the active prereq edge set from each placed course's currently-
+    // chosen branch (not the flat default), so swapping prereq paths in the
+    // CoursePath picker reflects in the planner immediately.
+    const placed = new Set()
+    for (const s of semesters) for (const c of s.courses) placed.add(c.id)
+    const edges = []
+    for (const id of placed) {
+      for (const pid of getPrereqIdsFor(id, prereqChoices)) {
+        edges.push({ course_id: id, prerequisite_id: pid })
+      }
+    }
+    return detectPrereqViolations(semesters, edges)
+  }, [semesters, prereqChoices, getPrereqIdsFor])
   const lastSem = semesters[semesters.length - 1]
   const canRemoveLast = semesters.length > 1 && lastSem && lastSem.courses.length === 0
 
@@ -736,7 +750,10 @@ function detectPrereqViolations(semesters, prereqs) {
     const a = semOf.get(course_id)
     const b = semOf.get(prerequisite_id)
     if (a === undefined || b === undefined) continue
-    if (b >= a) {
+    // Strict prereq violation: the prerequisite must be in an EARLIER
+    // semester. Same-semester (b == a) is treated as concurrent enrollment
+    // and is allowed — most CC catalogs permit it for sequence courses.
+    if (b > a) {
       const semId = semesters[a].id
       if (!violations.has(semId)) violations.set(semId, new Set())
       violations.get(semId).add(course_id)
