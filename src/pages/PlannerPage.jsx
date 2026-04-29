@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { DndContext, DragOverlay, PointerSensor, useDraggable, useDroppable, useSensor, useSensors, pointerWithin } from '@dnd-kit/core'
 import SemesterColumn from '../components/Planner/SemesterColumn.jsx'
 import AutoPlanButton from '../components/Planner/AutoPlanButton.jsx'
+import StepNav from '../components/StepNav.jsx'
 import { autoPlanSemesters } from '../lib/topologicalSort.js'
 import { defaultTerms, extendTerms } from '../lib/terms.js'
 import { useCalGetcSelections } from '../hooks/useCalGetcSelections.js'
@@ -40,6 +41,7 @@ function makeEmptySemesters(terms) {
 }
 
 export default function PlannerPage() {
+  const navigate = useNavigate()
   const { setup } = useSetup()
   const { selected: rawSelectedCalGetc } = useCalGetcSelections()
   const { choices: orChoices } = useOrChoices()
@@ -537,6 +539,12 @@ export default function PlannerPage() {
           ) : null}
         </DragOverlay>
       </DndContext>
+      <StepNav
+        canPrev
+        canNext={false}
+        onPrev={() => navigate('/requirements')}
+        prevLabel="Course Path"
+      />
     </div>
   )
 }

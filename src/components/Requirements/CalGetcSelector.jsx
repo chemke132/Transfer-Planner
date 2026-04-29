@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSetup } from '../../hooks/useSetup.js'
 import { useCalGetcSelections } from '../../hooks/useCalGetcSelections.js'
 import { useAppData } from '../../hooks/useAppData.jsx'
@@ -16,7 +16,7 @@ export default function CalGetcSelector() {
   const { choices: trackChoices } = useTrackChoices()
   const areaCodes = Object.keys(CAL_GETC_AREAS)
   const [activeArea, setActiveArea] = useState(areaCodes[0])
-  const { selected, toggle } = useCalGetcSelections()
+  const { selected, toggle, removeMany } = useCalGetcSelections()
 
   // Courses required by ANY target's major that also happen to satisfy a
   // Cal-GETC area. Students don't double up; we disable manual selection
@@ -62,6 +62,24 @@ export default function CalGetcSelector() {
     ).length
     return auto + manual
   }
+
+  // When the active major changes (or anything that flips an area into
+  // auto-satisfied), prune any user-picked courses sitting in those now-
+  // covered areas. Without this, an old BUS 240 pick from a previous major
+  // sticks around in the UI and leaks into the planner pool.
+  useEffect(() => {
+    const stale = []
+    for (const code of areaCodes) {
+      if (!isAutoSatisfied(code)) continue
+      const auto = majorCoveredByArea.get(code) || []
+      const autoIds = new Set(auto.map((c) => c.id))
+      for (const c of byArea.get(code) || []) {
+        if (selected.has(c.id) && !autoIds.has(c.id)) stale.push(c.id)
+      }
+    }
+    if (stale.length) removeMany(stale)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [majorCoveredByArea, byArea])
 
   const activeCourses = byArea.get(activeArea) || []
   const activeMeta = CAL_GETC_AREAS[activeArea]

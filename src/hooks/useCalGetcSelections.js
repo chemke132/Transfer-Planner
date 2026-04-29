@@ -36,5 +36,23 @@ export function useCalGetcSelections() {
     })
   }, [])
 
-  return { selected, toggle }
+  // Bulk-remove ids from the selection set. Used when a major-driven change
+  // (switching majors, picking up additional auto-satisfied areas) makes
+  // previously manual picks redundant.
+  const removeMany = useCallback((ids) => {
+    if (!ids || !ids.length) return
+    setSelected((prev) => {
+      let changed = false
+      const next = new Set(prev)
+      for (const id of ids) {
+        if (next.has(id)) {
+          next.delete(id)
+          changed = true
+        }
+      }
+      return changed ? next : prev
+    })
+  }, [])
+
+  return { selected, toggle, removeMany }
 }

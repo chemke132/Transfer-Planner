@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MajorList from '../components/Requirements/MajorList.jsx'
 import CalGetcSelector from '../components/Requirements/CalGetcSelector.jsx'
 import CoursePath from '../components/Requirements/CoursePath.jsx'
+import StepNav from '../components/StepNav.jsx'
 import { useSetup } from '../hooks/useSetup.js'
 import { useAppData } from '../hooks/useAppData.jsx'
 
@@ -12,6 +14,7 @@ const ALL_TABS = [
 ]
 
 export default function RequirementsPage() {
+  const navigate = useNavigate()
   const { setup } = useSetup()
   const { TARGET_MAJORS } = useAppData()
   // Cal-GETC is hidden only when EVERY selected target opts out (e.g. all
@@ -29,6 +32,25 @@ export default function RequirementsPage() {
   const tabs = calGetcRequired ? ALL_TABS : ALL_TABS.filter((t) => t.id !== 'calgetc')
   const [tab, setTab] = useState('major')
   const safeTab = tabs.some((t) => t.id === tab) ? tab : 'major'
+
+  // Step navigation: 4 logical steps once on this page (Setup is its own
+  // page). Going "back" from Major leaves the page entirely → /. Going
+  // "forward" from the last visible tab proceeds to /planner.
+  const tabIdx = tabs.findIndex((t) => t.id === safeTab)
+  const isFirstTab = tabIdx === 0
+  const isLastTab = tabIdx === tabs.length - 1
+
+  function goPrev() {
+    if (isFirstTab) navigate('/')
+    else setTab(tabs[tabIdx - 1].id)
+  }
+  function goNext() {
+    if (isLastTab) navigate('/planner')
+    else setTab(tabs[tabIdx + 1].id)
+  }
+
+  const prevLabel = isFirstTab ? 'Setup' : tabs[tabIdx - 1].label
+  const nextLabel = isLastTab ? 'Planner' : tabs[tabIdx + 1].label
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -64,6 +86,15 @@ export default function RequirementsPage() {
       {safeTab === 'major' && <MajorList />}
       {safeTab === 'calgetc' && calGetcRequired && <CalGetcSelector />}
       {safeTab === 'path' && <CoursePath />}
+
+      <StepNav
+        canPrev
+        canNext
+        onPrev={goPrev}
+        onNext={goNext}
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
+      />
     </div>
   )
 }
