@@ -177,16 +177,27 @@ def parse_course(html: str, slug: str) -> dict[str, Any] | None:
 
         own_prefix = prefix.lower()
         candidates = [extract_prereq_courses(b) for b in or_branches]
-        # Prefer the first branch whose prereq slugs start with the course's
-        # own department prefix (same-dept ladder).
-        same_dept = next(
-            (slugs for slugs in candidates if slugs and any(s.startswith(own_prefix) for s in slugs)),
-            None,
-        )
+        # Pick the cheapest valid branch:
+        #   1. Prefer same-dept branches (within own department's ladder)
+        #   2. Among those, fewest courses wins (PHYS-129 over PHYS-110+111)
+        #   3. Tiebreak: highest course-number sum (favor more advanced course
+        #      that already covers the lower one's content)
+        same_dept = [s for s in candidates if s and any(x.startswith(own_prefix) for x in s)]
+        def _branch_score(slugs: list[str]) -> tuple[int, int]:
+            # Lower (count, -numeric_sum) is better. Numeric sum extracts
+            # trailing digits from each slug and sums them.
+            num_sum = 0
+            for s in slugs:
+                m = re.search(r"(\d+)", s)
+                if m:
+                    num_sum += int(m.group(1))
+            return (len(slugs), -num_sum)
         if same_dept:
-            prereq_slugs = same_dept
+            same_dept.sort(key=_branch_score)
+            prereq_slugs = same_dept[0]
         else:
-            # Fall back to the LAST branch that has any course refs.
+            # Fall back to the LAST non-empty branch (often the calc-based /
+            # university track for cross-discipline STEM).
             for slugs in reversed(candidates):
                 if slugs:
                     prereq_slugs = slugs
