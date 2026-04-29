@@ -56,7 +56,15 @@ export default function App() {
             Articulation and prerequisite data is auto-scraped; alternative
             OR-paths, advisories, and some humanities majors may be missing
             or simplified. Do not rely on this tool as your sole source of
-            truth for course registration.
+            truth for course registration.{' '}
+            <span className="font-semibold">
+              Found a bug, wrong prereq, or have an idea? Please let me know
+              via the{' '}
+              <span className="inline-block bg-slate-900 text-white px-1.5 py-0.5 rounded text-[10px] align-middle">
+                💬 Feedback
+              </span>{' '}
+              button in the bottom-right — it really helps!
+            </span>
           </span>
         </div>
       </div>
