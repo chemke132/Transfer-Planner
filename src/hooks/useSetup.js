@@ -6,7 +6,20 @@ const KEY = 'tp:setup'
 // We migrate the legacy shape on read.
 const DEFAULT = {
   cc_id: 'dvc',
-  targets: [{ school_id: 'ucb', major_id: 'ucb_cs' }],
+  targets: [{ school_id: 'ucb', major_id: 'ucb_computer_science' }],
+}
+
+// Some early seed rows (ucb_cs, ucla_cs, ucsd_cs) duplicated scraper rows
+// with the same name. After deduping the DB, we redirect any stored old id
+// to the canonical scraped id so users keep their selection.
+const LEGACY_MAJOR_ALIASES = {
+  ucb_cs: 'ucb_computer_science',
+  ucla_cs: 'ucla_computer_science',
+  ucsd_cs: 'ucsd_cse_computer_science',
+}
+
+function canonicalMajorId(id) {
+  return LEGACY_MAJOR_ALIASES[id] || id
 }
 
 function migrate(parsed) {
@@ -15,7 +28,9 @@ function migrate(parsed) {
     return {
       cc_id: parsed.cc_id || DEFAULT.cc_id,
       targets: parsed.targets.length
-        ? parsed.targets.filter((t) => t && t.school_id && t.major_id)
+        ? parsed.targets
+            .filter((t) => t && t.school_id && t.major_id)
+            .map((t) => ({ ...t, major_id: canonicalMajorId(t.major_id) }))
         : DEFAULT.targets,
     }
   }
@@ -24,7 +39,10 @@ function migrate(parsed) {
     return {
       cc_id: parsed.cc_id || DEFAULT.cc_id,
       targets: [
-        { school_id: parsed.target_school_id, major_id: parsed.target_major_id },
+        {
+          school_id: parsed.target_school_id,
+          major_id: canonicalMajorId(parsed.target_major_id),
+        },
       ],
     }
   }

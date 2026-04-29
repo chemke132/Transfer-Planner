@@ -148,20 +148,40 @@ export default function MajorList() {
                   </span>
                 </h3>
                 <p className="text-xs text-violet-800/80 mb-3">
-                  Pick one section per group — only the chosen series counts toward
-                  this major.
+                  Each group lists alternative course series for one
+                  requirement. Pick per the rule shown above each group —
+                  only your selections count toward this major.
                 </p>
                 <ul className="space-y-3">
                   {pt.orGroups.map((group, gIdx) => {
                     const minCount = group.min_count || 1
                     const isMulti = group.allow_multi || minCount >= 2
+                    // Pre-compute which sections actually have a DVC course
+                    // articulated so the default auto-pick prefers them.
+                    const ccBySectionIdx = new Map()
+                    for (const sec of group.sections || []) {
+                      const ids = getSectionCourseIds(pt.path, sec, choices)
+                      ccBySectionIdx.set(sec.section_index, ids.size)
+                    }
                     let chosenSet
                     const stored = trackChoices[group.id]
                     if (Array.isArray(stored)) chosenSet = new Set(stored)
                     else if (typeof stored === 'number') chosenSet = new Set([stored])
                     else {
+                      // Default: first `minCount` sections with DVC courses.
+                      // Fall back to plain index order if not enough have DVC.
                       chosenSet = new Set()
-                      for (let i = 0; i < minCount; i++) chosenSet.add(i)
+                      const sortedIdx = (group.sections || [])
+                        .map((s) => s.section_index)
+                        .sort((a, b) => {
+                          const ha = (ccBySectionIdx.get(a) || 0) > 0 ? 0 : 1
+                          const hb = (ccBySectionIdx.get(b) || 0) > 0 ? 0 : 1
+                          if (ha !== hb) return ha - hb
+                          return a - b
+                        })
+                      for (const idx of sortedIdx.slice(0, minCount)) {
+                        chosenSet.add(idx)
+                      }
                     }
                     const headerLabel = (() => {
                       if (!isMulti) return 'pick 1 section'
@@ -226,10 +246,21 @@ export default function MajorList() {
                             const codes = sec.receiving_codes || []
                             const isBest =
                               otherIds && overlap > 0 && overlap === maxOverlap
+                            // No DVC equivalent → can't satisfy via DVC; mark
+                            // unselectable so students don't pick a section
+                            // that would contribute zero courses to their plan.
+                            const noDvc = ccCodes.length === 0
                             return (
                               <button
                                 key={sec.id}
+                                disabled={noDvc}
+                                title={
+                                  noDvc
+                                    ? 'No DVC equivalent — must take this course at the UC after transfer.'
+                                    : undefined
+                                }
                                 onClick={() => {
+                                  if (noDvc) return
                                   if (isMulti) {
                                     toggleTrackChoice(
                                       group.id,
@@ -243,7 +274,9 @@ export default function MajorList() {
                                   }
                                 }}
                                 className={`px-3 py-2 rounded-md border text-xs text-left max-w-xs ${
-                                  active
+                                  noDvc
+                                    ? 'bg-slate-50 text-slate-400 border-slate-200 cursor-not-allowed opacity-60'
+                                    : active
                                     ? 'bg-slate-900 text-white border-slate-900'
                                     : isBest
                                     ? 'bg-emerald-50 text-slate-700 border-emerald-400 hover:border-emerald-600'
