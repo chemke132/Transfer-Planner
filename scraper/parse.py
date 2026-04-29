@@ -76,69 +76,158 @@ def _walk_section_codes(section: dict[str, Any]) -> list[str]:
     return deduped
 
 
-def _extract_or_groups(template_assets_raw: Any, path_id: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Extract top-level RequirementGroups whose conjunction is 'Or'.
+def _row_codes(row: dict[str, Any]) -> list[str]:
+    """Walk one row's cells and return its receiving course codes
+    (a row may contain a single Course cell or a Series of courses)."""
+    out: list[str] = []
+    for cell in row.get("cells") or []:
+        t = cell.get("type")
+        if t == "Course":
+            c = cell.get("course") or {}
+            prefix = (c.get("prefix") or "").strip()
+            num = (c.get("courseNumber") or "").strip()
+            if prefix and num:
+                out.append(f"{prefix} {num}")
+        elif t == "Series":
+            for c in cell.get("courses") or []:
+                prefix = (c.get("prefix") or "").strip()
+                num = (c.get("courseNumber") or "").strip()
+                if prefix and num:
+                    out.append(f"{prefix} {num}")
+    return out
 
-    Returns (groups, sections) ready for upsert into path_or_groups and
-    path_or_sections. Groups with no Or conjunction (i.e. plain "complete
-    all") are skipped — those don't represent a user choice point.
+
+def _extract_or_groups(
+    template_assets_raw: Any, path_id: str
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    """Extract RequirementGroups that represent a user choice point.
+
+    Two structural forms in assist.org agreements both encode "pick one":
+
+      1. instruction.conjunction = "Or", with multiple top-level sections —
+         each section is one alternative track (e.g. UCSD Pharma Chem
+         "MATH 10-series OR MATH 20-series").
+      2. instruction.type = "NFromArea", amount = 1, amountUnitType = "Course",
+         with a single section whose ROWS are the alternatives (e.g. UC Davis
+         CompE Composition: pick one of ENL 003 / COM 001-003 / NAS 005 /
+         UWP 001). Each row becomes a synthetic section.
+
+    Anything else (Following = take all, or NFromArea with amountUnitType ==
+    "QuarterUnit" which is a "pick N units of electives" advisor case) is
+    NOT a user choice point. For QuarterUnit electives we still want to skip
+    those courses from the default required set, so we return their receiving
+    codes as `elective_codes` — articulations whose receiving_code matches
+    one of those are dropped from path_requirements until the user opts in.
     """
     if isinstance(template_assets_raw, str):
         try:
             ta = json.loads(template_assets_raw)
         except Exception:
-            return [], []
+            return [], [], []
     elif isinstance(template_assets_raw, list):
         ta = template_assets_raw
     else:
-        return [], []
+        return [], [], []
 
     groups: list[dict[str, Any]] = []
     sections: list[dict[str, Any]] = []
+    elective_codes: list[str] = []
+
     for asset in ta:
         if not isinstance(asset, dict):
             continue
         if asset.get("type") != "RequirementGroup":
             continue
         instr = asset.get("instruction") or {}
-        conjunction = (instr.get("conjunction") or "").strip()
-        if conjunction.lower() != "or":
-            continue
+        instr_type = (instr.get("type") or "").strip()
+        conjunction = (instr.get("conjunction") or "").strip().lower()
+        amount = instr.get("amount")
+        unit_type = (instr.get("amountUnitType") or "").strip()
         secs = asset.get("sections") or []
-        if len(secs) < 2:
-            # A single-section "Or" is meaningless — skip.
-            continue
         position = asset.get("position") or 0
         group_id = f"{path_id}:grp:{position}"
-        section_payloads: list[dict[str, Any]] = []
-        any_codes = False
-        for sec_idx, sec in enumerate(secs):
-            codes = _walk_section_codes(sec)
-            if not codes:
-                continue
-            any_codes = True
-            section_payloads.append(
-                {
-                    "id": f"{group_id}:s{sec_idx}",
-                    "group_id": group_id,
-                    "section_index": sec_idx,
-                    "receiving_codes": codes,
-                }
-            )
-        if not any_codes:
-            continue
-        groups.append(
-            {
-                "id": group_id,
-                "path_id": path_id,
-                "position": position,
-                "conjunction": "Or",
-                "selection_type": instr.get("selectionType"),
-            }
-        )
-        sections.extend(section_payloads)
 
-    return groups, sections
+        # Form 1: conjunction=Or with multiple sections.
+        if conjunction == "or" and len(secs) >= 2:
+            section_payloads: list[dict[str, Any]] = []
+            for sec_idx, sec in enumerate(secs):
+                codes = _walk_section_codes(sec)
+                if not codes:
+                    continue
+                section_payloads.append(
+                    {
+                        "id": f"{group_id}:s{sec_idx}",
+                        "group_id": group_id,
+                        "section_index": sec_idx,
+                        "receiving_codes": codes,
+                    }
+                )
+            if section_payloads:
+                groups.append(
+                    {
+                        "id": group_id,
+                        "path_id": path_id,
+                        "position": position,
+                        "conjunction": "Or",
+                        "selection_type": instr.get("selectionType"),
+                    }
+                )
+                sections.extend(section_payloads)
+            continue
+
+        # Form 2: NFromArea with amount=1 and unit=Course → rows are the alternatives.
+        if (
+            instr_type == "NFromArea"
+            and (amount or 0) == 1
+            and unit_type.lower() == "course"
+            and len(secs) >= 1
+        ):
+            sec = secs[0]
+            row_payloads: list[dict[str, Any]] = []
+            for row_idx, row in enumerate(sec.get("rows") or []):
+                codes = _row_codes(row)
+                if not codes:
+                    continue
+                row_payloads.append(
+                    {
+                        "id": f"{group_id}:s{row_idx}",
+                        "group_id": group_id,
+                        "section_index": row_idx,
+                        "receiving_codes": codes,
+                    }
+                )
+            if len(row_payloads) >= 2:
+                groups.append(
+                    {
+                        "id": group_id,
+                        "path_id": path_id,
+                        "position": position,
+                        "conjunction": "Or",
+                        "selection_type": "NFromArea-1Course",
+                    }
+                )
+                sections.extend(row_payloads)
+            continue
+
+        # Form 3: NFromArea with QuarterUnit/SemesterUnit — elective bucket.
+        # Treat all listed courses as electives so they don't bloat the
+        # default required list. The user can elect them later via the UI.
+        if instr_type == "NFromArea" and unit_type.lower().endswith("unit"):
+            for sec in secs:
+                elective_codes.extend(_walk_section_codes(sec))
+            continue
+
+        # Anything else (Following / etc.) → all-required: do nothing here.
+
+    # Dedupe elective codes preserving order.
+    seen: set[str] = set()
+    deduped_electives: list[str] = []
+    for c in elective_codes:
+        if c not in seen:
+            seen.add(c)
+            deduped_electives.append(c)
+
+    return groups, sections, deduped_electives
 
 
 def _receiving_code(course: dict[str, Any]) -> str:
@@ -224,6 +313,7 @@ def parse_agreement(
                 "receiving_units": course.get("maxUnits") or course.get("minUnits"),
                 "sending_logic": sa,
                 "has_articulation": has_articulation,
+                "is_elective": False,
             }
         )
 
@@ -273,9 +363,18 @@ def parse_agreement(
         for cid in default_ids:
             requirements.add((path_id, cid))
 
-    or_groups, or_sections = _extract_or_groups(
+    or_groups, or_sections, elective_recv_codes = _extract_or_groups(
         result.get("templateAssets"), path_id
     )
+
+    # Mark articulations whose receiving_code is in an elective bucket
+    # (NFromArea with amountUnitType=QuarterUnit/SemesterUnit). The frontend
+    # treats `is_elective=True` arts as opt-in only — they don't show up in
+    # the "required courses" union by default.
+    elective_set = set(elective_recv_codes)
+    for a in articulations:
+        if a.get("receiving_code") in elective_set:
+            a["is_elective"] = True
 
     return {
         "articulations": articulations,

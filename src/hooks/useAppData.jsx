@@ -58,6 +58,9 @@ function buildHelpers(data) {
     const ids = new Set()
     for (const art of arts) {
       if (!art.has_articulation) continue
+      // is_elective = NFromArea QuarterUnit advisor-pick bucket. Drop from
+      // the default required union; advanced UI can opt these in later.
+      if (art.is_elective) continue
       const opts = art.options || []
       if (!opts.length) continue
       // Track filter: if this art's receiving_code lives in some OR-group,

@@ -318,6 +318,10 @@ def _derive_requirements(
     for art in articulations:
         if not art.get("has_articulation"):
             continue
+        # Skip elective bucket articulations (NFromArea QuarterUnit) so the
+        # default required-courses union doesn't drag in advisor-electives.
+        if art.get("is_elective"):
+            continue
         items = (art.get("sending_logic") or {}).get("items") or []
         if not items:
             continue
