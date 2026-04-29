@@ -154,7 +154,7 @@ export default function MajorList() {
                 <ul className="space-y-3">
                   {pt.orGroups.map((group, gIdx) => {
                     const minCount = group.min_count || 1
-                    const isMulti = minCount >= 2
+                    const isMulti = group.allow_multi || minCount >= 2
                     let chosenSet
                     const stored = trackChoices[group.id]
                     if (Array.isArray(stored)) chosenSet = new Set(stored)
@@ -163,6 +163,18 @@ export default function MajorList() {
                       chosenSet = new Set()
                       for (let i = 0; i < minCount; i++) chosenSet.add(i)
                     }
+                    const headerLabel = (() => {
+                      if (!isMulti) return 'pick 1 section'
+                      const isAtLeast =
+                        group.selection_type &&
+                        group.selection_type.includes('AtLeast')
+                      if (isAtLeast) {
+                        return minCount === 1
+                          ? 'pick at least 1 section'
+                          : `pick at least ${minCount} sections`
+                      }
+                      return `pick ${minCount} section${minCount > 1 ? 's' : ''}`
+                    })()
                     // For multi-target setups, compute how many CC courses
                     // each section shares with the user's OTHER targets so
                     // we can highlight the overlap-maximizing pick.
@@ -200,9 +212,7 @@ export default function MajorList() {
                         <div className="font-medium text-slate-800 mb-2">
                           Group {gIdx + 1}
                           <span className="text-[10px] text-slate-500 font-normal ml-2">
-                            {isMulti
-                              ? `pick ${minCount} sections`
-                              : 'pick 1 section'}
+                            {headerLabel}
                           </span>
                           {otherIds && maxOverlap > 0 && (
                             <span className="text-[10px] text-slate-500 font-normal ml-2">

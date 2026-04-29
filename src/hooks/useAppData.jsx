@@ -44,7 +44,8 @@ function buildHelpers(data) {
       // Codes the user has currently chosen across all groups.
       const chosenCodes = new Set()
       for (const g of groups) {
-        // Default selection: first `min_count` section indexes.
+        // Default selection: first `min_count` section indexes (so the user
+        // sees a fully-satisfied requirement until they pick something).
         const minCount = g.min_count || 1
         const stored = trackChoices[g.id]
         let chosenIndexes
@@ -56,6 +57,9 @@ function buildHelpers(data) {
           chosenIndexes = new Set()
           for (let i = 0; i < minCount; i++) chosenIndexes.add(i)
         }
+        // Note: allow_multi changes UI semantics (radio vs checkbox) but
+        // the union math is the same regardless — chosenIndexes is treated
+        // as a set of "active" sections and we union their codes below.
         for (const sec of g.sections || []) {
           for (const code of sec.receiving_codes || []) {
             inAnyGroup.add(code)

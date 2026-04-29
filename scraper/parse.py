@@ -171,6 +171,7 @@ def _extract_or_groups(
                         "conjunction": "Or",
                         "selection_type": instr.get("selectionType"),
                         "min_count": 1,
+                        "allow_multi": False,
                     }
                 )
                 sections.extend(section_payloads)
@@ -213,14 +214,20 @@ def _extract_or_groups(
             # Need at least min_count+1 rows for there to be an actual choice;
             # otherwise the group is just "take all of these" (no choice point).
             if len(row_payloads) > min_count:
+                # allow_multi: "at least N" lets the user pick more than the
+                # floor; "exactly N" (default with N>=2) is also rendered as
+                # multi-select so the user can pick the right N. Only
+                # "exactly 1" is a true radio (single-pick).
+                allow_multi = amt_qual == "atleast" or min_count >= 2
                 groups.append(
                     {
                         "id": group_id,
                         "path_id": path_id,
                         "position": position,
                         "conjunction": "Or",
-                        "selection_type": f"{instr_type}-{int(amount)}{unit_type}",
+                        "selection_type": f"{instr_type}-{int(amount)}{unit_type}{'-AtLeast' if amt_qual == 'atleast' else ''}",
                         "min_count": min_count,
+                        "allow_multi": allow_multi,
                     }
                 )
                 sections.extend(row_payloads)
