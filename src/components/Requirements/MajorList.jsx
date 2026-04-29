@@ -9,6 +9,8 @@ export default function MajorList() {
   const {
     findTransferPath,
     getRequirementMap,
+    getSectionCourseIds,
+    getOtherTargetsRequiredIds,
     PREREQUISITES,
     TARGET_MAJORS,
     SCHOOLS,
@@ -142,15 +144,50 @@ export default function MajorList() {
                 <ul className="space-y-3">
                   {pt.orGroups.map((group, gIdx) => {
                     const chosenIdx = trackChoices[group.id] ?? 0
+                    // For multi-target setups, compute how many CC courses
+                    // each section shares with the user's OTHER targets so
+                    // we can highlight the overlap-maximizing pick.
+                    const otherIds =
+                      setup.targets.length > 1
+                        ? getOtherTargetsRequiredIds(
+                            setup.cc_id,
+                            setup.targets,
+                            idx,
+                            choices,
+                            trackChoices,
+                          )
+                        : null
+                    const sectionsRanked = group.sections
+                      .map((sec) => {
+                        const cids = getSectionCourseIds(pt.path, sec, choices)
+                        let overlap = 0
+                        if (otherIds) {
+                          for (const id of cids) if (otherIds.has(id)) overlap++
+                        }
+                        return { sec, overlap, total: cids.size }
+                      })
+                      .sort((a, b) => {
+                        // Higher overlap first; ties broken by lower section index.
+                        if (b.overlap !== a.overlap) return b.overlap - a.overlap
+                        return a.sec.section_index - b.sec.section_index
+                      })
+                    const maxOverlap = sectionsRanked[0]?.overlap ?? 0
                     return (
                       <li key={group.id} className="text-sm">
                         <div className="font-medium text-slate-800 mb-2">
                           Group {gIdx + 1}
+                          {otherIds && maxOverlap > 0 && (
+                            <span className="text-[10px] text-slate-500 font-normal ml-2">
+                              · sections sorted by overlap with your other targets
+                            </span>
+                          )}
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {group.sections.map((sec) => {
+                          {sectionsRanked.map(({ sec, overlap }) => {
                             const active = chosenIdx === sec.section_index
                             const codes = sec.receiving_codes || []
+                            const isBest =
+                              otherIds && overlap > 0 && overlap === maxOverlap
                             return (
                               <button
                                 key={sec.id}
@@ -160,6 +197,8 @@ export default function MajorList() {
                                 className={`px-3 py-2 rounded-md border text-xs text-left max-w-xs ${
                                   active
                                     ? 'bg-slate-900 text-white border-slate-900'
+                                    : isBest
+                                    ? 'bg-emerald-50 text-slate-700 border-emerald-400 hover:border-emerald-600'
                                     : 'bg-white text-slate-700 border-slate-300 hover:border-slate-500'
                                 }`}
                               >
@@ -171,15 +210,33 @@ export default function MajorList() {
                                   {codes.slice(0, 4).join(' · ')}
                                   {codes.length > 4 && ` …+${codes.length - 4}`}
                                 </div>
-                                {sec.section_index === 0 && (
-                                  <div
-                                    className={`text-[10px] mt-0.5 ${
-                                      active ? 'text-slate-300' : 'text-slate-400'
-                                    }`}
-                                  >
-                                    default
-                                  </div>
-                                )}
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  {sec.section_index === 0 && (
+                                    <span
+                                      className={`text-[10px] ${
+                                        active ? 'text-slate-300' : 'text-slate-400'
+                                      }`}
+                                    >
+                                      default
+                                    </span>
+                                  )}
+                                  {otherIds && overlap > 0 && (
+                                    <span
+                                      className={`text-[10px] font-semibold ${
+                                        active
+                                          ? 'text-emerald-300'
+                                          : 'text-emerald-700'
+                                      }`}
+                                    >
+                                      +{overlap} shared
+                                    </span>
+                                  )}
+                                  {isBest && !active && (
+                                    <span className="text-[10px] text-emerald-700 uppercase tracking-wide">
+                                      ★ best overlap
+                                    </span>
+                                  )}
+                                </div>
                               </button>
                             )
                           })}

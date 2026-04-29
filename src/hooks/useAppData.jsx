@@ -167,6 +167,50 @@ function buildHelpers(data) {
     for (const [id, e] of reqMap) if (e.isDirect) out.add(id)
     return out
   }
+
+  // For an OR-group section, return the set of CC course ids that THAT
+  // section would contribute if chosen — by unioning each receiving_code's
+  // articulation's currently-chosen option course_ids.
+  function getSectionCourseIds(path, section, orChoices = {}) {
+    const ids = new Set()
+    if (!path || !section) return ids
+    const arts = path.articulations || []
+    const codes = new Set(section.receiving_codes || [])
+    for (const art of arts) {
+      if (!art.has_articulation) continue
+      if (!codes.has(art.receiving_code)) continue
+      const opts = art.options || []
+      if (!opts.length) continue
+      const chosenIdx = orChoices[art.id] ?? 0
+      const chosen = opts.find((o) => o.option_index === chosenIdx) || opts[0]
+      for (const cid of chosen.course_ids || []) ids.add(cid)
+    }
+    return ids
+  }
+
+  // For a given target (by index), compute the set of CC course ids already
+  // required by all OTHER targets — including their transitive prereqs.
+  // Used to highlight which OR-group section overlaps most with the rest of
+  // the user's plan.
+  function getOtherTargetsRequiredIds(
+    cc_id,
+    targets,
+    excludeIdx,
+    orChoices,
+    trackChoices,
+  ) {
+    const out = new Set()
+    if (!targets) return out
+    targets.forEach((t, i) => {
+      if (i === excludeIdx) return
+      const path = findTransferPath({ cc_id, target_major_id: t.major_id })
+      if (!path) return
+      const directIds = getRequiredCourseIds(path, orChoices, trackChoices)
+      const allIds = expandPrereqs(directIds)
+      for (const id of allIds) out.add(id)
+    })
+    return out
+  }
   function getCalGetcCourses(cc_id) {
     return data.COURSES.filter((c) => c.school_id === cc_id && c.cal_getc_area)
   }
@@ -195,6 +239,8 @@ function buildHelpers(data) {
     getRequirementMap,
     getMajorCoursesForTargets,
     getDirectRequiredIdsForTargets,
+    getSectionCourseIds,
+    getOtherTargetsRequiredIds,
     getCalGetcCourses,
     filterPrerequisites,
     targetMajorsForSchool,
