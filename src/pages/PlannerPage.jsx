@@ -434,14 +434,38 @@ export default function PlannerPage() {
   }
 
   // Tap-to-add path used by mobile (where dnd would be hopeless on a phone
-  // screen). Pull the course out of the pool and append it to the chosen
-  // semester. Mirrors the "from pool → semester" branch of handleDragEnd.
+  // screen). The course can be sitting in the pool OR already placed in
+  // another semester — in either case, lift it out of its current home
+  // and drop it into the chosen semester. Without the cross-semester move,
+  // there's no way to rearrange a plan on mobile after auto-plan empties
+  // the pool.
   function handleAddToSemester(courseId, semesterId) {
-    const course = pool.find((c) => c.id === courseId)
-    if (!course) return
-    setPool((prev) => prev.filter((c) => c.id !== courseId))
+    let course = pool.find((c) => c.id === courseId)
+    if (course) {
+      setPool((prev) => prev.filter((c) => c.id !== courseId))
+    } else {
+      for (const s of semesters) {
+        const match = s.courses.find((c) => c.id === courseId)
+        if (match) {
+          course = match
+          break
+        }
+      }
+      if (!course) return
+      setSemesters((prev) =>
+        prev.map((s) =>
+          s.id === semesterId
+            ? s
+            : { ...s, courses: s.courses.filter((c) => c.id !== courseId) },
+        ),
+      )
+    }
     setSemesters((prev) =>
-      prev.map((s) => (s.id === semesterId ? { ...s, courses: [...s.courses, course] } : s)),
+      prev.map((s) =>
+        s.id === semesterId && !s.courses.some((c) => c.id === courseId)
+          ? { ...s, courses: [...s.courses, course] }
+          : s,
+      ),
     )
     setPinnedIds((prev) => new Set(prev).add(courseId))
   }
@@ -499,6 +523,12 @@ export default function PlannerPage() {
   }
 
   const placedIds = new Set(allPlaced.map((c) => c.id))
+  // course id → semester name for the picker hint ("currently in 27SP").
+  const placedSemesterByCourse = useMemo(() => {
+    const map = new Map()
+    for (const s of semesters) for (const c of s.courses) map.set(c.id, s.name)
+    return map
+  }, [semesters])
   const selectedCalGetcCourses = useMemo(
     () => calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
     [calGetcCourses, selectedCalGetc],
@@ -592,21 +622,32 @@ export default function PlannerPage() {
                 Academic year {group.label}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {group.semesters.map((s) => (
-                  <SemesterColumn
-                    key={s.id}
-                    semester={s}
-                    unitCap={unitCap}
-                    violations={violations.get(s.id) || new Set()}
-                    pinnedIds={pinnedIds}
-                    majorIds={majorIds}
-                    onRemove={handleRemoveFromSemester}
-                    availableMajor={pool.filter((c) => majorIds.has(c.id))}
-                    availableCalGetc={pool.filter((c) => !majorIds.has(c.id))}
-                    onAdd={handleAddToSemester}
-                    showCalGetc={requiresCalGetc}
-                  />
-                ))}
+                {group.semesters.map((s) => {
+                  // Available = every course of this section's type that
+                  // isn't already in THIS semester and isn't marked taken.
+                  // Includes courses placed in other semesters so the
+                  // student can move them across; without this, after
+                  // auto-plan empties the pool the picker would have
+                  // nothing to offer.
+                  const here = new Set(s.courses.map((c) => c.id))
+                  const isUsable = (c) => !here.has(c.id) && !taken.has(c.id)
+                  return (
+                    <SemesterColumn
+                      key={s.id}
+                      semester={s}
+                      unitCap={unitCap}
+                      violations={violations.get(s.id) || new Set()}
+                      pinnedIds={pinnedIds}
+                      majorIds={majorIds}
+                      onRemove={handleRemoveFromSemester}
+                      availableMajor={majorCourses.filter(isUsable)}
+                      availableCalGetc={selectedCalGetcCourses.filter(isUsable)}
+                      placedSemesterByCourse={placedSemesterByCourse}
+                      onAdd={handleAddToSemester}
+                      showCalGetc={requiresCalGetc}
+                    />
+                  )
+                })}
               </div>
             </div>
           ))}
