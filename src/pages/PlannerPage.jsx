@@ -271,8 +271,14 @@ export default function PlannerPage() {
   )
 
   function handleAutoPlan() {
-    const selectedCalGetcCourses = calGetcCourses.filter((c) => selectedCalGetc.has(c.id))
-    if (!majorCourses.length && !selectedCalGetcCourses.length) return
+    // "Already taken" courses are invisible to the planner — they shouldn't
+    // get scheduled and they shouldn't pollute the prereq graph (their
+    // prereqs are already satisfied at the CC).
+    const planMajor = majorCourses.filter((c) => !taken.has(c.id))
+    const selectedCalGetcCourses = calGetcCourses.filter(
+      (c) => selectedCalGetc.has(c.id) && !taken.has(c.id),
+    )
+    if (!planMajor.length && !selectedCalGetcCourses.length) return
 
     // Pinned courses stay where they are; everything else gets (re)placed.
     const pinnedBySem = new Map()
@@ -301,8 +307,8 @@ export default function PlannerPage() {
     // one of each major subject (COMSC/MATH/PHYS) before Cal-GETC fills in.
     // autoPlanSemesters already enforces subject uniqueness per semester, so
     // running it on majors alone distributes them evenly in topo order.
-    const majorsToPlan = majorCourses.filter((c) => !pinnedIds.has(c.id))
-    const majorPrereqs = filterPrerequisites(majorCourses.map((c) => c.id))
+    const majorsToPlan = planMajor.filter((c) => !pinnedIds.has(c.id))
+    const majorPrereqs = filterPrerequisites(planMajor.map((c) => c.id))
     const majorPlan = majorsToPlan.length
       ? autoPlanSemesters(majorsToPlan, majorPrereqs, baseSlots)
       : baseSlots.map((s) => ({ id: s.id, courses: [], pinnedCourses: s.pinnedCourses }))
@@ -325,7 +331,7 @@ export default function PlannerPage() {
 
     const calGetcToPlan = selectedCalGetcCourses.filter((c) => !pinnedIds.has(c.id))
     const allPrereqs = filterPrerequisites([
-      ...majorCourses.map((c) => c.id),
+      ...planMajor.map((c) => c.id),
       ...selectedCalGetcCourses.map((c) => c.id),
     ])
     const finalPlan = calGetcToPlan.length
