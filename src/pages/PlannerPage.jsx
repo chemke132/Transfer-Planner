@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { DndContext, DragOverlay, PointerSensor, useDraggable, useDroppable, useSensor, useSensors, pointerWithin } from '@dnd-kit/core'
+import { DndContext, DragOverlay, MouseSensor, TouchSensor, useDraggable, useDroppable, useSensor, useSensors, pointerWithin } from '@dnd-kit/core'
 import SemesterColumn from '../components/Planner/SemesterColumn.jsx'
 import AutoPlanButton from '../components/Planner/AutoPlanButton.jsx'
 import StepNav from '../components/StepNav.jsx'
 import { autoPlanSemesters } from '../lib/topologicalSort.js'
 import { defaultTerms, extendTerms } from '../lib/terms.js'
 import { useCalGetcSelections } from '../hooks/useCalGetcSelections.js'
+import { useTakenCourses } from '../hooks/useTakenCourses.js'
 import { useSetup } from '../hooks/useSetup.js'
 import { useAppData } from '../hooks/useAppData.jsx'
 import { useOrChoices } from '../hooks/useOrChoices.js'
@@ -45,6 +46,7 @@ export default function PlannerPage() {
   const navigate = useNavigate()
   const { setup } = useSetup()
   const { selected: rawSelectedCalGetc } = useCalGetcSelections()
+  const { taken, toggle: toggleTaken } = useTakenCourses()
   const { choices: orChoices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
   const { choices: prereqChoices } = usePrereqChoices()
@@ -130,7 +132,15 @@ export default function PlannerPage() {
     return initial
   })
   const [activeCourse, setActiveCourse] = useState(null)
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }))
+  // Separate mouse / touch sensors: mouse uses a distance threshold so a
+  // click doesn't fire a drag, but touch uses a press-and-hold delay so the
+  // user can still scroll the page without accidentally picking up a card.
+  // Without TouchSensor, every touchmove on a draggable would be a drag —
+  // making vertical scroll on mobile basically impossible.
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
+  )
 
   // When the transfer path OR the OR-branch choices change, reconcile state:
   // - drop placed/pinned courses that are no longer required
@@ -198,6 +208,46 @@ export default function PlannerPage() {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCalGetc])
+
+  // When the student marks a course "already taken", strip it from
+  // semesters, the pool, and the pinned set. Taken courses are excluded
+  // from the planner entirely — there's nothing left to schedule.
+  useEffect(() => {
+    if (taken.size === 0) return
+    setSemesters((prev) =>
+      prev.map((s) => ({ ...s, courses: s.courses.filter((c) => !taken.has(c.id)) })),
+    )
+    setPool((prev) => prev.filter((c) => !taken.has(c.id)))
+    setPinnedIds((prev) => {
+      let changed = false
+      const next = new Set(prev)
+      for (const id of prev) {
+        if (taken.has(id)) {
+          next.delete(id)
+          changed = true
+        }
+      }
+      return changed ? next : prev
+    })
+  }, [taken])
+
+  // When a course is un-marked (no longer taken), make sure it's available
+  // in the pool again so the student can re-place it.
+  useEffect(() => {
+    setPool((prev) => {
+      const have = new Set(prev.map((c) => c.id))
+      const placed = new Set(semesters.flatMap((s) => s.courses.map((c) => c.id)))
+      const desired = [
+        ...majorCourses,
+        ...calGetcCourses.filter((c) => selectedCalGetc.has(c.id)),
+      ]
+      const toAdd = desired.filter(
+        (c) => !taken.has(c.id) && !have.has(c.id) && !placed.has(c.id),
+      )
+      return toAdd.length ? [...prev, ...toAdd] : prev
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [taken])
 
   // Persist planner state on any change.
   useEffect(() => {
@@ -459,25 +509,26 @@ export default function PlannerPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
+      <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
         <h1 className="text-2xl font-bold">Planner</h1>
-        <div className="flex items-center gap-4">
-          <label className="text-sm">
-            Units / semester:
+        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+          <label className="text-sm flex items-center gap-2 whitespace-nowrap">
+            <span className="hidden sm:inline">Units / semester:</span>
+            <span className="sm:hidden">Units:</span>
             <input
               type="range"
               min={6}
               max={21}
               value={unitCap}
               onChange={(e) => setUnitCap(Number(e.target.value))}
-              className="mx-2 align-middle"
+              className="align-middle w-24 sm:w-auto"
             />
             <span className="font-medium">{unitCap}</span>
           </label>
           <AutoPlanButton onClick={handleAutoPlan} />
           <button
             onClick={handleReset}
-            className="text-sm px-3 py-1.5 rounded-md border border-red-200 bg-white text-red-600 hover:bg-red-50"
+            className="text-sm px-3 py-1.5 rounded-md border border-red-200 bg-white text-red-600 hover:bg-red-50 whitespace-nowrap"
             title="Clear all placed courses and reset planner to defaults"
           >
             ↺ Reset
@@ -491,6 +542,8 @@ export default function PlannerPage() {
         placedIds={placedIds}
         directRequiredIds={directRequiredIds}
         showCalGetc={requiresCalGetc}
+        taken={taken}
+        onToggleTaken={toggleTaken}
       />
 
       <DndContext
@@ -645,11 +698,20 @@ function ConfiguredCoursesPanel({
   placedIds,
   directRequiredIds,
   showCalGetc = true,
+  taken,
+  onToggleTaken,
 }) {
   return (
     <section className="mb-4 border rounded-lg bg-white p-3">
-      <div className="text-xs uppercase tracking-wide font-semibold text-slate-500 mb-2">
-        Configured courses
+      <div className="flex items-baseline justify-between gap-2 mb-2 flex-wrap">
+        <div className="text-xs uppercase tracking-wide font-semibold text-slate-500">
+          Configured courses
+        </div>
+        <div className="text-xs text-slate-500">
+          Tap a course you've already taken — it'll turn{' '}
+          <span className="text-emerald-700 font-semibold">green</span> and
+          drop out of the planner below.
+        </div>
       </div>
       <div className={`grid grid-cols-1 ${showCalGetc ? 'md:grid-cols-2' : ''} gap-2`}>
         <ConfiguredRow
@@ -658,6 +720,8 @@ function ConfiguredCoursesPanel({
           courses={majorCourses}
           placedIds={placedIds}
           directRequiredIds={directRequiredIds}
+          taken={taken}
+          onToggleTaken={onToggleTaken}
         />
         {showCalGetc && (
           <ConfiguredRow
@@ -665,6 +729,8 @@ function ConfiguredCoursesPanel({
             tone="emerald"
             courses={calGetcCourses}
             placedIds={placedIds}
+            taken={taken}
+            onToggleTaken={onToggleTaken}
             emptyHint={
               <>
                 None selected — pick in{' '}
@@ -678,7 +744,16 @@ function ConfiguredCoursesPanel({
   )
 }
 
-function ConfiguredRow({ label, tone, courses, placedIds, emptyHint, directRequiredIds }) {
+function ConfiguredRow({
+  label,
+  tone,
+  courses,
+  placedIds,
+  emptyHint,
+  directRequiredIds,
+  taken,
+  onToggleTaken,
+}) {
   const toneClass = tone === 'emerald'
     ? 'border-emerald-200 bg-emerald-50/40'
     : 'border-slate-200 bg-slate-50/50'
@@ -686,17 +761,26 @@ function ConfiguredRow({ label, tone, courses, placedIds, emptyHint, directRequi
   const badgeTone = tone === 'emerald'
     ? 'bg-emerald-100 text-emerald-700'
     : 'bg-slate-200 text-slate-700'
-  const totalUnits = courses.reduce((sum, c) => sum + (c.units || 0), 0)
-  const assignedCount = courses.filter((c) => placedIds?.has(c.id)).length
+  // Taken courses are excluded from totals — they're not in the planner
+  // anymore so unit/assigned counts shouldn't include them either.
+  const visibleCourses = taken ? courses.filter((c) => !taken.has(c.id)) : courses
+  const totalUnits = visibleCourses.reduce((sum, c) => sum + (c.units || 0), 0)
+  const assignedCount = visibleCourses.filter((c) => placedIds?.has(c.id)).length
   const groups = groupBySubject(courses)
+  const takenCount = courses.length - visibleCourses.length
   return (
     <div className={`border rounded-md p-2 ${toneClass}`}>
-      <div className="flex items-center justify-between mb-1.5">
+      <div className="flex items-center justify-between mb-1.5 gap-2 flex-wrap">
         <div className={`text-[10px] uppercase tracking-wide font-semibold ${labelTone}`}>
           {label}
+          {takenCount > 0 && (
+            <span className="ml-1.5 text-emerald-700 normal-case font-normal">
+              · {takenCount} taken
+            </span>
+          )}
         </div>
         <div className={`text-[10px] px-1.5 py-0.5 rounded ${badgeTone}`}>
-          {assignedCount}/{courses.length} assigned · {totalUnits}u
+          {assignedCount}/{visibleCourses.length} assigned · {totalUnits}u
         </div>
       </div>
       {courses.length === 0 ? (
@@ -710,18 +794,35 @@ function ConfiguredRow({ label, tone, courses, placedIds, emptyHint, directRequi
               </div>
               <div className="flex flex-col gap-1">
                 {list.map((c) => {
-                  const assigned = placedIds?.has(c.id)
-                  const isPrereq = directRequiredIds && !directRequiredIds.has(c.id)
+                  const isTaken = taken?.has(c.id)
+                  const assigned = !isTaken && placedIds?.has(c.id)
+                  const isPrereq =
+                    !isTaken && directRequiredIds && !directRequiredIds.has(c.id)
+                  const baseCls = isTaken
+                    ? 'bg-emerald-100 border-emerald-400 text-emerald-900'
+                    : assigned
+                    ? 'bg-blue-50 border-blue-200'
+                    : 'bg-white hover:border-slate-400'
                   return (
-                    <span
+                    <button
                       key={c.id}
-                      className={`text-xs px-2 py-1 rounded border inline-flex flex-col leading-tight ${
-                        assigned ? 'bg-blue-50 border-blue-200' : 'bg-white'
-                      }`}
-                      title={`${c.name} · ${c.units}u${isPrereq ? ' · prereq' : ''}`}
+                      type="button"
+                      onClick={() => onToggleTaken?.(c.id)}
+                      className={`text-xs px-2 py-1 rounded border inline-flex flex-col leading-tight text-left transition cursor-pointer ${baseCls}`}
+                      title={
+                        isTaken
+                          ? `${c.name} · already taken — tap to undo`
+                          : `${c.name} · ${c.units}u${isPrereq ? ' · prereq' : ''} — tap if you've already taken this`
+                      }
                     >
-                      <span>{c.code}</span>
-                      {assigned ? (
+                      <span className={isTaken ? 'line-through' : undefined}>
+                        {c.code}
+                      </span>
+                      {isTaken ? (
+                        <span className="text-[9px] text-emerald-700 uppercase tracking-wide">
+                          ✓ taken
+                        </span>
+                      ) : assigned ? (
                         <span className="text-[9px] text-blue-600 uppercase tracking-wide">
                           assigned
                         </span>
@@ -730,7 +831,7 @@ function ConfiguredRow({ label, tone, courses, placedIds, emptyHint, directRequi
                           prereq
                         </span>
                       ) : null}
-                    </span>
+                    </button>
                   )
                 })}
               </div>

@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSetup } from '../hooks/useSetup.js'
 import { useAppData } from '../hooks/useAppData.jsx'
+
+const ONBOARDING_KEY = 'tp:onboarding_dismissed'
 
 export default function SetupPage() {
   const navigate = useNavigate()
@@ -39,8 +41,77 @@ export default function SetupPage() {
     navigate('/requirements')
   }
 
+  // First-visit welcome banner. Dismissible; persists per-browser via
+  // localStorage so returning users don't see it again. New users get a
+  // 3-step explainer so they know what's coming after this page.
+  const [showIntro, setShowIntro] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    setShowIntro(window.localStorage.getItem(ONBOARDING_KEY) !== '1')
+  }, [])
+  function dismissIntro() {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(ONBOARDING_KEY, '1')
+    }
+    setShowIntro(false)
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
+      {showIntro && (
+        <div className="mb-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <h2 className="font-semibold text-base">
+              👋 Welcome — here's how it works
+            </h2>
+            <button
+              onClick={dismissIntro}
+              aria-label="Dismiss welcome message"
+              className="text-slate-400 hover:text-slate-700 text-lg leading-none shrink-0"
+            >
+              ×
+            </button>
+          </div>
+          <ol className="space-y-2 text-sm text-slate-700">
+            <li className="flex gap-3">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-900 text-white text-xs font-semibold shrink-0">
+                1
+              </span>
+              <div>
+                <span className="font-medium">Setup</span> — pick your
+                community college and the UC majors you're considering.
+              </div>
+            </li>
+            <li className="flex gap-3">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs font-semibold shrink-0">
+                2
+              </span>
+              <div>
+                <span className="font-medium">Requirements</span> — review the
+                courses each target needs, choose between OR-paths, and pick
+                Cal-GETC electives.
+              </div>
+            </li>
+            <li className="flex gap-3">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs font-semibold shrink-0">
+                3
+              </span>
+              <div>
+                <span className="font-medium">Planner</span> — drag courses
+                into semesters (or hit Auto-Plan) to build a transfer
+                schedule that respects prereqs.
+              </div>
+            </li>
+          </ol>
+          <button
+            onClick={dismissIntro}
+            className="mt-4 text-xs text-slate-500 hover:text-slate-800 underline"
+          >
+            Got it, don't show again
+          </button>
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold mb-6">Setup</h1>
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg border">
         <Field label="Current community college">

@@ -5,10 +5,44 @@ import PlannerPage from './pages/PlannerPage.jsx'
 import FeedbackButton from './components/FeedbackButton.jsx'
 import { useAppData } from './hooks/useAppData.jsx'
 
-const navClass = ({ isActive }) =>
-  `px-3 py-2 rounded-md text-sm font-medium ${
-    isActive ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'
-  }`
+// Numbered stepper nav. Each item shows "1 Setup", "2 Requirements", "3 Planner"
+// with a small connector hint between them. The active step gets the dark
+// pill; completed/upcoming steps stay neutral. The number badge is the main
+// visual cue that this is a sequential 3-step flow.
+function StepNavLink({ to, end, num, label }) {
+  return (
+    <NavLink to={to} end={end} className="block">
+      {({ isActive }) => (
+        <span
+          className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium ${
+            isActive
+              ? 'bg-slate-900 text-white'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          <span
+            className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-semibold ${
+              isActive
+                ? 'bg-white text-slate-900'
+                : 'bg-slate-200 text-slate-600'
+            }`}
+          >
+            {num}
+          </span>
+          <span>{label}</span>
+        </span>
+      )}
+    </NavLink>
+  )
+}
+
+function StepConnector() {
+  return (
+    <span aria-hidden className="text-slate-300 select-none text-xs sm:text-sm">
+      →
+    </span>
+  )
+}
 
 export default function App() {
   const { loading, error, source, fallbackReason } = useAppData()
@@ -16,11 +50,15 @@ export default function App() {
   return (
     <div className="min-h-full flex flex-col bg-slate-50 text-slate-900">
       <header className="border-b bg-white">
-        <nav className="max-w-6xl mx-auto flex items-center gap-2 px-4 py-3">
-          <div className="font-semibold mr-4">Transfer Planner</div>
-          <NavLink to="/" end className={navClass}>Setup</NavLink>
-          <NavLink to="/requirements" className={navClass}>Requirements</NavLink>
-          <NavLink to="/planner" className={navClass}>Planner</NavLink>
+        <nav className="max-w-6xl mx-auto flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-3">
+          <div className="hidden sm:block font-semibold mr-4">
+            Transfer Planner
+          </div>
+          <StepNavLink to="/" end num={1} label="Setup" />
+          <StepConnector />
+          <StepNavLink to="/requirements" num={2} label="Requirements" />
+          <StepConnector />
+          <StepNavLink to="/planner" num={3} label="Planner" />
           {!loading && source === 'seed' && (
             <span
               className="ml-auto text-xs text-amber-700 bg-amber-100 px-2 py-0.5 rounded"
