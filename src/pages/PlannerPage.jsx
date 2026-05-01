@@ -46,7 +46,7 @@ export default function PlannerPage() {
   const navigate = useNavigate()
   const { setup } = useSetup()
   const { selected: rawSelectedCalGetc } = useCalGetcSelections()
-  const { taken, toggle: toggleTaken } = useTakenCourses()
+  const { taken, toggle: toggleTaken, clear: clearTaken } = useTakenCourses()
   const { choices: orChoices } = useOrChoices()
   const { choices: trackChoices } = useTrackChoices()
   const { choices: prereqChoices } = usePrereqChoices()
@@ -510,7 +510,7 @@ export default function PlannerPage() {
   function handleReset() {
     if (typeof window !== 'undefined') {
       const ok = window.confirm(
-        'Reset planner? All placed courses, pinned courses, and unit cap will be cleared.',
+        'Reset planner? All placed courses, pinned courses, "already taken" marks, and unit cap will be cleared.',
       )
       if (!ok) return
       window.localStorage.removeItem(STORAGE_KEY)
@@ -519,6 +519,10 @@ export default function PlannerPage() {
     setUnitCap(15)
     setSemesters(makeEmptySemesters(freshTerms))
     setPinnedIds(new Set())
+    // Clear "already taken" too — otherwise reset partially works (the
+    // semesters empty out but the taken courses stay hidden, so tapping
+    // Reset looks broken).
+    clearTaken()
     setPool(buildInitialPool(majorCourses, calGetcCourses, selectedCalGetc))
   }
 
