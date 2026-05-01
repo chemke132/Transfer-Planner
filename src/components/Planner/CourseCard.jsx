@@ -1,8 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
-import { useState } from 'react'
 
 export default function CourseCard({ course, violated, pinned, onRemove }) {
-  const [done, setDone] = useState(false)
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: course.id })
 
   const style = transform
@@ -36,32 +34,21 @@ export default function CourseCard({ course, violated, pinned, onRemove }) {
           </div>
           <div className="text-xs text-slate-500">{course.name}</div>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="flex items-center gap-1 text-xs">
-            <input
-              type="checkbox"
-              checked={done}
-              onChange={(e) => setDone(e.target.checked)}
-              onPointerDown={(e) => e.stopPropagation()}
-            />
-            done
-          </label>
-          {onRemove && (
-            <button
-              type="button"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation()
-                onRemove(course.id)
-              }}
-              className="text-slate-400 hover:text-red-600 text-sm leading-none px-1"
-              title="Remove to unplaced"
-              aria-label="Remove course"
-            >
-              ✕
-            </button>
-          )}
-        </div>
+        {onRemove && (
+          <button
+            type="button"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation()
+              onRemove(course.id)
+            }}
+            className="text-slate-400 hover:text-red-600 text-sm leading-none px-1"
+            title="Remove to unplaced"
+            aria-label="Remove course"
+          >
+            ✕
+          </button>
+        )}
       </div>
       <div className="text-xs text-slate-500 mt-1">{course.units}u</div>
     </div>
