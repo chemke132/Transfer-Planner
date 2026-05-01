@@ -14,6 +14,7 @@ export default function SemesterColumn({
   // ignores these and uses dnd-kit instead.
   availableMajor = [],
   availableCalGetc = [],
+  placedSemesterByCourse,
   onAdd,
   showCalGetc = true,
 }) {
@@ -50,6 +51,8 @@ export default function SemesterColumn({
         pinnedIds={pinnedIds}
         onRemove={onRemove}
         available={availableMajor}
+        placedSemesterByCourse={placedSemesterByCourse}
+        currentSemesterId={semester.id}
         onAdd={onAdd ? (id) => onAdd(id, semester.id) : undefined}
       />
       {showCalGetc && (
@@ -61,6 +64,8 @@ export default function SemesterColumn({
           pinnedIds={pinnedIds}
           onRemove={onRemove}
           available={availableCalGetc}
+          placedSemesterByCourse={placedSemesterByCourse}
+          currentSemesterId={semester.id}
           onAdd={onAdd ? (id) => onAdd(id, semester.id) : undefined}
         />
       )}
@@ -68,7 +73,18 @@ export default function SemesterColumn({
   )
 }
 
-function SubSection({ label, tone, courses, violations, pinnedIds, onRemove, available = [], onAdd }) {
+function SubSection({
+  label,
+  tone,
+  courses,
+  violations,
+  pinnedIds,
+  onRemove,
+  available = [],
+  placedSemesterByCourse,
+  currentSemesterId,
+  onAdd,
+}) {
   const toneClass = tone === 'emerald'
     ? 'border-emerald-200 bg-emerald-50/40'
     : 'border-slate-200 bg-slate-50/50'
@@ -105,6 +121,8 @@ function SubSection({ label, tone, courses, violations, pinnedIds, onRemove, ava
           <AddCoursePicker
             label={label}
             available={available}
+            placedSemesterByCourse={placedSemesterByCourse}
+            currentSemesterId={currentSemesterId}
             onAdd={onAdd}
             tone={addBtnTone}
           />
@@ -114,15 +132,29 @@ function SubSection({ label, tone, courses, violations, pinnedIds, onRemove, ava
   )
 }
 
-function AddCoursePicker({ label, available, onAdd, tone }) {
+function AddCoursePicker({
+  label,
+  available,
+  placedSemesterByCourse,
+  currentSemesterId,
+  onAdd,
+  tone,
+}) {
   const [open, setOpen] = useState(false)
   if (available.length === 0) {
     return (
       <div className="text-[11px] text-slate-400 italic">
-        All {label.toLowerCase()} courses placed.
+        Nothing left to add.
       </div>
     )
   }
+  // Sort: unplaced first, then courses already in another semester. Lets
+  // the user see fresh-add options before the move-from-elsewhere ones.
+  const sorted = [...available].sort((a, b) => {
+    const ai = placedSemesterByCourse?.has(a.id) ? 1 : 0
+    const bi = placedSemesterByCourse?.has(b.id) ? 1 : 0
+    return ai - bi
+  })
   return (
     <div>
       <button
@@ -134,23 +166,32 @@ function AddCoursePicker({ label, available, onAdd, tone }) {
       </button>
       {open && (
         <div className="mt-2 max-h-64 overflow-y-auto border rounded-md bg-white divide-y">
-          {available.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => {
-                onAdd(c.id)
-                setOpen(false)
-              }}
-              className="w-full text-left px-2 py-2 text-xs hover:bg-slate-50 active:bg-slate-100 flex items-center justify-between gap-2"
-            >
-              <span className="min-w-0">
-                <span className="font-medium">{c.code}</span>
-                <span className="text-slate-500"> · {c.name}</span>
-              </span>
-              <span className="text-slate-400 shrink-0">{c.units}u</span>
-            </button>
-          ))}
+          {sorted.map((c) => {
+            const placedIn = placedSemesterByCourse?.get(c.id)
+            const isElsewhere = placedIn && placedIn !== currentSemesterId
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => {
+                  onAdd(c.id)
+                  setOpen(false)
+                }}
+                className="w-full text-left px-2 py-2 text-xs hover:bg-slate-50 active:bg-slate-100 flex items-center justify-between gap-2"
+              >
+                <span className="min-w-0">
+                  <span className="font-medium">{c.code}</span>
+                  <span className="text-slate-500"> · {c.name}</span>
+                  {isElsewhere && (
+                    <span className="ml-1 text-[10px] text-amber-700 whitespace-nowrap">
+                      (move from {placedIn})
+                    </span>
+                  )}
+                </span>
+                <span className="text-slate-400 shrink-0">{c.units}u</span>
+              </button>
+            )
+          })}
         </div>
       )}
     </div>
