@@ -433,6 +433,19 @@ export default function PlannerPage() {
     setPinnedIds((prev) => new Set(prev).add(courseId))
   }
 
+  // Tap-to-add path used by mobile (where dnd would be hopeless on a phone
+  // screen). Pull the course out of the pool and append it to the chosen
+  // semester. Mirrors the "from pool → semester" branch of handleDragEnd.
+  function handleAddToSemester(courseId, semesterId) {
+    const course = pool.find((c) => c.id === courseId)
+    if (!course) return
+    setPool((prev) => prev.filter((c) => c.id !== courseId))
+    setSemesters((prev) =>
+      prev.map((s) => (s.id === semesterId ? { ...s, courses: [...s.courses, course] } : s)),
+    )
+    setPinnedIds((prev) => new Set(prev).add(courseId))
+  }
+
   function handleRemoveFromSemester(courseId) {
     let moving = null
     const without = semesters.map((s) => {
@@ -569,43 +582,65 @@ export default function PlannerPage() {
             + Add semester
           </button>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {semesters.map((s) => (
-            <SemesterColumn
-              key={s.id}
-              semester={s}
-              unitCap={unitCap}
-              violations={violations.get(s.id) || new Set()}
-              pinnedIds={pinnedIds}
-              majorIds={majorIds}
-              onRemove={handleRemoveFromSemester}
-            />
+        {/* Mobile: 1-col stack grouped by academic year with a gap and a
+            small header between years. Desktop: original continuous 3-col
+            grid (one row per AY just because terms come out in that order). */}
+        <div className="space-y-6 sm:space-y-0 mb-8">
+          {groupByAcademicYear(semesters).map((group, gi) => (
+            <div key={group.key} className={gi > 0 ? 'sm:mt-4' : ''}>
+              <div className="text-[11px] uppercase tracking-wide font-semibold text-slate-500 mb-1.5 sm:hidden">
+                Academic year {group.label}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {group.semesters.map((s) => (
+                  <SemesterColumn
+                    key={s.id}
+                    semester={s}
+                    unitCap={unitCap}
+                    violations={violations.get(s.id) || new Set()}
+                    pinnedIds={pinnedIds}
+                    majorIds={majorIds}
+                    onRemove={handleRemoveFromSemester}
+                    availableMajor={pool.filter((c) => majorIds.has(c.id))}
+                    availableCalGetc={pool.filter((c) => !majorIds.has(c.id))}
+                    onAdd={handleAddToSemester}
+                    showCalGetc={requiresCalGetc}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
 
-        <PoolDropZone>
-          {(() => {
-            const unplaced = pool.filter((c) => !placedIds.has(c.id))
-            if (unplaced.length === 0) {
+        {/* Unplaced-pool drag source. Hidden on mobile — phones use the
+            tap-to-add picker inside each SemesterColumn instead, since
+            drag-and-drop across off-screen targets isn't usable on a
+            small viewport. */}
+        <div className="hidden sm:block">
+          <PoolDropZone>
+            {(() => {
+              const unplaced = pool.filter((c) => !placedIds.has(c.id))
+              if (unplaced.length === 0) {
+                return (
+                  <div className="text-sm text-slate-400 italic">
+                    Nothing unplaced. Pick Cal-GETC courses in{' '}
+                    <Link to="/requirements" className="underline">Requirements</Link> to add more.
+                  </div>
+                )
+              }
+              const majorUnplaced = unplaced.filter((c) => majorIds.has(c.id))
+              const calGetcUnplaced = unplaced.filter((c) => !majorIds.has(c.id))
               return (
-                <div className="text-sm text-slate-400 italic">
-                  Nothing unplaced. Pick Cal-GETC courses in{' '}
-                  <Link to="/requirements" className="underline">Requirements</Link> to add more.
+                <div className="space-y-2">
+                  <PoolSubSection label="Major" tone="slate" courses={majorUnplaced} />
+                  {requiresCalGetc && (
+                    <PoolSubSection label="Cal-GETC" tone="emerald" courses={calGetcUnplaced} />
+                  )}
                 </div>
               )
-            }
-            const majorUnplaced = unplaced.filter((c) => majorIds.has(c.id))
-            const calGetcUnplaced = unplaced.filter((c) => !majorIds.has(c.id))
-            return (
-              <div className="space-y-2">
-                <PoolSubSection label="Major" tone="slate" courses={majorUnplaced} />
-                {requiresCalGetc && (
-                  <PoolSubSection label="Cal-GETC" tone="emerald" courses={calGetcUnplaced} />
-                )}
-              </div>
-            )
-          })()}
-        </PoolDropZone>
+            })()}
+          </PoolDropZone>
+        </div>
 
         <DragOverlay>
           {activeCourse ? (
@@ -675,6 +710,31 @@ function PoolSubSection({ label, tone, courses }) {
       </div>
     </div>
   )
+}
+
+// Academic year of a term: Fall belongs to its own year (26FA → AY 2026-27);
+// Spring/Summer belong to the previous calendar year (27SP, 27SU → AY 2026-27).
+// Used to render semesters grouped by AY with a small gap between years.
+function academicYearOf(sem) {
+  return sem.season === 'FA' ? sem.year : sem.year - 1
+}
+
+function groupByAcademicYear(semesters) {
+  const groups = []
+  const byKey = new Map()
+  for (const s of semesters) {
+    const ay = academicYearOf(s)
+    if (!byKey.has(ay)) {
+      const group = { key: ay, label: `${ay}-${String((ay + 1) % 100).padStart(2, '0')}`, semesters: [] }
+      byKey.set(ay, group)
+      groups.push(group)
+    }
+    byKey.get(ay).semesters.push(s)
+  }
+  // Within each group, render in chronological order: FA → SP → SU.
+  const order = { FA: 0, SP: 1, SU: 2 }
+  for (const g of groups) g.semesters.sort((a, b) => order[a.season] - order[b.season])
+  return groups
 }
 
 function subjectOf(course) {

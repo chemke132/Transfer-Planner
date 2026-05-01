@@ -157,7 +157,8 @@ export default function SetupPage() {
                       type="button"
                       onClick={() => removeTarget(idx)}
                       disabled={setup.targets.length <= 1}
-                      className="text-xs text-slate-400 hover:text-red-600 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                      aria-label="Remove target"
+                      className="shrink-0 inline-flex items-center justify-center min-w-[40px] min-h-[40px] -my-1 -mr-1 rounded-md text-lg leading-none text-slate-400 hover:text-red-600 hover:bg-red-50 active:bg-red-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                       title={
                         setup.targets.length <= 1
                           ? 'At least one target required'
